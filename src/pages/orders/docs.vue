@@ -3,10 +3,6 @@
     <div class="row full-height q-col-gutter-x-md">
       <div v-for="day of Object.keys(orders.docs)" :key="day" class="col">
         <q-card class="full-height">
-          <div class="text-h6 q-pa-md">
-            {{ day.charAt(0).toUpperCase() + day.slice(1) }}
-          </div>
-          <q-separator />
           <ListDragOrders :day="day" />
           <q-separator />
         </q-card>
