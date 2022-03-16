@@ -13,23 +13,23 @@ export const useOrders = defineStore({
   },
 
   actions: {
-    ...baseActions(),
+    ...baseActions()
 
-    async getDoc(id, day) {
-      try {
-        this.loading = true
-        const { data } = await api.get(this.$id, {
-          params: {
-            id,
-            day
-          }
-        })
-        this.doc = data.doc
-      } catch (error) {
-        throw error
-      } finally {
-        this.loading = false
-      }
-    }
+    // async getDoc(id, day) {
+    //   try {
+    //     this.loading = true
+    //     const { data } = await api.get(this.$id, {
+    //       params: {
+    //         id,
+    //         day
+    //       }
+    //     })
+    //     this.doc = data.doc
+    //   } catch (error) {
+    //     throw error
+    //   } finally {
+    //     this.loading = false
+    //   }
+    // }
   }
 })

@@ -1,6 +1,6 @@
 <template>
   <div class="text-h6 q-pa-md">
-    {{ day.charAt(0).toUpperCase() + day.slice(1) }} {{ getDayNumber(day) }}
+    {{ day.charAt(0).toUpperCase() + day.slice(1) }}
   </div>
   <q-separator />
   <Draggable
@@ -24,7 +24,7 @@
         class="draggable q-py-sm"
         clickable
         v-ripple
-        @click="onClick(provider, day)"
+        @click="onClick(provider)"
       >
         <q-item-section>
           <q-item-label>{{ provider.alias }}</q-item-label>
@@ -44,7 +44,7 @@ import Draggable from 'vuedraggable'
 import { inject } from 'vue'
 import { useProviders } from 'stores/providers'
 import { useRouter } from 'vue-router'
-import moment from 'moment'
+// import moment from 'moment'
 
 const router = useRouter()
 
@@ -53,10 +53,10 @@ const props = defineProps(['day'])
 const orders = inject('orders')
 const providers = useProviders()
 
-function onClick(provider, day) {
+function onClick(provider) {
   router.push({
     name: 'orders/:id',
-    params: { id: provider._id, day }
+    params: { id: provider._id }
   })
 }
 
@@ -72,17 +72,17 @@ async function onEnd(event) {
   await providers.update(provider._id, { orderDays: [to, ...orderDays] })
 }
 
-function getDayNumber(day) {
-  const days = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes']
-  const today = moment()
-  const todayWeekDay = today.weekday() - 1
-  const weekDay = days.indexOf(props.day)
-  const addDays =
-    weekDay >= todayWeekDay
-      ? weekDay - todayWeekDay
-      : 7 + weekDay - todayWeekDay
-  return today.add(addDays, 'days').format('DD')
-}
+// function getDayNumber(day) {
+//   const days = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes']
+//   const today = moment()
+//   const todayWeekDay = today.weekday() - 1
+//   const weekDay = days.indexOf(props.day)
+//   const addDays =
+//     weekDay >= todayWeekDay
+//       ? weekDay - todayWeekDay
+//       : 7 + weekDay - todayWeekDay
+//   return today.add(addDays, 'days').format('DD')
+// }
 </script>
 
 <style>
