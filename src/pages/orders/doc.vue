@@ -1,15 +1,38 @@
 <template>
-  <h2>Order</h2>
+  <LayoutPage :loading="orders.loading" class="q-pa-md">
+    <q-list
+      bordered
+      separator
+      class="rounded-borders"
+      style="border-color: grey"
+    >
+      <q-item
+        v-for="product of orders.doc.order"
+        :key="product._id"
+        style="border-color: grey"
+      >
+        <ItemOrder :product="product" />
+      </q-item>
+    </q-list>
+  </LayoutPage>
 </template>
 
 <script setup>
-import { useOrders } from 'stores/orders'
 import { onMounted, provide, reactive } from 'vue'
 import { useRoute } from 'vue-router'
+import { useOrders } from 'stores/orders'
+import { useProducts } from 'stores/products'
+import { useSupplies } from 'stores/supplies'
 
 const route = useRoute()
 
 const orders = useOrders()
+provide(orders.$id, orders)
+const products = useProducts()
+provide(products.$id, products)
+const supplies = useSupplies()
+provide(supplies.$id, supplies)
+
 const id = route.params.id
 const order = reactive({})
 
