@@ -115,6 +115,8 @@ import { useProviders } from 'stores/providers'
 import { provide, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import formatter from 'tools/formatter'
+import ButtonPayCalc from './components/ButtonPayCalc.vue'
+import CellLinkDte from './components/CellLinkDte.vue'
 
 export default {
   setup() {

@@ -164,6 +164,7 @@ import { useSupplies } from 'stores/supplies'
 import { onMounted, provide, reactive, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import formatter from 'tools/formatter'
+import RowJumbo from './components/RowJumbo.vue'
 
 const products = useProducts()
 const providers = useProviders()

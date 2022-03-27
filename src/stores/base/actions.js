@@ -83,7 +83,28 @@ export const baseActions = () => {
         this.saving = true
 
         const { data } = await api.patch(`${this.$id}/${id}`, {
-          doc: mod
+          mod
+        })
+
+        this.doc = data.doc
+        const index = this.docs.findIndex(doc => doc._id === id)
+        if (index > -1) {
+          this.docs[index] = data.doc
+        }
+
+        notify.positive('Datos modificados con éxito')
+      } catch (error) {
+        throw error
+      } finally {
+        this.saving = false
+      }
+    },
+    async replace(id, doc) {
+      try {
+        this.saving = true
+
+        const { data } = await api.put(`${this.$id}/${id}`, {
+          doc
         })
 
         this.doc = data.doc

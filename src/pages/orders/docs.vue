@@ -12,9 +12,9 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, provide } from 'vue'
 import { useOrders } from 'stores/orders'
-import { provide } from 'vue'
+import ListDragOrders from './components/ListDragOrders.vue'
 
 const orders = useOrders()
 provide(orders.$id, orders)

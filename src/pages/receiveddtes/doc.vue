@@ -131,6 +131,7 @@ import { useReceivedDtes } from 'stores/receiveddtes'
 import { useProducts } from 'stores/products'
 import { useSupplies } from 'stores/supplies'
 import { useRoute } from 'vue-router'
+import ItemDte from './components/ItemDte.vue'
 
 export default {
   setup() {

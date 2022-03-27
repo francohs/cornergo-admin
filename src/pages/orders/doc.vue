@@ -27,6 +27,7 @@ import { useOrders } from 'stores/orders'
 import { useProducts } from 'stores/products'
 import { useSupplies } from 'stores/supplies'
 import formatter from 'tools/formatter'
+import ItemOrder from './components/ItemOrder.vue'
 
 const route = useRoute()
 
