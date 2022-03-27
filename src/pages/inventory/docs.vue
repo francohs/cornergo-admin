@@ -1,22 +1,21 @@
 <template>
   <q-page>
-    <TableQueryLazy
-      :storeId="products.$id"
+    <TableQuery
+      :storeId="inventory.$id"
       :columns="columns"
-      tableName="productsTable"
-      title="Productos"
-      titleIcon="widgets"
+      title="Revisar Stock"
+      titleIcon="fact_check"
       inputPlaceholder="Buscar producto..."
       noDataText="Puedes filtrar productos por nombre o codigo"
-      activeToggle
-      createBtn
+      tableName="inventoryTable"
     >
       <template v-slot:extracontrols>
         <SelectInputFetch
           lazy
           fetchAll
           :storeId="providers.$id"
-          v-model="products.productsTable.equalFilter.provider"
+          v-model="provider"
+          @update:modelValue="queryDocs"
           field="alias"
           label="Proveedor"
           icon="local_shipping"
@@ -29,41 +28,47 @@
         <Cell field="code" :cell="props" />
         <CellInput field="name" :storeId="products.$id" :cell="props" />
         <CellInput field="category" :storeId="products.$id" :cell="props" />
-        <CellInput field="stock" :storeId="products.$id" :cell="props" />
+        <CellInput
+          field="stock"
+          format="decimal"
+          :storeId="products.$id"
+          :cell="props"
+          @editOutChange="CellCheckedRef.stockChanged(props.row._id)"
+        />
         <CellInput field="showcase" :storeId="products.$id" :cell="props" />
         <CellInput field="minimum" :storeId="products.$id" :cell="props" />
-        <CellInput
-          field="cost"
-          format="currency"
+        <Cell field="lastBuy" :storeId="products.$id" :cell="props" />
+        <Cell field="lastSell" :storeId="products.$id" :cell="props" />
+        <Cell field="sale" :storeId="products.$id" :cell="props" />
+        <Cell field="saleAvg" :storeId="products.$id" :cell="props" />
+        <Cell
+          field="totalSells"
+          format="decimal"
           :storeId="products.$id"
           :cell="props"
         />
-        <Cell field="marginRate" :storeId="products.$id" :cell="props" />
-        <CellInput
-          format="currency"
-          field="price"
-          :storeId="products.$id"
-          :cell="props"
-        />
-        <CellInput field="provider" :storeId="products.$id" :cell="props" />
-        <CellInput field="lastBuy" :storeId="products.$id" :cell="props" />
-        <CellInput field="lastSell" :storeId="products.$id" :cell="props" />
-        <CellInput field="totalSells" :storeId="products.$id" :cell="props" />
-        <CellToggle field="active" :storeId="products.$id" :cell="props" />
+        <CellChecked :cell="props" ref="CellCheckedRef" />
       </template>
-    </TableQueryLazy>
+    </TableQuery>
   </q-page>
 </template>
 
 <script setup>
 import { useProducts } from 'stores/products'
+import { useInventory } from 'stores/inventory'
 import { useProviders } from 'stores/providers'
 import { provide, ref } from 'vue'
+import CellChecked from './components/CellChecked.vue'
 
 const products = useProducts()
-const providers = useProviders()
 provide(products.$id, products)
+const inventory = useInventory()
+provide(inventory.$id, inventory)
+const providers = useProviders()
 provide(providers.$id, providers)
+
+const provider = ref(null)
+const CellCheckedRef = ref(null)
 
 const columns = [
   { label: 'DETALLE', name: '_id', size: 50 },
@@ -73,13 +78,17 @@ const columns = [
   { label: 'STOCK', name: 'stock' },
   { label: 'VITRINA', name: 'showcase' },
   { label: 'MÍNIMO', name: 'minimum' },
-  { label: 'COSTO', name: 'cost' },
-  { label: '% MARGEN', name: 'marginRate' },
-  { label: 'PRECIO', name: 'price' },
-  { label: 'PROVEEDOR', name: 'provider' },
   { label: 'ÚLTIMA COMPRA', name: 'lastBuy' },
   { label: 'ÚLTIMA VENTA', name: 'lastSell' },
-  { label: 'VENTAS', name: 'totalSells' },
-  { label: 'ACTIVO', name: 'active', size: 50 }
+  { label: 'VENTAS SEMANAL', name: 'sale' },
+  { label: 'VENTAS PROMEDIO', name: 'saleAvg' },
+  { label: 'VENTAS TOTAL', name: 'totalSells' },
+  { label: 'REVISADO', name: 'checked' }
 ]
+
+const queryDocs = async provider => {
+  if (provider) {
+    await inventory.getDocs(provider)
+  }
+}
 </script>

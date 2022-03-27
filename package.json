@@ -10,7 +10,7 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
-    "@quasar/extras": "^1.13.2",
+    "@quasar/extras": "^1.13.3",
     "axios": "^0.26.1",
     "moment": "^2.29.1",
     "pinia": "^2.0.12",
@@ -20,7 +20,7 @@
     "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
-    "@quasar/app-vite": "^1.0.0-beta.4",
+    "@quasar/app-vite": "^1.0.0-beta.8",
     "autoprefixer": "^10.4.4"
   },
   "engines": {

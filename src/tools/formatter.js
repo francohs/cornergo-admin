@@ -29,6 +29,11 @@ const formatter = {
     return value.toString() + '%'
   },
 
+  decimal: value => {
+    if (!value) return ''
+    return Math.round((parseFloat(value) + Number.EPSILON) * 100) / 100
+  },
+
   unformat: value => {
     if (!value) return 0
     return parseInt(
@@ -49,9 +54,9 @@ const formatter = {
 
   date: value => (value ? moment.utc(value).format('DD/MM/YYYY') : null),
 
-  time: value => date.formatDate(new Date(value), 'HH:mm'),
+  time: value => date.formatDate(new Date(value), 'HH:mm:ss'),
 
-  datetime: value => date.formatDate(new Date(value), 'DD-MM-YYYY HH:mm'),
+  datetime: value => date.formatDate(new Date(value), 'DD-MM-YYYY HH:mm:ss'),
 
   boolean: value => {
     return value ? 'SI' : 'NO'

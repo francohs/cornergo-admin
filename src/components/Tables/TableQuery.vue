@@ -1,18 +1,12 @@
 <template>
   <div class="q-pa-md">
-    <!-- :visible-columns="table.visibles" -->
-    <q-table
+    <Table
+      v-bind="$attrs"
       :rows="filteredRows"
       :columns="columns"
-      v-model:pagination="pagination"
-      :loading="loading"
-      row-key="_id"
-      separator="cell"
-      no-data-label="No se han encontrado datos"
-      no-results-label="No se encuentran resultados"
-      loading-label="Cargando datos..."
-      color="primary"
-      :wrap-cells="false"
+      :visible-columns="table.visibles"
+      v-model:pagination="table.pagination"
+      :loading="store.loading"
     >
       <template v-slot:top>
         <div class="full-width row items-center q-gutter-x-sm">
@@ -20,26 +14,29 @@
           <div class="text-h6 q-mr-md">{{ title }}</div>
 
           <InputTable
-            v-model="input"
-            debounce="0"
+            v-model="table.input"
             :placeholder="inputPlaceholder"
             style="width: 268px"
+            :onlynumbers="inputOnlynumbers"
           />
 
-          <!-- <SelectTableVisibles
+          <slot name="extracontrols" />
+          <q-space />
+
+          <SelectTableVisibles
             v-model="table.visibles"
             :columns="columns"
-            @update:modelValue="queryInit"
+            @update:modelValue="saveTable"
           />
 
           <SelectTableSort
             v-model="table.pagination"
             :columns="columns"
             :visibles="table.visibles"
-            @update:modelValue="queryNext"
-          /> -->
+            @update:modelValue="saveTable"
+          />
 
-          <slot name="extracontrols" />
+          <ButtonLinkCreate :storeId="store.$id" v-if="createBtn" />
         </div>
       </template>
 
@@ -56,7 +53,7 @@
       <template v-slot:no-data>
         <div class="full-width row flex-center text-grey-8 q-gutter-sm">
           <span>
-            {{ loading ? 'Cagando datos...' : noDataText }}
+            {{ store.loading ? 'Cagando datos...' : noDataText }}
           </span>
         </div>
       </template>
@@ -66,71 +63,71 @@
           <div class="row items-center">
             {{ filteredRows.length }} Resultados
 
-            <ToggleActives v-if="activeToggle" v-model="actives" />
+            <ToggleActives
+              v-if="activeToggle"
+              v-model="table.actives"
+              @update:modelValue="saveTable"
+            />
           </div>
 
           <div class="row items-center">
-            <SelectRowsPerPage v-model="pagination.rowsPerPage" />
+            <SelectRowsPerPage
+              v-model="table.pagination.rowsPerPage"
+              @update:modelValue="saveTable"
+            />
 
             <PaginationTable
-              :pagination="pagination"
-              :count="filteredRows.length"
-              @update:page="pagination.page = $event"
+              v-model:pagination="table.pagination"
+              :count="store.countDocs"
             />
           </div>
         </div>
       </template>
-    </q-table>
+    </Table>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { LocalStorage } from 'quasar'
+import { inject, computed, onMounted } from 'vue'
 
 const props = defineProps({
-  rows: Array,
-  columnsProps: Array,
-  noDataText: String,
+  storeId: String,
+  tableName: String,
+  columns: Array,
   title: String,
   titleIcon: String,
   activeToggle: Boolean,
   inputPlaceholder: String,
-  filteredFields: Array,
-  loading: Boolean
+  inputOnlynumbers: Boolean,
+  forceSort: Object,
+  createBtn: Boolean,
+  noDataText: String
 })
 
-const input = ref('')
-const pagination = ref({
-  sortBy: '',
-  descending: false,
-  page: 1,
-  rowsPerPage: 5
-})
-const actives = ref(null)
+const store = inject(props.storeId)
+const table = store[props.tableName]
 
-const columns = props.columnsProps.map(col => {
-  col.style = col.size ? `width: ${col.size}px` : 'width: 200px'
-  col.align = col.align || 'center'
-  col.field = col.field || col.name
-  col.sortable = col.sortable == undefined ? false : col.sortable
-  return col
-})
-const allColumns = props.columnsProps.map(col => col.name)
+// onMounted(async () => {
+//   table.input = ''
+//   table.pagination.page = 1
+//   store.clearDocs()
+// })
 
 const filteredRows = computed(() => {
-  let filteredRows = props.rows
+  let filteredRows = store.docs
 
-  if (actives.value) {
-    filteredRows = props.rows.filter(row => row.active === actives.value)
+  if (table.actives) {
+    filteredRows = store.docs.filter(row => row.active)
   }
 
-  if (input.value) {
-    filteredRows = props.rows.filter(row => {
-      for (let field of props.filteredFields) {
+  if (table.input) {
+    filteredRows = store.docs.filter(row => {
+      for (let field of table.containsFields) {
         let rowValue = row[field]
         if (
           rowValue &&
-          rowValue.toUpperCase().includes(input.value.toUpperCase())
+          rowValue.toUpperCase().includes(table.input.toUpperCase())
         ) {
           return true
         }
@@ -141,4 +138,8 @@ const filteredRows = computed(() => {
 
   return filteredRows
 })
+
+const saveTable = () => {
+  LocalStorage.set(props.tableName, table)
+}
 </script>

@@ -1,5 +1,8 @@
 <template>
   <LayoutPage :loading="orders.loading" class="q-pa-md">
+    <div class="text-h4 q-mb-md">
+      Pedido {{ orders.doc.provider.alias }} {{ orderDate }}
+    </div>
     <q-list
       bordered
       separator
@@ -23,6 +26,7 @@ import { useRoute } from 'vue-router'
 import { useOrders } from 'stores/orders'
 import { useProducts } from 'stores/products'
 import { useSupplies } from 'stores/supplies'
+import formatter from 'tools/formatter'
 
 const route = useRoute()
 
@@ -46,4 +50,6 @@ onMounted(async () => {
     console.error(error)
   }
 })
+
+const orderDate = formatter.date(new Date())
 </script>

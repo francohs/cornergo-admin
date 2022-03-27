@@ -41,13 +41,7 @@
           width="90"
           dense
         />
-        <InputRead
-          label="Costo Producto"
-          :modelValue="supply.cost"
-          width="100"
-          format="currency"
-          dense
-        />
+
         <div>
           <q-btn label="ALTERNATIVAS" rounded size="sm" />
         </div>
@@ -72,7 +66,7 @@
           dense
         />
         <InputRead label="Unidad" :modelValue="supply.unit" width="120" dense />
-        <InputRead
+        <Input
           label="Multiplicador"
           :modelValue="supply.multipler"
           storeId="supplies"
@@ -88,15 +82,15 @@
           dense
         />
         <InputRead
-          label="Costo Suministro"
-          :modelValue="5000"
-          width="120"
+          label="Costo Producto"
+          :modelValue="supply.cost"
+          width="100"
           format="currency"
           dense
         />
         <InputRead
           label="Subtotal"
-          :modelValue="25000"
+          :modelValue="supply.subtotal"
           width="120"
           format="currency"
           dense
@@ -114,5 +108,8 @@ const { product } = props
 const { supply } = product
 supply.units = computed(() => {
   return supply.multipler * supply.orderQuantity
+})
+supply.subtotal = computed(() => {
+  return supply.units * supply.cost
 })
 </script>

@@ -14,15 +14,18 @@ const props = defineProps(['cell', 'field', 'url', 'params', 'name', 'noLink'])
 const router = useRouter()
 
 const goto = () => {
-  if (props.params == undefined) props.params = {}
-
   if (props.url) {
     openURL(props.url)
   } else {
-    router.push({
+    console.log({
       name: props.name,
       params: { id: props.cell.row._id }
     })
+    // router.push({
+    //   name: props.name,
+    //   params: { id: props.cell.row._id }
+    // })
+    router.push(`/${props.name}/${props.cell.row._id}`)
   }
 }
 </script>

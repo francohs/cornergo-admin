@@ -7,7 +7,12 @@
       dense
       flat
       :disable="pagination.page == 1"
-      @click="$emit('update:page', pagination.page - 1)"
+      @click="
+        $emit('update:pagination', {
+          ...pagination,
+          page: pagination.page - 1
+        })
+      "
     />
 
     {{ pagination.page }} / {{ pages }}
@@ -19,7 +24,12 @@
       dense
       flat
       :disable="pagination.page == pages"
-      @click="$emit('update:page', pagination.page + 1)"
+      @click="
+        $emit('update:pagination', {
+          ...pagination,
+          page: pagination.page + 1
+        })
+      "
     />
   </div>
 </template>

@@ -78,12 +78,12 @@ export const baseActions = () => {
         this.saving = false
       }
     },
-    async update(id, doc) {
+    async update(id, mod) {
       try {
         this.saving = true
 
         const { data } = await api.patch(`${this.$id}/${id}`, {
-          doc
+          doc: mod
         })
 
         this.doc = data.doc
@@ -104,6 +104,7 @@ export const baseActions = () => {
         this.deleting = true
         await api.delete(`${this.$id}/${id}`)
         this.doc = {}
+        this.docs.filter(doc => doc._id != id)
         notify.positive('Datos eliminados con éxito')
       } catch (error) {
         throw error

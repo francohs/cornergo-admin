@@ -2,7 +2,7 @@ import axios from 'axios'
 import errorInterceptor from './serverErrors'
 import { LocalStorage } from 'quasar'
 
-const api = axios.create({ baseURL: 'http://localhost:3015' })
+const api = axios.create({ baseURL: 'http://192.168.2.189:3015' })
 
 api.interceptors.response.use(function (response) {
   return response

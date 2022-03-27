@@ -32,6 +32,7 @@ import formatter from 'tools/formatter'
 import { inject, computed, ref, nextTick } from 'vue'
 
 const props = defineProps(['storeId', 'field', 'cell', 'format'])
+const emit = defineEmits(['editOutChange'])
 
 const store = inject(props.storeId)
 
@@ -78,6 +79,8 @@ const editOut = async event => {
       await store.update(doc._id, {
         [props.field]: inputValue.value
       })
+
+      emit('editOutChange')
     }
   }
   editMode.value = false

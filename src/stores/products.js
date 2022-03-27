@@ -7,14 +7,12 @@ export const useProducts = defineStore({
 
   state: () => ({
     ...baseState(),
-    table: tableState('products', {
+    productsTable: tableState('productsTable', {
       visibles: ['code', 'name', 'stock', 'price', 'active'],
-      forceSelect: [],
       containsFields: ['code', 'name'],
       equalFilter: {
-        provider: null
-      },
-      dateFilter: {}
+        providers: null
+      }
     })
   }),
 

@@ -157,7 +157,7 @@
   </PageResponsive>
 </template>
 
-<script>
+<script setup>
 import { useProducts } from 'stores/products'
 import { useProviders } from 'stores/providers'
 import { useSupplies } from 'stores/supplies'
@@ -165,46 +165,30 @@ import { onMounted, provide, reactive, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import formatter from 'tools/formatter'
 
-export default defineComponent({
-  name: 'ProductDoc',
-  setup() {
-    const products = useProducts()
-    const providers = useProviders()
-    const supplies = useSupplies()
-    const $route = useRoute()
-    const id = $route.params.id
-    const product = reactive({})
+const products = useProducts()
+const providers = useProviders()
+const supplies = useSupplies()
+const $route = useRoute()
+const id = $route.params.id
+const product = reactive({})
 
-    provide(products.$id, products)
-    provide(providers.$id, providers)
-    provide(supplies.$id, supplies)
+provide(products.$id, products)
+provide(providers.$id, providers)
+provide(supplies.$id, supplies)
 
-    onMounted(async () => {
-      supplies.clearDocs()
-      await products.getDoc(id)
-      Object.assign(product, products.doc)
+onMounted(async () => {
+  supplies.clearDocs()
+  await products.getDoc(id)
+  Object.assign(product, products.doc)
 
-      await supplies.getQueryDocs({ query: { equal: { product: id } } })
-    })
-
-    const calcPrice = computed(() =>
-      Math.round(product.cost * (1 + product.marginRate / 100))
-    )
-
-    const calcMarginRate = computed(() =>
-      Math.round((product.price / product.cost - 1) * 100)
-    )
-
-    return {
-      id,
-      product,
-      products,
-      providers,
-      supplies,
-      formatter,
-      calcPrice,
-      calcMarginRate
-    }
-  }
+  await supplies.getQueryDocs({ query: { equal: { product: id } } })
 })
+
+const calcPrice = computed(() =>
+  Math.round(product.cost * (1 + product.marginRate / 100))
+)
+
+const calcMarginRate = computed(() =>
+  Math.round((product.price / product.cost - 1) * 100)
+)
 </script>

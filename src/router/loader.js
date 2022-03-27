@@ -10,6 +10,7 @@ const loadRoutes = () => {
       const folderName = filePathArr[1]
       const fileName = filePathArr[2]
 
+      if (folderName == 'components') continue
       if (fileName.slice(0, 1) == '_') continue
 
       let routeName = fileName

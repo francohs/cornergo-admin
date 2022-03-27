@@ -75,7 +75,7 @@
             <PaginationTable
               :pagination="table.pagination"
               :count="store.count"
-              @update:page="onPagination"
+              @update:pagination="onPagination"
             />
           </div>
         </div>
@@ -90,6 +90,7 @@ import { inject, watch, onMounted } from 'vue'
 
 const props = defineProps({
   storeId: String,
+  tableName: String,
   columns: Array,
   title: String,
   titleIcon: String,
@@ -103,7 +104,7 @@ const props = defineProps({
 })
 
 const store = inject(props.storeId)
-const table = store.table
+const table = store[props.tableName]
 
 if (props.initFetch) {
   onMounted(async () => {
@@ -121,9 +122,9 @@ const queryInit = async () => {
   saveTable()
 }
 
-const onPagination = async page => {
-  await queryNext(page)
-  table.pagination.page = page
+const onPagination = async pagination => {
+  await queryNext(pagination.page)
+  table.pagination.page = pagination.page
 }
 
 const queryNext = async (page = table.pagination.page) => {
@@ -178,6 +179,6 @@ const queryDocs = async (page = table.pagination.page) => {
 }
 
 const saveTable = () => {
-  LocalStorage.set(`${store.$id}/table`, table)
+  LocalStorage.set(props.tableName, table)
 }
 </script>

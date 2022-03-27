@@ -4,29 +4,28 @@ export const baseState = () => ({
   docs: [],
   doc: {},
   options: [],
-  count: 0,
   loading: false,
   saving: false,
   deleting: false
 })
 
 export const tableState = (
-  storeId,
+  tableName,
   { visibles, forceSelect, containsFields, equalFilter, dateFilter }
 ) => {
-  const table = LocalStorage.getItem(`${storeId}/table`) || {
+  const table = LocalStorage.getItem(tableName) || {
     input: '',
-    visibles,
-    forceSelect,
+    visibles: visibles || [],
+    forceSelect: forceSelect || [],
     pagination: {
       sortBy: null,
       descending: false,
       page: 1,
       rowsPerPage: 10
     },
-    containsFields,
-    equalFilter,
-    dateFilter,
+    containsFields: containsFields || [],
+    equalFilter: equalFilter || {},
+    dateFilter: dateFilter || {},
     actives: true
   }
   table.input = ''
