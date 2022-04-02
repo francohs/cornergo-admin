@@ -10,7 +10,7 @@
       <ItemLink page="clients" icon="groups" label="Clientes" />
       <ItemLink page="company" icon="business" label="Empresa" />
       <ItemLink page="users" icon="people" label="Usuarios" />
-      <!-- <ItemLink page="items" icon="checklist" label="Items" /> -->
+      <ItemLink page="items" icon="checklist" label="Items" />
     </q-list>
   </q-drawer>
 </template>

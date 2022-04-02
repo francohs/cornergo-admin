@@ -14,7 +14,7 @@
           lazy
           fetchAll
           :storeId="providers.$id"
-          v-model="provider"
+          v-model="inventory.provider"
           @update:modelValue="queryDocs"
           field="alias"
           label="Proveedor"
@@ -35,8 +35,8 @@
           :cell="props"
           @editOutChange="CellCheckedRef.stockChanged(props.row._id)"
         />
-        <CellInput field="showcase" :storeId="products.$id" :cell="props" />
         <CellInput field="minimum" :storeId="products.$id" :cell="props" />
+        <CellInput field="showcase" :storeId="products.$id" :cell="props" />
         <Cell field="lastBuy" :storeId="products.$id" :cell="props" />
         <Cell field="lastSell" :storeId="products.$id" :cell="props" />
         <Cell field="sale" :storeId="products.$id" :cell="props" />
@@ -67,7 +67,6 @@ provide(inventory.$id, inventory)
 const providers = useProviders()
 provide(providers.$id, providers)
 
-const provider = ref(null)
 const CellCheckedRef = ref(null)
 
 const columns = [
@@ -76,8 +75,8 @@ const columns = [
   { label: 'NOMBRE', name: 'name', align: 'left' },
   { label: 'CATEGORÍA', name: 'category' },
   { label: 'STOCK', name: 'stock' },
-  { label: 'VITRINA', name: 'showcase' },
   { label: 'MÍNIMO', name: 'minimum' },
+  { label: 'VITRINA', name: 'showcase' },
   { label: 'ÚLTIMA COMPRA', name: 'lastBuy' },
   { label: 'ÚLTIMA VENTA', name: 'lastSell' },
   { label: 'VENTAS SEMANAL', name: 'sale' },

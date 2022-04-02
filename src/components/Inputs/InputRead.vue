@@ -5,7 +5,7 @@
     readonly
     stack-label
     :modelValue="formattedValue"
-    class="readonly"
+    :input-class="`${bold ? 'text-bold' : ''}`"
     :style="`width: ${width ? width : 150}px;`"
     :hint="hint ? hint.toString() : ''"
   >
@@ -19,7 +19,13 @@
 import { computed } from 'vue'
 import formatter from 'tools/formatter'
 
-const props = defineProps(['modelValue', 'format', 'width', 'hint'])
+const props = defineProps({
+  modelValue: [String, Number],
+  format: String,
+  width: [String, Number],
+  hint: [String, Number],
+  bold: Boolean
+})
 
 const formattedValue = computed(() => {
   if (props.format) {
