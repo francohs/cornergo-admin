@@ -16,7 +16,7 @@
     />
 
     <div v-else @dblclick="editIn">
-      <div v-if="formatedValue" style="height: 40px; line-height: 40px">
+      <div v-if="formatedValue != ''" style="height: 40px; line-height: 40px">
         {{ textOverflow(formatedValue) }}
         <q-tooltip v-if="formatedValue.length > maxLength">
           {{ formatedValue }}
@@ -49,7 +49,7 @@ const formatedValue = computed(() => {
   if (props.format) {
     return formatter[props.format](props.cell.row[props.field])
   }
-  return props.cell.row[props.field]
+  return props.cell.row[props.field].toString()
 })
 
 const textOverflow = value => {

@@ -4,10 +4,10 @@
     icon="add"
     color="positive"
     class="q-ml-md"
-    :to="{ name: `${store}/create` }"
+    :to="{ name: `${storeId}/create` }"
   />
 </template>
 
 <script setup>
-const props = defineProps(['store'])
+const props = defineProps(['storeId'])
 </script>

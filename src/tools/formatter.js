@@ -30,7 +30,7 @@ const formatter = {
   },
 
   decimal: value => {
-    if (!value) return ''
+    if (!value) return 0
     return Math.round((parseFloat(value) + Number.EPSILON) * 100) / 100
   },
 
