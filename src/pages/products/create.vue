@@ -12,7 +12,10 @@
         <div class="text-subtitle2 q-pl-sm" style="line-height: 35px">
           GENERAL
         </div>
-        <Toggle v-model="product.active" label="Activo" />
+        <div>
+          <Toggle v-model="isPack" label="Pack" />
+          <Toggle v-model="product.active" label="Activo" class="q-ml-md" />
+        </div>
       </div>
 
       <RowMultiCols>
@@ -37,6 +40,12 @@
           onlynumbers
           class="col"
         />
+      </RowMultiCols>
+
+      <div class="text-subtitle2 q-my-md q-pl-sm">PRODUCTOS DEL PACK</div>
+
+      <RowMultiCols>
+        <SelectSearchProduct />
       </RowMultiCols>
 
       <div class="text-subtitle2 q-my-md q-pl-sm">INVENTARIO</div>
@@ -80,7 +89,7 @@
         <InputAuto
           label="Precio"
           v-model="product.price"
-          v-model:isAuto="product.autoPrice"
+          v-model:isAuto="isAutoPrice"
           :autoValue="autoPrice"
           :hintAuto="autoPrice ? `Sugerido $ ${autoPrice}` : ''"
           format="currency"
@@ -90,7 +99,7 @@
         <InputAuto
           label="Margen"
           v-model="product.marginRate"
-          :isAuto="!product.autoPrice"
+          :isAuto="!isAutoPrice"
           :autoValue="autoMargin"
           :low="30"
           :high="40"
@@ -114,81 +123,68 @@
   </PageResponsive>
 </template>
 
-<script>
+<script setup>
+import { provide, reactive, computed, ref } from 'vue'
 import { useProducts } from 'stores/products'
 import { useProviders } from 'stores/providers'
-import { provide, reactive, computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import SelectSearchProduct from './components/SelectSearchProduct.vue'
 
-export default {
-  setup() {
-    const products = useProducts()
-    const providers = useProviders()
-    const $route = useRoute()
-    const id = $route.params.id
-    const loading = ref(false)
-    const product = reactive({
-      name: products.doc.name,
-      code: products.doc.code,
-      active: true,
-      isExempt: false,
-      autoMin: true,
-      marginRate: 40,
-      stock: 0,
-      showcase: 3,
-      cost: 1000,
-      price: 1400,
-      autoCost: false,
-      autoPrice: true,
-      provider: products.doc.provider
-    })
-    provide(products.$id, products)
-    provide(providers.$id, providers)
+const products = useProducts()
+const providers = useProviders()
+const $route = useRoute()
+const id = $route.params.id
 
-    const autoPrice = computed(() => {
-      let autoPrice = Math.round(product.cost * (1 + product.marginRate / 100))
-      let lastTwo = autoPrice.toString().slice(-2)
-      const lastTwoNum = parseInt(lastTwo)
+const product = reactive({
+  name: products.doc.name,
+  code: products.doc.code,
+  pack: [],
+  active: true,
+  isExempt: false,
+  marginRate: 40,
+  stock: 0,
+  showcase: 3,
+  cost: 1000,
+  price: 1400,
+  provider: products.doc.provider
+})
 
-      if (lastTwoNum > 0 && lastTwoNum <= 50) {
-        lastTwo = 50
-      } else if (lastTwoNum > 50) {
-        lastTwo = 90
-      }
-      let autoPriceArray = autoPrice.toString().split('')
-      autoPriceArray.splice(-2, 2, lastTwo.toString()[0], lastTwo.toString()[1])
-      return Math.round(autoPriceArray.join(''))
-    })
+const loading = ref(false)
+const isPack = ref(false)
+const isAutoPrice = ref(true)
 
-    const autoMargin = computed(() => {
-      let price = product.autoPrice ? autoPrice.value : product.price
+provide(products.$id, products)
+provide(providers.$id, providers)
 
-      if (price == 0 || product.cost == 0) return 0
+const autoPrice = computed(() => {
+  let autoPrice = Math.round(product.cost * (1 + product.marginRate / 100))
+  let lastTwo = autoPrice.toString().slice(-2)
+  const lastTwoNum = parseInt(lastTwo)
 
-      return Math.round((price / product.cost - 1) * 100)
-    })
+  if (lastTwoNum > 0 && lastTwoNum <= 50) {
+    lastTwo = 50
+  } else if (lastTwoNum > 50) {
+    lastTwo = 90
+  }
+  let autoPriceArray = autoPrice.toString().split('')
+  autoPriceArray.splice(-2, 2, lastTwo.toString()[0], lastTwo.toString()[1])
+  return Math.round(autoPriceArray.join(''))
+})
 
-    const findProduct = async () => {
-      if (product.code != '') {
-        loading.value = true
-        await products.findDoc({ code: product.code })
-        loading.value = false
-      }
-      return !product.code || !products.doc || 'El código ya existe'
-    }
+const autoMargin = computed(() => {
+  let price = product.autoPrice ? autoPrice.value : product.price
 
-    return {
-      id,
-      product,
-      products,
-      providers,
-      autoPrice,
-      autoMargin,
-      loading,
-      findProduct
-    }
-  },
+  if (price == 0 || product.cost == 0) return 0
 
-  name: 'ProductCreate'
+  return Math.round((price / product.cost - 1) * 100)
+})
+
+const findProduct = async () => {
+  if (product.code != '') {
+    loading.value = true
+    await products.findDoc({ code: product.code })
+    loading.value = false
+  }
+  return !product.code || !products.doc || 'El código ya existe'
 }
 </script>

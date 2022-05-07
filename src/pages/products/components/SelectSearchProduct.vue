@@ -53,7 +53,7 @@ const emit = defineEmits(['next'])
 
 const inputValue = ref('')
 const options = ref([])
-const pos = inject('pos')
+// const pos = inject('pos')
 const selectRef = ref('')
 
 const filterFn = async (value, update) => {
@@ -78,7 +78,7 @@ const filterFn = async (value, update) => {
 }
 
 const addItem = product => {
-  pos.addItem(product)
+  // pos.addItem(product)
   clear()
 }
 
