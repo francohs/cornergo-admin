@@ -4,7 +4,7 @@
     outlined
     behavior="menu"
     ref="selectRef"
-    label="Buscar producto por código o nombre"
+    label="Añade al pack buscando por código o nombre"
     :model-value="inputValue"
     @input-value="inputValue = $event"
     :options="options"
@@ -22,10 +22,7 @@
       <q-item v-bind="scope.itemProps" @click="addItem(scope.opt)">
         <q-item-section>
           <q-item-label>{{ scope.opt.name }}</q-item-label>
-          <q-item-label caption
-            >Código: {{ scope.opt.code }} Stock: {{ scope.opt.stock }} Precio:
-            {{ formatter.currency(scope.opt.price) }}</q-item-label
-          >
+          <q-item-label caption>Código: {{ scope.opt.code }}</q-item-label>
         </q-item-section>
       </q-item>
     </template>
@@ -49,11 +46,10 @@ import { api } from 'boot/axios'
 import formatter from 'tools/formatter'
 import notify from 'tools/notify'
 
-const emit = defineEmits(['next'])
+const emit = defineEmits(['chose'])
 
 const inputValue = ref('')
 const options = ref([])
-// const pos = inject('pos')
 const selectRef = ref('')
 
 const filterFn = async (value, update) => {
@@ -78,41 +74,17 @@ const filterFn = async (value, update) => {
 }
 
 const addItem = product => {
-  // pos.addItem(product)
+  emit('chose', product)
   clear()
 }
 
 const onEnter = () => {
-  if (inputValue.value == '') {
-    emit('next')
-    return
-  }
+  let selectedProduct = options.value.find(
+    product => product.name == inputValue.value
+  )
 
-  let isNumber = Number.isInteger(parseInt(inputValue.value))
-
-  if (isNumber) {
-    let selectedItem = options.value.find(item => item.code == inputValue.value)
-
-    if (selectedItem) {
-      addItem(selectedItem)
-    } else if (inputValue.value.length < 6) {
-      let code = Date.now()
-      addItem({
-        _id: code,
-        code,
-        name: 'PRODUCTO SIN CODIGO',
-        price: parseInt(inputValue.value),
-        quantity: 1
-      })
-    } else {
-      notify.negative('Código sin resultados')
-    }
-  } else {
-    let selectedItem = options.value.find(item => item.name == inputValue.value)
-
-    if (selectedItem) {
-      addItem(selectedItem)
-    }
+  if (selectedProduct) {
+    addItem(selectedProduct)
   }
 }
 

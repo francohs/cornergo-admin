@@ -9,7 +9,7 @@ export const useReceivedDtes = defineStore({
 
   state: () => ({
     ...baseState(),
-    table: tableState('receiveddtes', {
+    table: tableState('receivedDtesTable', {
       visibles: [
         '_id',
         'dteTypeName',

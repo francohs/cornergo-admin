@@ -42,13 +42,21 @@
         />
       </RowMultiCols>
 
-      <div class="text-subtitle2 q-my-md q-pl-sm">PRODUCTOS DEL PACK</div>
+      <div v-if="isPack" class="text-subtitle2 q-mb-md q-pl-sm">
+        PRODUCTOS DEL PACK
+      </div>
 
-      <RowMultiCols>
-        <SelectSearchProduct />
-      </RowMultiCols>
+      <div v-if="isPack">
+        <ItemPack
+          v-for="item of product.pack"
+          :key="item.product._id"
+          :item="item"
+          @remove="removeItemPack"
+        />
+        <SelectSearchProduct @chose="addItemPack" class="q-my-md" />
+      </div>
 
-      <div class="text-subtitle2 q-my-md q-pl-sm">INVENTARIO</div>
+      <div class="text-subtitle2 q-mb-md q-pl-sm">INVENTARIO</div>
 
       <RowMultiCols>
         <Input v-model="product.stock" label="Stock" onlynumbers class="col" />
@@ -129,6 +137,7 @@ import { useProducts } from 'stores/products'
 import { useProviders } from 'stores/providers'
 import { useRoute } from 'vue-router'
 import SelectSearchProduct from './components/SelectSearchProduct.vue'
+import ItemPack from './components/ItemPack.vue'
 
 const products = useProducts()
 const providers = useProviders()
@@ -152,6 +161,17 @@ const product = reactive({
 const loading = ref(false)
 const isPack = ref(false)
 const isAutoPrice = ref(true)
+
+const addItemPack = newProduct => {
+  product.pack.push({
+    product: newProduct,
+    quantity: 1
+  })
+}
+
+const removeItemPack = id => {
+  product.pack = product.pack.filter(i => i.product._id != id)
+}
 
 provide(products.$id, products)
 provide(providers.$id, providers)

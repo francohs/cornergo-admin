@@ -1,6 +1,7 @@
 <template>
   <LayoutPage>
     <TableQueryLazy
+      tableName="receivedDtesTable"
       :storeId="receivedDtes.$id"
       :columns="columns"
       initFetch
@@ -109,7 +110,7 @@
   </LayoutPage>
 </template>
 
-<script>
+<script setup>
 import { useReceivedDtes } from 'stores/receiveddtes'
 import { useProviders } from 'stores/providers'
 import { provide, ref } from 'vue'
@@ -118,57 +119,45 @@ import formatter from 'tools/formatter'
 import ButtonPayCalc from './components/ButtonPayCalc.vue'
 import CellLinkDte from './components/CellLinkDte.vue'
 
-export default {
-  setup() {
-    const $router = useRouter()
-    const date = ref('2021/10/21')
+const $router = useRouter()
+const date = ref('2021/10/21')
 
-    const receivedDtes = useReceivedDtes()
-    provide(receivedDtes.$id, receivedDtes)
-    const providers = useProviders()
-    provide(providers.$id, providers)
+const receivedDtes = useReceivedDtes()
+provide(receivedDtes.$id, receivedDtes)
+const providers = useProviders()
+provide(providers.$id, providers)
 
-    const receivedDtesTable = ref({})
+const receivedDtesTable = ref({})
 
-    const createProvider = (rut, name) => {
-      providers.doc = {
-        rut,
-        name
-      }
-      $router.push({ name: 'providers/create' })
-    }
-
-    return {
-      receivedDtes,
-      receivedDtesTable,
-      columns: [
-        { label: 'DETALLE', name: '_id', size: 100 },
-        { label: 'EMISIÓN', name: 'emissionDate', size: 250 },
-        { label: 'TIPO', name: 'dteTypeName', size: 250 },
-        { label: 'FOLIO', name: 'number' },
-        { label: 'ID BSALE', name: 'bsaleId' },
-        { label: 'RUT', name: 'providerRut' },
-        {
-          label: 'RAZÓN SOCIAL',
-          name: 'providerName',
-          align: 'left',
-          size: 300
-        },
-        { label: 'ALIAS', name: 'providerAlias', size: 300 },
-        { label: 'EXCENTO', name: 'exemptAmount' },
-        { label: 'IVA', name: 'ivaAmount' },
-        { label: 'TOTAL', name: 'totalAmount', align: 'right' },
-        { label: 'FORMA PAGO', name: 'paymentMethod' },
-        { label: 'EXPIRACIÓN', name: 'expirationDate' },
-        { label: 'PDF', name: 'pdfUrl' },
-        { label: 'XML', name: 'xmlUrl' },
-        { label: 'RECIBIDO', name: 'receptionDate' }
-      ],
-      providers,
-      createProvider,
-      formatter,
-      date
-    }
+const createProvider = (rut, name) => {
+  providers.doc = {
+    rut,
+    name
   }
+  $router.push({ name: 'providers/create' })
 }
+
+const columns = [
+  { label: 'DETALLE', name: '_id', size: 100 },
+  { label: 'EMISIÓN', name: 'emissionDate', size: 250 },
+  { label: 'TIPO', name: 'dteTypeName', size: 250 },
+  { label: 'FOLIO', name: 'number' },
+  { label: 'ID BSALE', name: 'bsaleId' },
+  { label: 'RUT', name: 'providerRut' },
+  {
+    label: 'RAZÓN SOCIAL',
+    name: 'providerName',
+    align: 'left',
+    size: 300
+  },
+  { label: 'ALIAS', name: 'providerAlias', size: 300 },
+  { label: 'EXCENTO', name: 'exemptAmount' },
+  { label: 'IVA', name: 'ivaAmount' },
+  { label: 'TOTAL', name: 'totalAmount', align: 'right' },
+  { label: 'FORMA PAGO', name: 'paymentMethod' },
+  { label: 'EXPIRACIÓN', name: 'expirationDate' },
+  { label: 'PDF', name: 'pdfUrl' },
+  { label: 'XML', name: 'xmlUrl' },
+  { label: 'RECIBIDO', name: 'receptionDate' }
+]
 </script>

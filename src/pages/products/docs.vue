@@ -1,9 +1,9 @@
 <template>
   <q-page>
     <TableQueryLazy
+      tableName="productsTable"
       :storeId="products.$id"
       :columns="columns"
-      tableName="productsTable"
       title="Productos"
       titleIcon="widgets"
       inputPlaceholder="Buscar producto..."

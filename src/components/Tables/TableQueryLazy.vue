@@ -106,6 +106,12 @@ const props = defineProps({
 const store = inject(props.storeId)
 const table = store[props.tableName]
 
+const queryInit = async () => {
+  table.pagination.page = 1
+  await queryDocs()
+  saveTable()
+}
+
 if (props.initFetch) {
   onMounted(async () => {
     await queryInit()
@@ -115,12 +121,6 @@ if (props.initFetch) {
 watch([table.equalFilter, table.dateFilter], async () => {
   await queryInit()
 })
-
-const queryInit = async () => {
-  table.pagination.page = 1
-  await queryDocs()
-  saveTable()
-}
 
 const onPagination = async pagination => {
   await queryNext(pagination.page)
