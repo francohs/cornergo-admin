@@ -1,3 +1,130 @@
+<script setup>
+import { computed, inject, ref, reactive } from 'vue'
+import { useRouter } from 'vue-router'
+import formatter from 'tools/formatter'
+
+const props = defineProps(['item'])
+
+const router = useRouter()
+const receivedDtes = inject('receiveddtes')
+const supplies = inject('supplies')
+const products = inject('products')
+
+const { item } = props
+const { supply } = item
+const product = reactive(supply.product ? supply.product : {})
+const loading = ref(false)
+const emptyCode = ref('')
+
+supply.units = computed(() => {
+  return supply.multipler * item.quantity
+})
+
+const netAmount = computed(() => {
+  const discount = item.discountAmount ? item.discountAmount : 0
+  return Math.round(item.netAmount * item.quantity - discount)
+})
+
+const unitNetAmount = computed(() => {
+  return Math.round(netAmount.value / supply.units)
+})
+
+const taxAmount = computed(() => {
+  return Math.round(netAmount.value * (item.taxRate / 100))
+})
+
+const unitTaxAmount = computed(() => {
+  return Math.round(taxAmount.value / supply.units)
+})
+
+const unitIvaAmount = computed(() => {
+  return Math.round(unitNetAmount.value * 0.19)
+})
+
+product.calcPrice = computed(() => {
+  let cost = supply.autoCost ? supply.calcCost : supply.cost
+  let price = Math.round(cost * (1 + product.marginRate / 100))
+  let lastTwo = price.toString().slice(-2)
+  const lastTwoNum = parseInt(lastTwo)
+
+  if (lastTwoNum > 0 && lastTwoNum <= 50) {
+    lastTwo = 50
+  } else if (lastTwoNum > 50) {
+    lastTwo = 90
+  }
+  let priceArray = price.toString().split('')
+  priceArray.splice(-2, 2, lastTwo.toString()[0], lastTwo.toString()[1])
+  return Math.round(priceArray.join(''))
+})
+
+product.calcMargin = computed(() => {
+  let price = product.autoPrice ? product.calcPrice : product.price
+  let cost = supply.autoCost ? supply.calcCost : supply.cost
+
+  return Math.round((price / cost - 1) * 100)
+})
+
+supply.calcShippingCost = computed(() => {
+  const calcCostWithoutShipping =
+    Math.round(unitNetAmount.value * 1.19) + unitTaxAmount.value
+  return Math.round(
+    (supply.units * (supply.cost - calcCostWithoutShipping)) / 1.19
+  )
+})
+
+const unitShippingCost = computed(() => {
+  if (receivedDtes.doc.provider.shippingCosts) {
+    return Math.round(supply.calcShippingCost / supply.units)
+  } else {
+    return Math.round(supply.shippingCost / supply.units)
+  }
+})
+
+product.calcStock = computed(() => {
+  return parseInt(product.stock) + supply.units
+})
+
+supply.calcCost = computed(() => {
+  return (
+    Math.round((unitNetAmount.value + unitShippingCost.value) * 1.19) +
+    unitTaxAmount.value
+  )
+})
+
+const unitDiscountAmount = computed(() => {
+  if (item.discountAmount) {
+    return Math.round(item.discountAmount / supply.units)
+  } else {
+    return 0
+  }
+})
+
+const matchProduct = async productId => {
+  loading.value = true
+
+  await products.getDoc(productId)
+  Object.assign(product, products.doc)
+
+  await supplies.update(supply._id, {
+    product: product._id,
+    productCode: product.code
+  })
+
+  item.supply.product = product
+
+  loading.value = false
+}
+
+const createProduct = () => {
+  products.doc = {
+    name: item.name,
+    code: product.code,
+    provider: supply.providerAlias
+  }
+  router.push({ name: 'products/create' })
+}
+</script>
+
 <template>
   <div class="full-width row q-gutter-y-sm q-py-sm">
     <div class="full-width row justify-between">
@@ -258,130 +385,3 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import { computed, inject, ref, reactive } from 'vue'
-import { useRouter } from 'vue-router'
-import formatter from 'tools/formatter'
-
-const props = defineProps(['item'])
-
-const router = useRouter()
-const receivedDtes = inject('receiveddtes')
-const supplies = inject('supplies')
-const products = inject('products')
-
-const { item } = props
-const { supply } = item
-const product = reactive(supply.product ? supply.product : {})
-const loading = ref(false)
-const emptyCode = ref('')
-
-supply.units = computed(() => {
-  return supply.multipler * item.quantity
-})
-
-const netAmount = computed(() => {
-  const discount = item.discountAmount ? item.discountAmount : 0
-  return Math.round(item.netAmount * item.quantity - discount)
-})
-
-const unitNetAmount = computed(() => {
-  return Math.round(netAmount.value / supply.units)
-})
-
-const taxAmount = computed(() => {
-  return Math.round(netAmount.value * (item.taxRate / 100))
-})
-
-const unitTaxAmount = computed(() => {
-  return Math.round(taxAmount.value / supply.units)
-})
-
-const unitIvaAmount = computed(() => {
-  return Math.round(unitNetAmount.value * 0.19)
-})
-
-product.calcPrice = computed(() => {
-  let cost = supply.autoCost ? supply.calcCost : supply.cost
-  let price = Math.round(cost * (1 + product.marginRate / 100))
-  let lastTwo = price.toString().slice(-2)
-  const lastTwoNum = parseInt(lastTwo)
-
-  if (lastTwoNum > 0 && lastTwoNum <= 50) {
-    lastTwo = 50
-  } else if (lastTwoNum > 50) {
-    lastTwo = 90
-  }
-  let priceArray = price.toString().split('')
-  priceArray.splice(-2, 2, lastTwo.toString()[0], lastTwo.toString()[1])
-  return Math.round(priceArray.join(''))
-})
-
-product.calcMargin = computed(() => {
-  let price = product.autoPrice ? product.calcPrice : product.price
-  let cost = supply.autoCost ? supply.calcCost : supply.cost
-
-  return Math.round((price / cost - 1) * 100)
-})
-
-supply.calcShippingCost = computed(() => {
-  const calcCostWithoutShipping =
-    Math.round(unitNetAmount.value * 1.19) + unitTaxAmount.value
-  return Math.round(
-    (supply.units * (supply.cost - calcCostWithoutShipping)) / 1.19
-  )
-})
-
-const unitShippingCost = computed(() => {
-  if (receivedDtes.doc.provider.shippingCosts) {
-    return Math.round(supply.calcShippingCost / supply.units)
-  } else {
-    return Math.round(supply.shippingCost / supply.units)
-  }
-})
-
-product.calcStock = computed(() => {
-  return parseInt(product.stock) + supply.units
-})
-
-supply.calcCost = computed(() => {
-  return (
-    Math.round((unitNetAmount.value + unitShippingCost.value) * 1.19) +
-    unitTaxAmount.value
-  )
-})
-
-const unitDiscountAmount = computed(() => {
-  if (item.discountAmount) {
-    return Math.round(item.discountAmount / supply.units)
-  } else {
-    return 0
-  }
-})
-
-const matchProduct = async productId => {
-  loading.value = true
-
-  await products.getDoc(productId)
-  Object.assign(product, products.doc)
-
-  await supplies.update(supply._id, {
-    product: product._id,
-    productCode: product.code
-  })
-
-  item.supply.product = product
-
-  loading.value = false
-}
-
-const createProduct = () => {
-  products.doc = {
-    name: item.name,
-    code: product.code,
-    provider: supply.providerAlias
-  }
-  router.push({ name: 'products/create' })
-}
-</script>

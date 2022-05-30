@@ -1,6 +1,7 @@
 <template>
   <LayoutPage>
     <TableQueryLazy
+      tableName="providersTable"
       :storeId="providers.$id"
       :columns="columns"
       title="Proveedores"

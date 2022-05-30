@@ -1,45 +1,3 @@
-<template>
-  <q-select
-    v-bind="$attrs"
-    outlined
-    behavior="menu"
-    ref="selectRef"
-    label="Añade al pack buscando por código o nombre"
-    :model-value="inputValue"
-    @input-value="inputValue = $event"
-    :options="options"
-    use-input
-    hide-selected
-    fill-input
-    input-debounce="300"
-    option-value="name"
-    option-label="name"
-    emit-value
-    @filter="filterFn"
-    @keyup.enter="onEnter"
-  >
-    <template v-slot:option="scope">
-      <q-item v-bind="scope.itemProps" @click="addItem(scope.opt)">
-        <q-item-section>
-          <q-item-label>{{ scope.opt.name }}</q-item-label>
-          <q-item-label caption>Código: {{ scope.opt.code }}</q-item-label>
-        </q-item-section>
-      </q-item>
-    </template>
-    <template v-slot:prepend>
-      <q-icon name="search" @click.stop />
-    </template>
-    <template v-slot:append>
-      <q-icon
-        v-if="inputValue"
-        name="cancel"
-        @click.stop="clear"
-        class="cursor-pointer"
-      />
-    </template>
-  </q-select>
-</template>
-
 <script setup>
 import { ref, inject } from 'vue'
 import { api } from 'boot/axios'
@@ -94,3 +52,45 @@ const clear = () => {
   selectRef.value.focus()
 }
 </script>
+
+<template>
+  <Select
+    v-bind="$attrs"
+    outlined
+    behavior="menu"
+    ref="selectRef"
+    label="Añade al pack buscando por código o nombre"
+    :model-value="inputValue"
+    @input-value="inputValue = $event"
+    :options="options"
+    use-input
+    hide-selected
+    fill-input
+    input-debounce="300"
+    option-value="name"
+    option-label="name"
+    emit-value
+    @filter="filterFn"
+    @keyup.enter="onEnter"
+  >
+    <template v-slot:option="scope">
+      <q-item v-bind="scope.itemProps" @click="addItem(scope.opt)">
+        <q-item-section>
+          <q-item-label>{{ scope.opt.name }}</q-item-label>
+          <q-item-label caption>Código: {{ scope.opt.code }}</q-item-label>
+        </q-item-section>
+      </q-item>
+    </template>
+    <template v-slot:prepend>
+      <q-icon name="search" @click.stop />
+    </template>
+    <template v-slot:append>
+      <q-icon
+        v-if="inputValue"
+        name="cancel"
+        @click.stop="clear"
+        class="cursor-pointer"
+      />
+    </template>
+  </Select>
+</template>

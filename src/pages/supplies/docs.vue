@@ -1,6 +1,7 @@
 <template>
   <q-page>
     <TableQueryLazy
+      tableName="suppliesTable"
       :storeId="supplies.$id"
       :columns="columns"
       title="Suministros"
@@ -15,7 +16,7 @@
           lazy
           fetchAll
           :storeId="providers.$id"
-          v-model="supplies.table.equalFilter.providerAlias"
+          v-model="supplies.suppliesTable.equalFilter.providerAlias"
           field="alias"
           label="Proveedor"
           icon="local_shipping"

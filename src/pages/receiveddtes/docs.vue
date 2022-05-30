@@ -1,3 +1,55 @@
+<script setup>
+import { provide, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useReceivedDtes } from 'stores/receiveddtes'
+import { useProviders } from 'stores/providers'
+import formatter from 'tools/formatter'
+import ButtonPayCalc from './components/ButtonPayCalc.vue'
+import CellLinkDte from './components/CellLinkDte.vue'
+
+const $router = useRouter()
+const date = ref('2021/10/21')
+
+const receivedDtes = useReceivedDtes()
+provide(receivedDtes.$id, receivedDtes)
+const providers = useProviders()
+provide(providers.$id, providers)
+
+const receivedDtesTable = ref({})
+
+const createProvider = (rut, name) => {
+  providers.doc = {
+    rut,
+    name
+  }
+  $router.push({ name: 'providers/create' })
+}
+
+const columns = [
+  { label: 'DETALLE', name: '_id', size: 100 },
+  { label: 'EMISIÓN', name: 'emissionDate', size: 250 },
+  { label: 'TIPO', name: 'dteTypeName', size: 250 },
+  { label: 'FOLIO', name: 'number' },
+  { label: 'ID BSALE', name: 'bsaleId' },
+  { label: 'RUT', name: 'providerRut' },
+  {
+    label: 'RAZÓN SOCIAL',
+    name: 'providerName',
+    align: 'left',
+    size: 300
+  },
+  { label: 'ALIAS', name: 'providerAlias', size: 300 },
+  { label: 'EXCENTO', name: 'exemptAmount' },
+  { label: 'IVA', name: 'ivaAmount' },
+  { label: 'TOTAL', name: 'totalAmount', align: 'right' },
+  { label: 'FORMA PAGO', name: 'paymentMethod' },
+  { label: 'EXPIRACIÓN', name: 'expirationDate' },
+  { label: 'PDF', name: 'pdfUrl' },
+  { label: 'XML', name: 'xmlUrl' },
+  { label: 'RECIBIDO', name: 'receptionDate' }
+]
+</script>
+
 <template>
   <LayoutPage>
     <TableQueryLazy
@@ -21,7 +73,7 @@
           lazy
           fetchAll
           :storeId="providers.$id"
-          v-model="receivedDtes.table.equalFilter.providerAlias"
+          v-model="receivedDtes.receivedDtesTable.equalFilter.providerAlias"
           field="alias"
           label="Proveedor"
           icon="local_shipping"
@@ -30,9 +82,11 @@
 
         <CalendarInput
           label="Fecha Emisión"
-          v-model="receivedDtes.table.dateFilter.value"
+          v-model="receivedDtes.receivedDtesTable.dateFilter.value"
         />
-        <ButtonPayCalc :date="receivedDtes.table.dateFilter.value" />
+        <ButtonPayCalc
+          :date="receivedDtes.receivedDtesTable.dateFilter.value"
+        />
       </template>
 
       <template v-slot="{ props }">
@@ -109,55 +163,3 @@
     </TableQueryLazy>
   </LayoutPage>
 </template>
-
-<script setup>
-import { useReceivedDtes } from 'stores/receiveddtes'
-import { useProviders } from 'stores/providers'
-import { provide, ref } from 'vue'
-import { useRouter } from 'vue-router'
-import formatter from 'tools/formatter'
-import ButtonPayCalc from './components/ButtonPayCalc.vue'
-import CellLinkDte from './components/CellLinkDte.vue'
-
-const $router = useRouter()
-const date = ref('2021/10/21')
-
-const receivedDtes = useReceivedDtes()
-provide(receivedDtes.$id, receivedDtes)
-const providers = useProviders()
-provide(providers.$id, providers)
-
-const receivedDtesTable = ref({})
-
-const createProvider = (rut, name) => {
-  providers.doc = {
-    rut,
-    name
-  }
-  $router.push({ name: 'providers/create' })
-}
-
-const columns = [
-  { label: 'DETALLE', name: '_id', size: 100 },
-  { label: 'EMISIÓN', name: 'emissionDate', size: 250 },
-  { label: 'TIPO', name: 'dteTypeName', size: 250 },
-  { label: 'FOLIO', name: 'number' },
-  { label: 'ID BSALE', name: 'bsaleId' },
-  { label: 'RUT', name: 'providerRut' },
-  {
-    label: 'RAZÓN SOCIAL',
-    name: 'providerName',
-    align: 'left',
-    size: 300
-  },
-  { label: 'ALIAS', name: 'providerAlias', size: 300 },
-  { label: 'EXCENTO', name: 'exemptAmount' },
-  { label: 'IVA', name: 'ivaAmount' },
-  { label: 'TOTAL', name: 'totalAmount', align: 'right' },
-  { label: 'FORMA PAGO', name: 'paymentMethod' },
-  { label: 'EXPIRACIÓN', name: 'expirationDate' },
-  { label: 'PDF', name: 'pdfUrl' },
-  { label: 'XML', name: 'xmlUrl' },
-  { label: 'RECIBIDO', name: 'receptionDate' }
-]
-</script>

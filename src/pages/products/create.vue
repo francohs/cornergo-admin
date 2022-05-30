@@ -136,7 +136,6 @@ import { provide, reactive, computed, ref } from 'vue'
 import { useProducts } from 'stores/products'
 import { useProviders } from 'stores/providers'
 import { useRoute } from 'vue-router'
-import SelectSearchProduct from './components/SelectSearchProduct.vue'
 import ItemPack from './components/ItemPack.vue'
 
 const products = useProducts()

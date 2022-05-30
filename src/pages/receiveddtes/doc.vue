@@ -1,3 +1,36 @@
+<script setup>
+import { reactive, provide, onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
+import { useReceivedDtes } from 'stores/receiveddtes'
+import { useProducts } from 'stores/products'
+import { useSupplies } from 'stores/supplies'
+import ItemDte from './components/ItemDte.vue'
+
+const receivedDtes = useReceivedDtes()
+provide(receivedDtes.$id, receivedDtes)
+const products = useProducts()
+provide(products.$id, products)
+const supplies = useSupplies()
+provide(supplies.$id, supplies)
+const loading = ref(false)
+
+const $route = useRoute()
+const id = $route.params.id
+
+const receivedDte = reactive({})
+
+onMounted(async () => {
+  await receivedDtes.getDoc(id)
+  Object.assign(receivedDte, receivedDtes.doc)
+})
+
+const receiveDte = async () => {
+  loading.value = true
+  await receivedDtes.update(receivedDte._id, receivedDte)
+  Object.assign(receivedDte, receivedDtes.doc)
+  loading.value = false
+}
+</script>
 <template>
   <LayoutPage :loading="receivedDtes.loading" class="q-pa-md">
     <q-card flat bordered class="q-mb-sm q-pt-md" style="border-color: grey">
@@ -124,49 +157,3 @@
     </q-card>
   </LayoutPage>
 </template>
-
-<script>
-import { reactive, provide, onMounted, ref } from 'vue'
-import { useReceivedDtes } from 'stores/receiveddtes'
-import { useProducts } from 'stores/products'
-import { useSupplies } from 'stores/supplies'
-import { useRoute } from 'vue-router'
-import ItemDte from './components/ItemDte.vue'
-
-export default {
-  setup() {
-    const receivedDtes = useReceivedDtes()
-    provide(receivedDtes.$id, receivedDtes)
-    const products = useProducts()
-    provide(products.$id, products)
-    const supplies = useSupplies()
-    provide(supplies.$id, supplies)
-    const loading = ref(false)
-
-    const $route = useRoute()
-    const id = $route.params.id
-
-    const receivedDte = reactive({})
-
-    onMounted(async () => {
-      await receivedDtes.getDoc(id)
-      Object.assign(receivedDte, receivedDtes.doc)
-    })
-
-    const receiveDte = async () => {
-      loading.value = true
-      await receivedDtes.update(receivedDte._id, receivedDte)
-      Object.assign(receivedDte, receivedDtes.doc)
-      loading.value = false
-    }
-
-    return {
-      receivedDte,
-      receivedDtes,
-      receiveDte,
-      loading
-    }
-  },
-  name: 'receivedDteDoc'
-}
-</script>

@@ -5,6 +5,7 @@
     :hint="hint"
     :rules="rules"
     :class="{ 'hide-select-input': $attrs.value != null }"
+    :style="`width: ${width ? width : 150}px;`"
   >
     <template v-if="icon" v-slot:prepend>
       <q-icon :name="icon" />
@@ -19,7 +20,8 @@
 const props = defineProps({
   required: Boolean,
   hint: String,
-  icon: String
+  icon: String,
+  width: [String, Number]
 })
 
 let rules = []
