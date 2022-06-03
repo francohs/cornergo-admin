@@ -1,35 +1,5 @@
-<template>
-  <q-input
-    v-bind="$attrs"
-    outlined
-    clearable
-    style="width: 185px"
-    class="q-pa-none readonly"
-    ref="inputDatePicker"
-    :modelValue="formatter.date(model.split('/').join('-'))"
-    @click="calendarPopup.show()"
-    @clear="clearDatePicker"
-  >
-    <template v-slot:prepend>
-      <q-icon name="event" class="cursor-pointer">
-        <q-popup-proxy ref="calendarPopup">
-          <q-date
-            flat
-            bordered
-            square
-            minimal
-            :locale="locale"
-            :modelValue="model"
-            @update:modelValue="hideDatePicker"
-          />
-        </q-popup-proxy>
-      </q-icon>
-    </template>
-  </q-input>
-</template>
-
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { locale } from 'tools/locale'
 import formatter from 'tools/formatter'
 
@@ -50,5 +20,35 @@ const hideDatePicker = value => {
 const clearDatePicker = () => {
   model.value = ''
   inputDatePicker.value.blur()
+  emit('update:modelValue', '')
 }
 </script>
+
+<template>
+  <q-input
+    v-bind="$attrs"
+    outlined
+    clearable
+    style="width: 185px"
+    class="q-pa-none readonly"
+    ref="inputDatePicker"
+    @click="calendarPopup.show()"
+    @clear="clearDatePicker"
+  >
+    <template v-slot:prepend>
+      <q-icon name="event" class="cursor-pointer">
+        <q-popup-proxy ref="calendarPopup">
+          <q-date
+            flat
+            bordered
+            square
+            minimal
+            :locale="locale"
+            :modelValue="model"
+            @update:modelValue="hideDatePicker"
+          />
+        </q-popup-proxy>
+      </q-icon>
+    </template>
+  </q-input>
+</template>

@@ -1,3 +1,13 @@
+<script setup>
+import { computed } from 'vue'
+
+const props = defineProps(['pagination', 'count'])
+
+const pages = computed(() =>
+  Math.ceil(props.count / props.pagination.rowsPerPage)
+)
+</script>
+
 <template>
   <div>
     <q-btn
@@ -33,13 +43,3 @@
     />
   </div>
 </template>
-
-<script setup>
-import { computed } from 'vue'
-
-const props = defineProps(['pagination', 'count'])
-
-const pages = computed(() =>
-  Math.ceil(props.count / props.pagination.rowsPerPage)
-)
-</script>

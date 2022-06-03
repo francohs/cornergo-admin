@@ -52,7 +52,12 @@ const formatter = {
     return value.toString().toUpperCase()
   },
 
-  date: value => (value ? moment.utc(value).format('DD/MM/YYYY') : null),
+  date: value => {
+    if (value) {
+      return moment.utc(value).format('DD/MM/YYYY')
+    }
+    return null
+  },
 
   time: value => date.formatDate(new Date(value), 'HH:mm:ss'),
 

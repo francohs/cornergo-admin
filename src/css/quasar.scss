@@ -78,6 +78,9 @@
 .q-date--landscape {
   min-width: 200px;
 }
+.q-date__today {
+  border: 1px solid $primary;
+}
 
 // SELECT
 .hide-select-input.q-select .q-field__input {

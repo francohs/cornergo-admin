@@ -82,7 +82,12 @@ const columns = [
 
         <CalendarInput
           label="Fecha Emisión"
-          v-model="receivedDtes.receivedDtesTable.dateFilter.value"
+          :modelValue="
+            formatter.date(receivedDtes.receivedDtesTable.dateFilter.value)
+          "
+          @update:modelValue="
+            receivedDtes.receivedDtesTable.dateFilter.value = $event
+          "
         />
         <ButtonPayCalc
           :date="receivedDtes.receivedDtesTable.dateFilter.value"

@@ -21,26 +21,40 @@
         <Input
           required
           onlynumbers
-          rut
+          format="rut"
           v-model="client.rut"
           label="RUT"
           class="col"
         />
       </RowMultiCols>
 
-      <Input required email label="Correo" v-model="client.email" class="fit" />
       <Input label="Dirección" v-model="client.address" class="fit" />
 
       <RowMultiCols>
         <Input
+          required
+          email
+          label="Correo"
+          v-model="client.email"
+          class="col"
+        /><Input
           onlynumbers
           label="Teléfono"
           v-model="client.phone"
           class="col"
         />
-        <InputRead
+      </RowMultiCols>
+
+      <RowMultiCols>
+        <Input
           label="Saldo"
           v-model="client.balance"
+          format="currency"
+          class="col"
+        />
+        <Input
+          label="Crédito Máximo"
+          v-model="client.maxCredit"
           format="currency"
           class="col"
         />
