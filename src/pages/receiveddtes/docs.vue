@@ -52,11 +52,11 @@ const columns = [
 
 <template>
   <LayoutPage>
+    <!-- initFetch -->
     <TableQueryLazy
       tableName="receivedDtesTable"
       :storeId="receivedDtes.$id"
       :columns="columns"
-      initFetch
       inputOnlynumbers
       :minInput="1"
       :forceSort="{ emissionDate: -1, providerName: -1, number: -1 }"
