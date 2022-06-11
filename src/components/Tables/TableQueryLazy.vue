@@ -95,90 +95,95 @@ const queryDocs = async (page = table.pagination.page) => {
 const saveTable = () => {
   LocalStorage.set(props.tableName, table)
 }
+
+defineExpose({ queryInit })
 </script>
 
 <template>
-  <div class="q-pa-md">
-    <Table
-      v-bind="$attrs"
-      :rows="store.docs"
-      :columns="columns"
-      :visible-columns="table.visibles"
-      v-model:pagination="table.pagination"
-      :loading="store.loading"
-    >
-      <template v-slot:top>
-        <div class="full-width row items-center q-gutter-x-sm">
-          <q-icon :name="titleIcon" size="sm" class="q-mx-none" />
-          <div class="text-h6 q-mr-md">{{ title }}</div>
+  <Table
+    v-bind="$attrs"
+    :rows="store.docs"
+    :columns="columns"
+    :visible-columns="table.visibles"
+    v-model:pagination="table.pagination"
+    :loading="store.loading"
+  >
+    <template v-slot:top>
+      <div class="full-width row items-center q-gutter-x-sm">
+        <q-icon
+          v-if="titleIcon"
+          :name="titleIcon"
+          size="sm"
+          class="q-mx-none"
+        />
+        <div v-if="title" class="text-h6 q-mr-md">{{ title }}</div>
 
-          <InputTable
-            v-model="table.input"
-            :placeholder="inputPlaceholder"
-            debounce="500"
-            style="width: 268px"
-            @update:modelValue="queryInputDocs()"
-            :onlynumbers="inputOnlynumbers"
+        <InputTable
+          v-model="table.input"
+          :placeholder="inputPlaceholder"
+          debounce="500"
+          style="width: 268px"
+          @update:modelValue="queryInputDocs()"
+          :onlynumbers="inputOnlynumbers"
+        />
+
+        <slot name="extracontrols" />
+
+        <q-space />
+
+        <SelectTableVisibles
+          v-model="table.visibles"
+          :columns="columns"
+          @update:modelValue="queryInit"
+        />
+
+        <SelectTableSort
+          v-if="!forceSort"
+          v-model="table.pagination"
+          :columns="columns"
+          :visibles="table.visibles"
+          @update:modelValue="queryInit"
+        />
+
+        <ButtonLinkCreate :storeId="store.$id" v-if="createBtn" />
+      </div>
+    </template>
+
+    <template v-slot:body="props">
+      <q-tr :props="props">
+        <slot :props="props">
+          <q-td v-for="column in columns" :key="column.name" :props="props">
+            {{ props.row[column.name] }}
+          </q-td>
+        </slot>
+      </q-tr>
+    </template>
+
+    <template v-slot:bottom>
+      <div class="full-width row justify-between items-center">
+        <div class="row items-center">
+          {{ store.count }} Resultados
+
+          <ToggleActives
+            v-if="activeToggle"
+            v-model="table.actives"
+            @update:modelValue="queryInit"
           />
+        </div>
 
-          <slot name="extracontrols" />
-
-          <q-space />
-
-          <SelectTableVisibles
-            v-model="table.visibles"
-            :columns="columns"
+        <div class="row items-center">
+          <SelectRowsPerPage
+            v-model="table.pagination.rowsPerPage"
             @update:modelValue="queryInit"
           />
 
-          <SelectTableSort
-            v-if="!forceSort"
-            v-model="table.pagination"
-            :columns="columns"
-            :visibles="table.visibles"
-            @update:modelValue="queryInit"
+          <PaginationTable
+            :pagination="table.pagination"
+            :count="store.count"
+            @update:pagination="onPagination"
           />
-
-          <ButtonLinkCreate :storeId="store.$id" v-if="createBtn" />
         </div>
-      </template>
-
-      <template v-slot:body="props">
-        <q-tr :props="props">
-          <slot :props="props">
-            <q-td v-for="column in columns" :key="column.name" :props="props">
-              {{ props.row[column.name] }}
-            </q-td>
-          </slot>
-        </q-tr>
-      </template>
-
-      <template v-slot:bottom>
-        <div class="full-width row justify-between items-center">
-          <div class="row items-center">
-            {{ store.count }} Resultados
-
-            <ToggleActives
-              v-if="activeToggle"
-              v-model="table.actives"
-              @update:modelValue="queryInit"
-            />
-          </div>
-
-          <div class="row items-center">
-            <SelectRowsPerPage
-              v-model="table.pagination.rowsPerPage"
-              @update:modelValue="queryInit"
-            />
-
-            <PaginationTable
-              :pagination="table.pagination"
-              :count="store.count"
-              @update:pagination="onPagination"
-            />
-          </div>
-        </div>
-      </template>
-    </Table>
-  </div>
+      </div>
+    </template>
+  </Table>
 </template>

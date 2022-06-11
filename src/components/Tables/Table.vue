@@ -1,3 +1,20 @@
+<script setup>
+const props = defineProps({
+  columns: Array,
+  noDataText: String,
+  loading: Boolean,
+  loadingText: { type: String, default: 'Cagando datos...' }
+})
+
+const columnsProps = props.columns.map(col => {
+  col.style = col.size ? `width: ${col.size}px` : 'width: 200px'
+  col.align = col.align || 'center'
+  col.field = col.field || col.name
+  col.sortable = col.sortable == undefined ? false : col.sortable
+  return col
+})
+</script>
+
 <template>
   <q-table
     v-bind="$attrs"
@@ -37,20 +54,3 @@
     </template>
   </q-table>
 </template>
-
-<script setup>
-const props = defineProps({
-  columns: Array,
-  noDataText: String,
-  loading: Boolean,
-  loadingText: { type: String, default: 'Cagando datos...' }
-})
-
-const columnsProps = props.columns.map(col => {
-  col.style = col.size ? `width: ${col.size}px` : 'width: 200px'
-  col.align = col.align || 'center'
-  col.field = col.field || col.name
-  col.sortable = col.sortable == undefined ? false : col.sortable
-  return col
-})
-</script>

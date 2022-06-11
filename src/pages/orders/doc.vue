@@ -71,7 +71,7 @@ const order = reactive({})
 const provider = ref('')
 const checkStockCount = ref(0)
 const loadingGoto = ref(false)
-const orderDate = formatter.date(new Date())
+const orderDate = formatter.localDate(new Date())
 
 provide(orders.$id, orders)
 

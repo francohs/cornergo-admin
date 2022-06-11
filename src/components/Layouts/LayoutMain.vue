@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="hHh Lpr lff">
+  <q-layout view="hHh Lpr lff" class="bg-grey-2">
     <Navbar @drawer-open="toggleDrawer" />
 
     <Drawer v-model="drawerOpen" v-if="auth.isLogged" />

@@ -140,7 +140,7 @@ const createProduct = () => {
         <InputRead
           label="Nombre Suministro"
           :modelValue="item.name"
-          :hint="`Creado ${formatter.date(supply.createdAt)}`"
+          :hint="`Creado ${formatter.localDate(supply.createdAt)}`"
           input-style="font-size: 14px;"
           width="400"
           dense
@@ -284,7 +284,7 @@ const createProduct = () => {
         <Input
           label="Nombre Producto"
           v-model="product.name"
-          :hint="`Creado ${formatter.date(product.createdAt)}`"
+          :hint="`Creado ${formatter.localDate(product.createdAt)}`"
           input-style="font-size: 14px;"
           width="400"
           dense
@@ -318,7 +318,7 @@ const createProduct = () => {
           label="Pedido"
           v-if="supply.lastOrdered"
           :modelValue="supply.lastOrdered.quantity"
-          :hint="formatter.date(supply.lastOrdered.updatedAt)"
+          :hint="formatter.localDate(supply.lastOrdered.updatedAt)"
           width="90"
           dense
         />

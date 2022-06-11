@@ -135,7 +135,7 @@
       <RowMultiCols>
         <Input
           label="Última Venta"
-          :modelValue="formatter.date(product.lastSell)"
+          :modelValue="formatter.localDate(product.lastSell)"
           readonly
         />
         <Input label="Total Ventas" :modelValue="product.totalSells" readonly />

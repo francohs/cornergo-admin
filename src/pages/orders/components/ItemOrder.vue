@@ -12,7 +12,7 @@
           <InputRead
             label="Nombre Producto"
             :modelValue="product.name"
-            :hint="`Creado ${formatter.date(product.createdAt)}`"
+            :hint="`Creado ${formatter.localDate(product.createdAt)}`"
             input-style="font-size: 14px;"
             width="400"
             dense
@@ -75,7 +75,7 @@
           <InputRead
             label="Nombre Suministro"
             :modelValue="supply.name"
-            :hint="`Creado ${formatter.date(supply.createdAt)}`"
+            :hint="`Creado ${formatter.localDate(supply.createdAt)}`"
             input-style="font-size: 14px;"
             width="400"
             dense

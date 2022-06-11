@@ -1,40 +1,3 @@
-<template>
-  <div>
-    <q-btn
-      flat
-      label="CALCULAR CHEQUES"
-      :disable="!date"
-      :class="{ 'text-primary': date }"
-      @click="payCalc"
-      :loading="loading"
-    /><q-tooltip v-if="!date" :delay="300"
-      >Primero selecciona la fecha de emisión</q-tooltip
-    >
-  </div>
-  <Dialog title="Calculo de Cheques" v-model="dialog" noFooter :width="800">
-    <q-table
-      separator="cell"
-      hide-bottom
-      :rows="pays"
-      :columns="[
-        { label: 'PROVEEDOR', field: 'providerName', align: 'left' },
-        { label: 'FORMA PAGO', field: 'paymentMethod', align: 'center' },
-        {
-          label: 'VENCIMIENTO',
-          field: 'expirationDate',
-          align: 'center',
-          format: val => formatter.date(val)
-        },
-        {
-          label: 'MONTO TOTAL',
-          field: 'totalAmount',
-          format: val => formatter.currency(val)
-        }
-      ]"
-    />
-  </Dialog>
-</template>
-
 <script setup>
 import { ref } from 'vue'
 import { api } from 'boot/axios'
@@ -79,3 +42,42 @@ const payCalc = async () => {
   }
 }
 </script>
+
+<template>
+  <div>
+    <!-- :class="{ 'text-primary': date }" -->
+    <q-btn
+      label="CALCULAR CHEQUES"
+      :disable="!date"
+      @click="payCalc"
+      :loading="loading"
+      color="primary"
+      ><q-tooltip v-if="!date" :delay="300"
+        >Primero selecciona la fecha de emisión</q-tooltip
+      ></q-btn
+    >
+  </div>
+
+  <Dialog title="Calculo de Cheques" v-model="dialog" noFooter :width="800">
+    <q-table
+      separator="cell"
+      hide-bottom
+      :rows="pays"
+      :columns="[
+        { label: 'PROVEEDOR', field: 'providerName', align: 'left' },
+        { label: 'FORMA PAGO', field: 'paymentMethod', align: 'center' },
+        {
+          label: 'VENCIMIENTO',
+          field: 'expirationDate',
+          align: 'center',
+          format: val => formatter.localDate(val)
+        },
+        {
+          label: 'MONTO TOTAL',
+          field: 'totalAmount',
+          format: val => formatter.currency(val)
+        }
+      ]"
+    />
+  </Dialog>
+</template>
