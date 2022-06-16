@@ -45,7 +45,6 @@ const payCalc = async () => {
 
 <template>
   <div>
-    <!-- :class="{ 'text-primary': date }" -->
     <q-btn
       label="CALCULAR CHEQUES"
       :disable="!date"
@@ -62,6 +61,7 @@ const payCalc = async () => {
     <q-table
       separator="cell"
       hide-bottom
+      wrap-cells
       :rows="pays"
       :columns="[
         { label: 'PROVEEDOR', field: 'providerName', align: 'left' },

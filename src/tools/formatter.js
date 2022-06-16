@@ -54,7 +54,7 @@ const formatter = {
 
   date: value => {
     if (value) {
-      return moment.utc(value).format('YYYY-MM-DD')
+      return moment(value).format('YYYY-MM-DD')
     }
     return null
   },

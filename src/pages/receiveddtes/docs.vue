@@ -17,10 +17,53 @@ provide(providers.$id, providers)
 const receivedDtesTable = ref({})
 const date = ref('2022-06-06')
 
-// onMounted(async () => {
-//   receivedDtes.receivedDtesTable.dateFilter.value = formatter.date(new Date())
-//   await receivedDtesTable.value.queryInit()
-// })
+const initDate = () => {
+  receivedDtes.receivedDtesTable.dateFilter.value = formatter.date(new Date())
+  receivedDtes.receivedDtesTable.visibles =
+    receivedDtes.receivedDtesTable.visibles.filter(
+      field => field != 'emissionDate'
+    )
+}
+
+const clearDate = () => {
+  receivedDtes.receivedDtesTable.dateFilter.value = null
+  receivedDtes.receivedDtesTable.visibles.push('emissionDate')
+}
+
+onMounted(async () => {
+  initDate()
+  await receivedDtesTable.value.queryInit()
+})
+
+const onDate = async () => {
+  receivedDtes.receivedDtesTable.visibles =
+    receivedDtes.receivedDtesTable.visibles.filter(
+      field => field != 'emissionDate'
+    )
+  receivedDtes.receivedDtesTable.equalFilter.providerAlias = null
+  receivedDtes.receivedDtesTable.input = ''
+  await receivedDtesTable.value.queryInit()
+}
+
+const onInput = async () => {
+  if (receivedDtes.receivedDtesTable.input) {
+    receivedDtes.receivedDtesTable.equalFilter.providerAlias = null
+    clearDate()
+  } else {
+    initDate()
+  }
+  await receivedDtesTable.value.queryInit()
+}
+
+const onFilter = async () => {
+  if (receivedDtes.receivedDtesTable.equalFilter.providerAlias) {
+    receivedDtes.receivedDtesTable.input = ''
+    clearDate()
+  } else {
+    initDate()
+  }
+  await receivedDtesTable.value.queryInit()
+}
 
 const createProvider = (rut, name) => {
   providers.doc = {
@@ -71,7 +114,10 @@ const columns = [
           <q-separator />
         </div>
 
-        <Calendar v-model="receivedDtes.receivedDtesTable.dateFilter.value" />
+        <Calendar
+          v-model="receivedDtes.receivedDtesTable.dateFilter.value"
+          @update:modelValue="onDate"
+        />
 
         <div>
           <q-separator />
@@ -81,16 +127,6 @@ const columns = [
             />
           </div>
         </div>
-
-        <!-- <CalendarInput
-          label="Fecha Emisión"
-          :modelValue="
-            formatter.localDate(receivedDtes.receivedDtesTable.dateFilter.value)
-          "
-          @update:modelValue="
-            receivedDtes.receivedDtesTable.dateFilter.value = $event
-          "
-        /> -->
       </q-card>
       <TableQueryLazy
         tableName="receivedDtesTable"
@@ -100,12 +136,21 @@ const columns = [
         :minInput="1"
         :forceSort="{ emissionDate: -1, providerName: -1, number: -1 }"
         ref="receivedDtesTable"
-        inputPlaceholder="Buscar DTE por folio..."
         loadingText="Sincronizando dtes..."
         noDataText="Sin resultados, puedes filtrar dtes por folio, proveedor o fecha de emisión"
         class="col"
       >
         <template v-slot:extracontrols>
+          <InputTable
+            v-model="receivedDtes.receivedDtesTable.input"
+            placeholder="Buscar DTE por folio..."
+            debounce="500"
+            style="width: 268px"
+            @update:modelValue="onInput"
+            :onlynumbers="true"
+            class="q-mr-md"
+          />
+
           <SelectInputFetch
             lazy
             fetchAll
@@ -115,12 +160,13 @@ const columns = [
             label="Proveedor"
             icon="local_shipping"
             style="width: 240px"
+            @update:modelValue="onFilter"
           />
         </template>
 
         <template v-slot="{ props }">
           <CellLinkDte field="_id" :cell="props" />
-          <Cell field="emissionDate" format="date" :cell="props" />
+          <Cell field="emissionDate" format="localDate" :cell="props" />
           <Cell field="dteTypeName" :cell="props" />
           <Cell field="number" :cell="props" />
           <Cell field="bsaleId" :cell="props" />
@@ -160,7 +206,7 @@ const columns = [
             :cell="props"
           />
           <Cell field="paymentMethod" format="currency" :cell="props" />
-          <Cell field="expirationDate" format="date" :cell="props" />
+          <Cell field="expirationDate" format="localDate" :cell="props" />
           <CellLink
             field="pdfUrl"
             :cell="props"

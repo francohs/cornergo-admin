@@ -11,6 +11,7 @@ const props = defineProps({
   activeToggle: Boolean,
   inputPlaceholder: String,
   minInput: { type: Number, default: 2 },
+  withInput: Boolean,
   initFetch: Boolean,
   inputOnlynumbers: Boolean,
   forceSort: Object,
@@ -32,9 +33,9 @@ if (props.initFetch) {
   })
 }
 
-watch([table.equalFilter, table.dateFilter], async () => {
-  await queryInit()
-})
+// watch([table.equalFilter, table.dateFilter], async () => {
+//   await queryInit()
+// })
 
 const onPagination = async pagination => {
   await queryNext(pagination.page)
@@ -109,7 +110,7 @@ defineExpose({ queryInit })
     :loading="store.loading"
   >
     <template v-slot:top>
-      <div class="full-width row items-center q-gutter-x-sm">
+      <div class="full-width row items-center">
         <q-icon
           v-if="titleIcon"
           :name="titleIcon"
@@ -119,12 +120,14 @@ defineExpose({ queryInit })
         <div v-if="title" class="text-h6 q-mr-md">{{ title }}</div>
 
         <InputTable
+          v-if="withInput"
           v-model="table.input"
           :placeholder="inputPlaceholder"
           debounce="500"
           style="width: 268px"
           @update:modelValue="queryInputDocs()"
           :onlynumbers="inputOnlynumbers"
+          class="q-mr-md"
         />
 
         <slot name="extracontrols" />
