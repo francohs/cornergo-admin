@@ -21,6 +21,11 @@ const props = defineProps({
 const store = inject(props.storeId)
 const table = store[props.tableName]
 
+const onVisbleOrSort = async () => {
+  if (store.docs.length == 0) return
+  await queryInit()
+}
+
 const queryInit = async () => {
   table.pagination.page = 1
   await queryDocs()
@@ -89,7 +94,8 @@ const queryDocs = async (page = table.pagination.page) => {
     pagination: {
       page,
       rowsPerPage: table.pagination.rowsPerPage
-    }
+    },
+    populate: table.populate
   })
 }
 
@@ -138,6 +144,7 @@ defineExpose({ queryInit })
           v-model="table.visibles"
           :columns="columns"
           @update:modelValue="queryInit"
+          class="q-ml-md"
         />
 
         <SelectTableSort
@@ -146,6 +153,7 @@ defineExpose({ queryInit })
           :columns="columns"
           :visibles="table.visibles"
           @update:modelValue="queryInit"
+          class="q-ml-md"
         />
 
         <ButtonLinkCreate :storeId="store.$id" v-if="createBtn" />
@@ -170,14 +178,14 @@ defineExpose({ queryInit })
           <ToggleActives
             v-if="activeToggle"
             v-model="table.actives"
-            @update:modelValue="queryInit"
+            @update:modelValue="onVisbleOrSort"
           />
         </div>
 
         <div class="row items-center">
           <SelectRowsPerPage
             v-model="table.pagination.rowsPerPage"
-            @update:modelValue="queryInit"
+            @update:modelValue="onVisbleOrSort"
           />
 
           <PaginationTable

@@ -38,11 +38,11 @@
         <CellInput field="minimum" :storeId="products.$id" :cell="props" />
         <CellInput field="showcase" :storeId="products.$id" :cell="props" />
         <Cell field="lastBuy" :storeId="products.$id" :cell="props" />
-        <Cell field="lastSell" :storeId="products.$id" :cell="props" />
+        <Cell field="lastSale" :storeId="products.$id" :cell="props" />
         <Cell field="sale" :storeId="products.$id" :cell="props" />
         <Cell field="saleAvg" :storeId="products.$id" :cell="props" />
         <Cell
-          field="totalSells"
+          field="totalSales"
           format="decimal"
           :storeId="products.$id"
           :cell="props"
@@ -78,10 +78,10 @@ const columns = [
   { label: 'MÍNIMO', name: 'minimum' },
   { label: 'VITRINA', name: 'showcase' },
   { label: 'ÚLTIMA COMPRA', name: 'lastBuy' },
-  { label: 'ÚLTIMA VENTA', name: 'lastSell' },
+  { label: 'ÚLTIMA VENTA', name: 'lastSale' },
   { label: 'VENTAS SEMANAL', name: 'sale' },
   { label: 'VENTAS PROMEDIO', name: 'saleAvg' },
-  { label: 'VENTAS TOTAL', name: 'totalSells' },
+  { label: 'VENTAS TOTAL', name: 'totalSales' },
   { label: 'REVISADO', name: 'checked' }
 ]
 

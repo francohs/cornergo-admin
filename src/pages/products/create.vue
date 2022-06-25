@@ -28,7 +28,7 @@
           label="Nombre"
           field="name"
           :minInput="2"
-          class="col-8"
+          class="col"
           hint=""
         />
         <Input
@@ -38,7 +38,7 @@
           :debounce="500"
           :loading="loading"
           onlynumbers
-          class="col"
+          style="width: 300px"
         />
       </RowMultiCols>
 
@@ -84,7 +84,8 @@
         <div class="text-subtitle2 q-pl-sm" style="line-height: 35px">
           PRECIO
         </div>
-        <Toggle label="Exento" v-model="product.isExempt" />
+
+        <Toggle label="Exento (Cigarros)" v-model="product.exempt" />
       </div>
 
       <RowMultiCols>
@@ -113,6 +114,13 @@
           :high="40"
           format="percent"
           width="100"
+          class="col"
+        />
+        <Input
+          v-if="product.exempt"
+          label="Precio Vigente SII"
+          v-model="product.batPrice"
+          onlynumbers
           class="col"
         />
       </RowMultiCols>
@@ -148,7 +156,7 @@ const product = reactive({
   code: products.doc.code,
   pack: [],
   active: true,
-  isExempt: false,
+  exempt: false,
   marginRate: 40,
   stock: 0,
   showcase: 3,

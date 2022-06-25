@@ -41,7 +41,7 @@
         <Cell format="currency" field="shippingCost" :cell="props" />
         <Cell format="currency" field="unitShipping" :cell="props" />
         <Cell field="taxCode" :cell="props" />
-        <Cell field="isExempt" format="boolean" :cell="props" />
+        <Cell field="exempt" format="boolean" :cell="props" />
         <Cell field="cost" format="currency" :cell="props" />
         <CellInput
           field="unitCost"
@@ -86,7 +86,7 @@ export default {
         { label: 'FLETE', name: 'shippingCost' },
         { label: 'FLETE UND', name: 'unitShipping' },
         { label: 'ILA', name: 'taxCode' },
-        { label: 'EXENTO', name: 'isExempt' },
+        { label: 'EXENTO', name: 'exempt' },
         { label: 'COSTO', name: 'cost' },
         { label: 'COSTO UND', name: 'unitCost' },
         { label: 'CREADO', name: 'createdAt' },

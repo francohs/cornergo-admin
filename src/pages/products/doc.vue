@@ -99,7 +99,7 @@
         <div class="text-subtitle2 q-pl-sm" style="line-height: 35px">
           PRECIO
         </div>
-        <Toggle label="Exento" v-model="product.isExempt" />
+        <Toggle label="Exento" v-model="product.exempt" />
       </div>
 
       <RowMultiCols>
@@ -135,10 +135,10 @@
       <RowMultiCols>
         <Input
           label="Última Venta"
-          :modelValue="formatter.localDate(product.lastSell)"
+          :modelValue="formatter.localDate(product.lastSale)"
           readonly
         />
-        <Input label="Total Ventas" :modelValue="product.totalSells" readonly />
+        <Input label="Total Ventas" :modelValue="product.totalSales" readonly />
       </RowMultiCols>
 
       <div class="row justify-between q-mt-md">

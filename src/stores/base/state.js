@@ -11,7 +11,7 @@ export const baseState = () => ({
 
 export const tableState = (
   tableName,
-  { visibles, forceSelect, containsFields, equalFilter, dateFilter }
+  { visibles, forceSelect, containsFields, equalFilter, dateFilter, populate }
 ) => {
   const table = LocalStorage.getItem(tableName) || {
     input: '',
@@ -26,7 +26,8 @@ export const tableState = (
     containsFields: containsFields || [],
     equalFilter: equalFilter || {},
     dateFilter: dateFilter || {},
-    actives: true
+    actives: true,
+    populate: populate || []
   }
   table.input = ''
   table.pagination.page = 1

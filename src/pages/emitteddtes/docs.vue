@@ -1,22 +1,17 @@
 <script setup>
 import { onMounted, provide, ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useReceivedDtes } from 'stores/receiveddtes'
+import { useEmittedDtes } from 'stores/emitteddtes'
 import { useProviders } from 'stores/providers'
 import formatter from 'tools/formatter'
-import ButtonPayCalc from './components/ButtonPayCalc.vue'
-import CellLinkDte from './components/CellLinkDte.vue'
 
-const $router = useRouter()
-
-const receivedDtes = useReceivedDtes()
-provide(receivedDtes.$id, receivedDtes)
+const emittedDtes = useEmittedDtes()
+provide(emittedDtes.$id, emittedDtes)
 const providers = useProviders()
 provide(providers.$id, providers)
 
-const tableRef = ref({})
+const emittedDtesTable = ref({})
 
-const table = receivedDtes.receivedDtesTable
+const table = emittedDtes.emittedDtesTable
 
 const initDate = () => {
   table.dateFilter.value = formatter.date(new Date())
@@ -30,14 +25,14 @@ const clearDate = () => {
 
 onMounted(async () => {
   initDate()
-  await tableRef.value.queryInit()
+  await emittedDtesTable.value.queryInit()
 })
 
 const onDate = async () => {
   table.visibles = table.visibles.filter(field => field != 'emissionDate')
   table.equalFilter.providerAlias = null
   table.input = ''
-  await tableRef.value.queryInit()
+  await emittedDtesTable.value.queryInit()
 }
 
 const onInput = async () => {
@@ -47,7 +42,7 @@ const onInput = async () => {
   } else {
     initDate()
   }
-  await tableRef.value.queryInit()
+  await emittedDtesTable.value.queryInit()
 }
 
 const onFilter = async () => {
@@ -57,39 +52,25 @@ const onFilter = async () => {
   } else {
     initDate()
   }
-  await tableRef.value.queryInit()
-}
-
-const createProvider = (rut, name) => {
-  providers.doc = {
-    rut,
-    name
-  }
-  $router.push({ name: 'providers/create' })
+  await emittedDtesTable.value.queryInit()
 }
 
 const columns = [
   { label: 'DETALLE', name: '_id', size: 100 },
-  { label: 'EMISIÓN', name: 'emissionDate', size: 250 },
   { label: 'TIPO', name: 'dteTypeName', size: 250 },
+  { label: 'EMISIÓN', name: 'emissionDate', size: 250 },
+  { label: 'HORA', name: 'time' },
   { label: 'FOLIO', name: 'number' },
   { label: 'ID BSALE', name: 'bsaleId' },
-  { label: 'RUT', name: 'providerRut' },
-  {
-    label: 'RAZÓN SOCIAL',
-    name: 'providerName',
-    align: 'left',
-    size: 300
-  },
-  { label: 'ALIAS', name: 'providerAlias', size: 300 },
-  { label: 'EXCENTO', name: 'exemptAmount' },
-  { label: 'IVA', name: 'ivaAmount' },
+  { label: 'VENDEDOR', name: 'sellerName' },
+  { label: 'CLIENTE', name: 'client' },
+  { label: 'EXCENTO', name: 'exemptAmount', align: 'right' },
+  { label: 'NETO', name: 'netAmount', align: 'right' },
+  { label: 'IVA', name: 'taxAmount', align: 'right' },
   { label: 'TOTAL', name: 'totalAmount', align: 'right' },
-  { label: 'FORMA PAGO', name: 'paymentMethod' },
-  { label: 'EXPIRACIÓN', name: 'expirationDate' },
+  { label: 'VUELTO', name: 'changeAmount', align: 'right' },
   { label: 'PDF', name: 'pdfUrl' },
-  { label: 'XML', name: 'xmlUrl' },
-  { label: 'RECIBIDO', name: 'receptionDate' }
+  { label: 'XML', name: 'xmlUrl' }
 ]
 </script>
 
@@ -113,22 +94,16 @@ const columns = [
           v-model="table.dateFilter.value"
           @update:modelValue="onDate"
         />
-
-        <div>
-          <q-separator />
-          <div class="row justify-center q-mt-lg">
-            <ButtonPayCalc :date="table.dateFilter.value" />
-          </div>
-        </div>
+        <q-separator />
       </q-card>
       <TableQueryLazy
-        tableName="receivedDtesTable"
-        :storeId="receivedDtes.$id"
+        tableName="emittedDtesTable"
+        :storeId="emittedDtes.$id"
         :columns="columns"
         inputOnlynumbers
         :minInput="1"
         :forceSort="{ emissionDate: -1, providerName: -1, number: -1 }"
-        ref="tableRef"
+        ref="emittedDtesTable"
         loadingText="Sincronizando dtes..."
         noDataText="Sin resultados, puedes filtrar dtes por folio, proveedor o fecha de emisión"
         class="col"
@@ -144,7 +119,7 @@ const columns = [
             class="q-mr-md"
           />
 
-          <SelectInputFetch
+          <!-- <SelectInputFetch
             lazy
             fetchAll
             :storeId="providers.$id"
@@ -154,52 +129,37 @@ const columns = [
             icon="local_shipping"
             style="width: 240px"
             @update:modelValue="onFilter"
-          />
+          /> -->
         </template>
 
         <template v-slot="{ props }">
-          <CellLinkDte field="_id" :cell="props" />
-          <Cell field="emissionDate" format="localDate" :cell="props" />
+          <CellLink field="_id" :name="emittedDtes.$id" :cell="props" />
           <Cell field="dteTypeName" :cell="props" />
+          <q-td key="emissionDate" :props="props">
+            <slot>
+              {{ formatter.localDate(props.row.emissionDate) }}
+            </slot>
+          </q-td>
+          <q-td key="time" :props="props">
+            <slot>
+              {{ formatter.time(props.row.emissionDate) }}
+            </slot>
+          </q-td>
           <Cell field="number" :cell="props" />
           <Cell field="bsaleId" :cell="props" />
-          <Cell format="rut" field="providerRut" :cell="props" />
-          <Cell field="providerName" style="font-size: 12px" :cell="props" />
-          <Cell
-            v-if="props.row.providerAlias"
-            field="providerAlias"
-            :cell="props"
-          />
-          <Cell
-            v-else
-            field="providerAlias"
-            style="font-size: 12px"
-            :cell="props"
-          >
-            {{ props.row.providerName }}
-            <q-btn
-              icon="add"
-              flat
-              dense
-              size="sm"
-              color="positive"
-              @click="
-                createProvider(props.row.providerRut, props.row.providerName)
-              "
-            >
-              <q-tooltip>Agregar proveedor</q-tooltip>
-            </q-btn>
-          </Cell>
+          <Cell field="sellerName" :cell="props" />
+          <q-td key="client" :props="props">
+            <slot>
+              {{ props.row.client ? props.row.client.name : '' }}
+            </slot>
+          </q-td>
+
           <Cell field="exemptAmount" format="currency" :cell="props" />
-          <Cell field="ivaAmount" format="currency" :cell="props" />
-          <Cell
-            v-if="props.row.totalAmount"
-            field="totalAmount"
-            format="currency"
-            :cell="props"
-          />
-          <Cell field="paymentMethod" format="currency" :cell="props" />
-          <Cell field="expirationDate" format="localDate" :cell="props" />
+          <Cell field="netAmount" format="currency" :cell="props" />
+          <Cell field="taxAmount" format="currency" :cell="props" />
+          <Cell field="totalAmount" format="currency" :cell="props" />
+          <Cell field="changeAmount" format="currency" :cell="props" />
+
           <CellLink
             field="pdfUrl"
             :cell="props"
@@ -212,21 +172,6 @@ const columns = [
             :url="props.row.xmlUrl"
             noLink="Sin XML"
           />
-          <Cell field="receptionDate" :cell="props">
-            {{
-              props.row.receptionDate
-                ? formatter.datetime(props.row.receptionDate)
-                : ''
-            }}
-            <q-icon
-              v-if="props.row.receptionDate"
-              class="q-ml-sm"
-              name="check_circle"
-              color="positive"
-              size="sm"
-            />
-            <q-icon v-else name="remove_circle" color="grey" size="sm" />
-          </Cell>
         </template>
       </TableQueryLazy>
     </div>

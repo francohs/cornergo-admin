@@ -1,31 +1,20 @@
 <template>
   <q-td :key="field" :props="cell">
-    <q-btn v-if="url || name" flat size="md" icon="launch" @click="goto" />
+    <q-btn v-if="url" flat size="md" icon="launch" @click="openURL(url)" />
+    <q-btn
+      v-else-if="name"
+      flat
+      size="md"
+      icon="launch"
+      :to="{ name: `${name}/:id`, params: { id: cell.row[field] } }"
+      target="_blank"
+    />
     <span v-else class="text-grey-8">{{ noLink }}</span>
   </q-td>
 </template>
 
 <script setup>
 import { openURL } from 'quasar'
-import { useRouter } from 'vue-router'
 
-const props = defineProps(['cell', 'field', 'url', 'params', 'name', 'noLink'])
-
-const router = useRouter()
-
-const goto = () => {
-  if (props.url) {
-    openURL(props.url)
-  } else {
-    console.log({
-      name: props.name,
-      params: { id: props.cell.row._id }
-    })
-    // router.push({
-    //   name: props.name,
-    //   params: { id: props.cell.row._id }
-    // })
-    router.push(`/${props.name}/${props.cell.row._id}`)
-  }
-}
+const props = defineProps(['cell', 'field', 'url', 'name', 'noLink'])
 </script>

@@ -20,7 +20,7 @@ const filterFn = async (value, update) => {
         },
         equal: { active: true }
       },
-      select: ['code', 'name', 'stock', 'price', 'isExempt'],
+      select: ['code', 'name', 'stock', 'price', 'exempt'],
       sort: { name: -1 }
     })
 
