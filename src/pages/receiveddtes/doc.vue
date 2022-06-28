@@ -94,13 +94,11 @@ const receiveDte = async () => {
       class="rounded-borders"
       style="border-color: grey"
     >
-      <q-item
+      <ItemDte
         v-for="item of receivedDtes.doc.items"
         :key="item.line"
-        style="border-color: grey"
-      >
-        <ItemDte :item="item" />
-      </q-item>
+        :item="item"
+      />
     </q-list>
 
     <q-card flat bordered class="q-mt-sm q-pt-md" style="border-color: grey">

@@ -4,6 +4,7 @@ import { api } from 'boot/axios'
 import formatter from 'tools/formatter'
 import notify from 'tools/notify'
 
+const props = defineProps(['modelValue'])
 const emit = defineEmits(['chose'])
 
 const inputValue = ref('')
@@ -48,8 +49,8 @@ const onEnter = () => {
 
 const clear = () => {
   inputValue.value = ''
-  selectRef.value.updateInputValue('')
-  selectRef.value.focus()
+  // selectRef.value.updateInputValue('')
+  // selectRef.value.focus()
 }
 </script>
 
@@ -59,7 +60,6 @@ const clear = () => {
     outlined
     behavior="menu"
     ref="selectRef"
-    label="Añade al pack buscando por código o nombre"
     :model-value="inputValue"
     @input-value="inputValue = $event"
     :options="options"
