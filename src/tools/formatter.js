@@ -61,7 +61,7 @@ const formatter = {
 
   localDate: value => {
     if (value) {
-      return moment.utc(value).format('DD/MM/YYYY')
+      return moment(value).format('DD/MM/YYYY')
     }
     return null
   },

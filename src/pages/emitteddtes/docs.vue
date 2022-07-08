@@ -81,13 +81,22 @@ const columns = [
         style="width: 338px"
         class="row column q-px-lg q-pt-sm q-pb-lg q-mr-sm"
       >
-        <div>
-          <div class="row items-center text-grey-8 q-mt-md q-mb-lg full-width">
-            <q-icon name="file_copy" size="sm" class="q-mr-sm" />
-            <div class="text-h6 q-mr-md">DTEs Recibidos</div>
+        <div
+          class="row items-center justify-between text-grey-8 q-mt-md q-mb-lg full-width"
+        >
+          <div class="row items-center">
+            <q-icon name="receipt_long" size="sm" class="q-mr-sm" />
+            <div class="text-h6 q-mr-md">DTEs Emitidos</div>
           </div>
 
-          <q-separator />
+          <q-btn
+            dense
+            flat
+            rounded
+            icon="refresh"
+            color="primary"
+            @click="onDate"
+          />
         </div>
 
         <Calendar

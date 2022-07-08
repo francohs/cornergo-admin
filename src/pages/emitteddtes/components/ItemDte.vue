@@ -1,6 +1,6 @@
 <template>
   <q-item class="q-px-none">
-    <div class="full-width row items-center q-py-sm">
+    <div class="full-width row items-center">
       <div class="row justify-start q-mr-md">
         <div class="text-h5 q-mx-md">
           {{ item.quantity }}

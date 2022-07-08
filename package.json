@@ -1,5 +1,5 @@
 {
-  "name": "cornergo-v6-admin",
+  "name": "cornergo-admin",
   "version": "0.0.1",
   "description": "A Quasar Project",
   "productName": "Quasar App",
@@ -7,21 +7,22 @@
   "private": true,
   "scripts": {
     "dev": "quasar dev",
-    "test": "echo \"No test specified\" && exit 0"
+    "build": "quasar build",
+    "deploy": "vercel"
   },
   "dependencies": {
-    "@quasar/extras": "^1.14.0",
+    "@quasar/extras": "^1.14.2",
     "axios": "^0.27.2",
     "jspdf": "^2.5.1",
-    "moment": "^2.29.3",
+    "moment": "^2.29.4",
     "pinia": "^2.0.14",
-    "quasar": "^2.7.3",
+    "quasar": "^2.7.5",
     "vue": "^3.2.37",
-    "vue-router": "^4.0.16",
+    "vue-router": "^4.1.1",
     "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
-    "@quasar/app-vite": "^1.0.2",
+    "@quasar/app-vite": "^1.0.5",
     "autoprefixer": "^10.4.7"
   },
   "engines": {

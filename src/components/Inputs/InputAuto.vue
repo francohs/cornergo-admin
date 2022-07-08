@@ -1,42 +1,5 @@
-<template>
-  <Input
-    v-bind="$attrs"
-    :modelValue="formatedValue"
-    :readonly="isAuto"
-    :class="{ readonly: isAuto }"
-    @focus="onFocus"
-    @blur="isFocus = false"
-    @keyup.enter="isFocus = false"
-    bottom-slots
-    stack-label
-    :loading="loading"
-    onlynumbers
-    ref="inputAuto"
-  >
-    <template v-if="!hideAutoBtn" v-slot:append>
-      <q-btn
-        dense
-        size="sm"
-        flat
-        v-if="!loading"
-        :icon="isAuto ? 'autorenew' : 'autorenew'"
-        :color="isAuto ? 'primary' : 'grey'"
-        @click="onClickAuto"
-      >
-        <q-tooltip>{{
-          isAuto ? 'Cambiar a manual' : 'Cambiar a automático'
-        }}</q-tooltip>
-      </q-btn>
-    </template>
-    <template v-slot:hint>
-      <span v-if="isAuto && hintManual">{{ hintManual }}</span>
-      <span v-if="!isAuto && hintAuto">{{ hintAuto }}</span>
-    </template>
-  </Input>
-</template>
-
 <script setup>
-import { computed, watch, ref, inject } from 'vue'
+import { computed, watch, ref, inject, nextTick } from 'vue'
 import formatter from 'tools/formatter'
 
 const props = defineProps({
@@ -53,10 +16,10 @@ const props = defineProps({
   hideAutoBtn: Boolean
 })
 
-const emit = defineEmits(['update:isAuto'])
+const emit = defineEmits(['update:isAuto', 'update:modelValue'])
 
 const isFocus = ref(false)
-const inputAuto = ref(null)
+const inputRef = ref(null)
 const store = props.storeId ? inject(props.storeId) : null
 const loading = ref(false)
 
@@ -65,6 +28,7 @@ const formatedValue = computed(() => {
   if (props.isAuto) {
     value = props.autoValue
   }
+  console.log(isFocus.value, props.isAuto, props.format)
   if ((!isFocus.value || props.isAuto) && props.format) {
     value = formatter[props.format](value)
   }
@@ -93,11 +57,55 @@ async function onClickAuto() {
     await store.update(props.id, { [props.autoField]: !props.isAuto })
     loading.value = false
   }
+  if (!props.isAuto) {
+    emit('update:modelValue', props.autoValue)
+  } else {
+    onFocus()
+  }
   emit('update:isAuto', !props.isAuto)
 }
 
-const onFocus = () => {
+const onFocus = async () => {
   isFocus.value = true
-  inputAuto.value.onFocus()
+  await nextTick()
+  inputRef.value.onFocus()
 }
 </script>
+
+<template>
+  <Input
+    v-bind="$attrs"
+    :modelValue="formatedValue"
+    @update:modelValue="emit('update:modelValue', $event)"
+    :readonly="isAuto"
+    :class="{ readonly: isAuto }"
+    @focus="onFocus"
+    @blur="isFocus = false"
+    @keyup.enter="isFocus = false"
+    bottom-slots
+    stack-label
+    :loading="loading"
+    onlynumbers
+    ref="inputRef"
+  >
+    <template v-if="!hideAutoBtn" v-slot:append>
+      <q-btn
+        dense
+        size="sm"
+        flat
+        v-if="!loading"
+        :icon="isAuto ? 'autorenew' : 'autorenew'"
+        :color="isAuto ? 'primary' : 'grey'"
+        @click="onClickAuto"
+      >
+        <q-tooltip>{{
+          isAuto ? 'Cambiar a manual' : 'Cambiar a automático'
+        }}</q-tooltip>
+      </q-btn>
+    </template>
+    <template v-slot:hint>
+      <span v-if="isAuto && hintManual">{{ hintManual }}</span>
+      <span v-if="!isAuto && hintAuto">{{ hintAuto }}</span>
+    </template>
+  </Input>
+</template>

@@ -41,7 +41,7 @@ const columns = [
 </script>
 
 <template>
-  <q-page>
+  <q-page class="q-pa-md">
     <TableQueryLazy
       tableName="productsTable"
       ref="tableRef"

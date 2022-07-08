@@ -101,9 +101,22 @@ const columns = [
         class="row column q-px-lg q-pt-sm q-pb-lg q-mr-sm"
       >
         <div>
-          <div class="row items-center text-grey-8 q-mt-md q-mb-lg full-width">
-            <q-icon name="file_copy" size="sm" class="q-mr-sm" />
-            <div class="text-h6 q-mr-md">DTEs Recibidos</div>
+          <div
+            class="row items-center justify-between text-grey-8 q-mt-md q-mb-lg full-width"
+          >
+            <div class="row items-center">
+              <q-icon name="file_copy" size="sm" class="q-mr-sm" />
+              <div class="text-h6 q-mr-md">DTEs Recibidos</div>
+            </div>
+
+            <q-btn
+              dense
+              flat
+              rounded
+              icon="refresh"
+              color="primary"
+              @click="onDate"
+            />
           </div>
 
           <q-separator />

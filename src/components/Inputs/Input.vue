@@ -1,29 +1,3 @@
-<template>
-  <q-input
-    outlined
-    v-bind="$attrs"
-    :type="password ? 'password' : 'text'"
-    bottom-slots
-    :label="label"
-    :modelValue="formattedValue"
-    :rules="rules"
-    lazy-rules
-    :input-class="limitClass"
-    :style="`width: ${width ? width : 150}px;`"
-    @focus="onFocus"
-    @blur="isFocus = false"
-    @keyup.enter="isFocus = false"
-    @keypress="numberValidation"
-    :loading="loading"
-    ref="inputRef"
-  >
-    <template v-for="(_, slot) of $slots" v-slot:[slot]="scope">
-      <slot :name="slot" v-bind="scope || {}" />
-    </template>
-    <q-tooltip v-if="tooltip">{{ tooltip }}</q-tooltip>
-  </q-input>
-</template>
-
 <script setup>
 import { computed, watch, ref, inject, nextTick } from 'vue'
 import formatter from 'tools/formatter'
@@ -159,4 +133,32 @@ const onFocus = async () => {
   await nextTick()
   inputRef.value.select()
 }
+
+defineExpose({ onFocus })
 </script>
+
+<template>
+  <q-input
+    v-bind="$attrs"
+    outlined
+    :type="password ? 'password' : 'text'"
+    bottom-slots
+    :label="label"
+    :modelValue="formattedValue"
+    :rules="rules"
+    lazy-rules
+    :input-class="limitClass"
+    :style="`width: ${width ? width : 150}px;`"
+    @focus="onFocus"
+    @blur="isFocus = false"
+    @keyup.enter="isFocus = false"
+    @keypress="numberValidation"
+    :loading="loading"
+    ref="inputRef"
+  >
+    <template v-for="(_, slot) of $slots" v-slot:[slot]="scope">
+      <slot :name="slot" v-bind="scope || {}" />
+    </template>
+    <q-tooltip v-if="tooltip">{{ tooltip }}</q-tooltip>
+  </q-input>
+</template>

@@ -100,19 +100,18 @@ const unitDiscountAmount = computed(() => {
   }
 })
 
-const matchProduct = async product => {
+const matchProduct = async selectedProduct => {
   loading.value = true
 
-  await products.getDoc(product._id)
+  await products.getDoc(selectedProduct._id)
   Object.assign(product, products.doc)
-  // product = products.doc
 
   await supplies.update(supply._id, {
     product: product._id,
     productCode: product.code
   })
 
-  item.supply.product = product
+  props.item.supply.product = product
 
   loading.value = false
 }
@@ -120,14 +119,13 @@ const matchProduct = async product => {
 const removeMatch = async () => {
   loading.value = true
 
-  Object.assign(product, {})
-
   await supplies.update(supply._id, {
     product: null,
     productCode: null
   })
 
-  item.supply.product = null
+  Object.assign(product, { _id: null })
+  props.item.supply.product = null
 
   loading.value = false
 }
@@ -261,6 +259,15 @@ const createProduct = () => {
             style="opacity: 0"
             width="50"
           /> -->
+          <div>
+            <q-btn
+              label="CREAR PRODUCTO"
+              @click="createProduct"
+              color="positive"
+              size="md"
+            />
+          </div>
+          <div class="q-px-md q-pt-sm">O asignar</div>
           <SelectSearchProduct
             label="Código o Nombre"
             v-model="emptyCode"
@@ -270,14 +277,6 @@ const createProduct = () => {
             hint=""
             dense
           />
-          <div>
-            <q-btn
-              label="CREAR"
-              @click="createProduct"
-              color="positive"
-              size="md"
-            />
-          </div>
         </div>
       </div>
 

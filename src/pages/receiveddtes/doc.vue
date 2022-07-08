@@ -40,6 +40,7 @@ const receiveDte = async () => {
             label="Tipo DTE"
             :modelValue="receivedDte.dteTypeName"
             input-class="text-bold"
+            width="200"
           />
           <InputRead
             label="Folio"

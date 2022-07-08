@@ -1,3 +1,80 @@
+<script setup>
+import { provide, reactive, computed, ref } from 'vue'
+import { useProducts } from 'stores/products'
+import { useProviders } from 'stores/providers'
+import { useRoute } from 'vue-router'
+import ItemPack from './components/ItemPack.vue'
+
+const products = useProducts()
+const providers = useProviders()
+const $route = useRoute()
+const id = $route.params.id
+
+const product = reactive({
+  name: products.doc.name || '',
+  code: products.doc.code || '',
+  pack: [],
+  active: true,
+  exempt: false,
+  marginRate: 40,
+  stock: 0,
+  showcase: 3,
+  cost: 1000,
+  price: 1400,
+  provider: products.doc.provider || ''
+})
+
+const loading = ref(false)
+const isPack = ref(false)
+const isAutoPrice = ref(true)
+
+const addItemPack = newProduct => {
+  product.pack.push({
+    product: newProduct,
+    quantity: 1
+  })
+}
+
+const removeItemPack = id => {
+  product.pack = product.pack.filter(i => i.product._id != id)
+}
+
+provide(products.$id, products)
+provide(providers.$id, providers)
+
+const autoPrice = computed(() => {
+  let autoPrice = Math.round(product.cost * (1 + product.marginRate / 100))
+  let lastTwo = autoPrice.toString().slice(-2)
+  const lastTwoNum = parseInt(lastTwo)
+
+  if (lastTwoNum > 0 && lastTwoNum <= 50) {
+    lastTwo = 50
+  } else if (lastTwoNum > 50) {
+    lastTwo = 90
+  }
+  let autoPriceArray = autoPrice.toString().split('')
+  autoPriceArray.splice(-2, 2, lastTwo.toString()[0], lastTwo.toString()[1])
+  return Math.round(autoPriceArray.join(''))
+})
+
+const autoMargin = computed(() => {
+  let price = product.autoPrice ? autoPrice.value : product.price
+
+  if (price == 0 || product.cost == 0) return 0
+
+  return Math.round((price / product.cost - 1) * 100)
+})
+
+const findProduct = async () => {
+  if (product.code != '') {
+    loading.value = true
+    await products.findDoc({ code: product.code })
+    loading.value = false
+  }
+  return !product.code || !products.doc || 'El código ya existe'
+}
+</script>
+
 <template>
   <PageResponsive :loading="product.loading" :maxWidth="900">
     <FormSave :storeId="products.$id" :doc="product">
@@ -138,80 +215,3 @@
     </FormSave>
   </PageResponsive>
 </template>
-
-<script setup>
-import { provide, reactive, computed, ref } from 'vue'
-import { useProducts } from 'stores/products'
-import { useProviders } from 'stores/providers'
-import { useRoute } from 'vue-router'
-import ItemPack from './components/ItemPack.vue'
-
-const products = useProducts()
-const providers = useProviders()
-const $route = useRoute()
-const id = $route.params.id
-
-const product = reactive({
-  name: products.doc.name,
-  code: products.doc.code,
-  pack: [],
-  active: true,
-  exempt: false,
-  marginRate: 40,
-  stock: 0,
-  showcase: 3,
-  cost: 1000,
-  price: 1400,
-  provider: products.doc.provider
-})
-
-const loading = ref(false)
-const isPack = ref(false)
-const isAutoPrice = ref(true)
-
-const addItemPack = newProduct => {
-  product.pack.push({
-    product: newProduct,
-    quantity: 1
-  })
-}
-
-const removeItemPack = id => {
-  product.pack = product.pack.filter(i => i.product._id != id)
-}
-
-provide(products.$id, products)
-provide(providers.$id, providers)
-
-const autoPrice = computed(() => {
-  let autoPrice = Math.round(product.cost * (1 + product.marginRate / 100))
-  let lastTwo = autoPrice.toString().slice(-2)
-  const lastTwoNum = parseInt(lastTwo)
-
-  if (lastTwoNum > 0 && lastTwoNum <= 50) {
-    lastTwo = 50
-  } else if (lastTwoNum > 50) {
-    lastTwo = 90
-  }
-  let autoPriceArray = autoPrice.toString().split('')
-  autoPriceArray.splice(-2, 2, lastTwo.toString()[0], lastTwo.toString()[1])
-  return Math.round(autoPriceArray.join(''))
-})
-
-const autoMargin = computed(() => {
-  let price = product.autoPrice ? autoPrice.value : product.price
-
-  if (price == 0 || product.cost == 0) return 0
-
-  return Math.round((price / product.cost - 1) * 100)
-})
-
-const findProduct = async () => {
-  if (product.code != '') {
-    loading.value = true
-    await products.findDoc({ code: product.code })
-    loading.value = false
-  }
-  return !product.code || !products.doc || 'El código ya existe'
-}
-</script>

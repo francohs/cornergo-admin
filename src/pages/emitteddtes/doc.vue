@@ -26,11 +26,19 @@ onMounted(async () => {
 <template>
   <PageResponsive :loading="emittedDtes.loading">
     <div class="q-pa-lg">
-      <div class="row items-center justify-between q-pb-lg text-h5 text-bold">
+      <div class="row items-center justify-between q-pb-lg">
         <div class="row">
-          <div>Detalle Boleta: {{ emittedDte.number }}</div>
+          <div class="text-h6 text-bold">
+            Detalle Boleta: {{ emittedDte.number }}
+          </div>
         </div>
-        <div>Emisión: {{ formatter.datetime(emittedDte.createdAt) }}</div>
+        <div class="column items-end">
+          <div class="text-h6 text-bold">
+            Emisión: {{ formatter.datetime(emittedDte.createdAt) }}
+          </div>
+
+          <div>Vendedor: {{ emittedDte.sellerName }}</div>
+        </div>
       </div>
 
       <div class="row col q-mb-lg">
@@ -46,12 +54,6 @@ onMounted(async () => {
       </div>
 
       <div class="q-px-sm">
-        <div class="row justify-between text-h6 q-mb-lg">
-          <div>VENDEDOR: {{ emittedDte.sellerName }}</div>
-          <div>VUELTO: {{ formatter.currency(emittedDte.changeAmount) }}</div>
-          <div>TOTAL: {{ formatter.currency(emittedDte.totalAmount) }}</div>
-        </div>
-
         <div class="text-h6 q-mb-md">Pagos</div>
 
         <q-list bordered separator>
@@ -73,12 +75,18 @@ onMounted(async () => {
             </q-item-section>
 
             <q-item-section side>
-              <q-item-label>{{
-                formatter.currency(pay.payAmount)
-              }}</q-item-label>
+              <q-item-label>{{ formatter.currency(pay.amount) }}</q-item-label>
             </q-item-section>
           </q-item>
         </q-list>
+
+        <div class="column items-end q-mt-lg" style="font-size: 18px">
+          <div class="text-bold text-h6">
+            TOTAL: {{ formatter.currency(emittedDte.totalAmount) }}
+          </div>
+          <div>TOTAL PAGADO: {{ formatter.currency(emittedDte.totalPay) }}</div>
+          <div>VUELTO: {{ formatter.currency(emittedDte.changeAmount) }}</div>
+        </div>
       </div>
     </div>
   </PageResponsive>
