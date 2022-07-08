@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { useEmittedDtes } from 'stores/emittedDtes'
+import { useEmittedDtes } from 'stores/emitteddtes'
 import formatter from 'tools/formatter'
 
 const route = useRoute()

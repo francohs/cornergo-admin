@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, provide, reactive } from 'vue'
 import { useRoute } from 'vue-router'
-import { useEmittedDtes } from 'stores/emittedDtes'
+import { useEmittedDtes } from 'stores/emitteddtes'
 import formatter from 'tools/formatter'
 
 const route = useRoute()
@@ -70,9 +70,7 @@ onMounted(async () => {
             </q-item-section>
 
             <q-item-section side>
-              <q-item-label>{{
-                formatter.currency(pay.amount)
-              }}</q-item-label>
+              <q-item-label>{{ formatter.currency(pay.amount) }}</q-item-label>
             </q-item-section>
           </q-item>
         </q-list>
