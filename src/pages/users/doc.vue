@@ -38,7 +38,7 @@
       <RowTimestamps v-if="user._id" :doc="user" />
 
       <div class="row justify-between q-mt-md">
-        <ButtonDelete :storeId="users.$id" :id="id" />
+        <ButtonDelete :storeId="users.$id" :id="id" name="usuario" />
 
         <div>
           <q-btn
@@ -69,6 +69,7 @@
           autofocus
           v-model="password1"
           label="Nueva contraseña"
+          class="full-width"
         />
         <Input
           required
@@ -76,6 +77,7 @@
           v-model="password2"
           :passwordConfirm="password1"
           label="Confirmar nueva contraseña"
+          class="full-width"
         />
       </form>
     </Dialog>

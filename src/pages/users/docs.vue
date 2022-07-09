@@ -10,7 +10,6 @@
       <q-list v-if="users.docs.length > 0" bordered separator>
         <q-item
           clickable
-          v-ripple
           v-for="user of users.docs"
           :key="user._id"
           class="q-py-md"

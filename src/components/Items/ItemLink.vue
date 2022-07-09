@@ -1,5 +1,4 @@
 <template>
-  <!-- v-ripple -->
   <q-item clickable @click="goto" :active="isActive" active-class="active-link">
     <q-item-section avatar>
       <q-icon :name="icon" />

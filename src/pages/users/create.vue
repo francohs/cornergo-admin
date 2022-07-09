@@ -10,15 +10,29 @@
       </div>
 
       <RowMultiCols>
-        <Input required v-model="user.username" label="Usuario" />
-        <Input required onlynumbers rut v-model="user.rut" label="RUT" />
+        <Input required v-model="user.username" label="Usuario" class="col" />
+        <Input
+          required
+          onlynumbers
+          rut
+          v-model="user.rut"
+          format="rut"
+          label="RUT"
+          class="col"
+        />
       </RowMultiCols>
 
-      <Input required email label="Correo" v-model="user.email" />
+      <Input
+        required
+        email
+        label="Correo"
+        v-model="user.email"
+        class="full-width"
+      />
 
       <RowMultiCols>
-        <Input required v-model="user.name" label="Nombre" />
-        <Input required v-model="user.lastName" label="Apellido" />
+        <Input required v-model="user.name" label="Nombre" class="col" />
+        <Input required v-model="user.lastName" label="Apellido" class="col" />
       </RowMultiCols>
 
       <RowMultiCols>
@@ -27,6 +41,7 @@
           required
           v-model="user.password"
           label="Nueva contraseña"
+          class="col"
         />
         <Input
           password
@@ -34,6 +49,7 @@
           v-model="passwordConfirm"
           :passwordConfirm="user.password"
           label="Confirmar nueva contraseña"
+          class="col"
         />
       </RowMultiCols>
 

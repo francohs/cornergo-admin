@@ -20,12 +20,7 @@
     :sort="false"
   >
     <template #item="{ element: provider }">
-      <q-item
-        class="draggable q-py-sm"
-        clickable
-        v-ripple
-        @click="onClick(provider)"
-      >
+      <q-item class="draggable q-py-sm" clickable @click="onClick(provider)">
         <q-item-section>
           <q-item-label>{{ provider.alias }}</q-item-label>
           <q-item-label caption lines="1">14-02-2022 13:55:25</q-item-label>

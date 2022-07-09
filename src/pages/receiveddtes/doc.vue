@@ -26,7 +26,7 @@ onMounted(async () => {
 
 const receiveDte = async () => {
   loading.value = true
-  await receivedDtes.update(receivedDte._id, receivedDte)
+  await receivedDtes.replace(receivedDte._id, receivedDte)
   Object.assign(receivedDte, receivedDtes.doc)
   loading.value = false
 }

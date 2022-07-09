@@ -6,12 +6,12 @@
 
     <Dialog
       v-model="dialog"
-      title="Eliminar Recurso"
+      :title="`Eliminar ${name}`"
       confirmColor="negative"
       @confirm="deleteDoc"
       :loading="store.deleting"
     >
-      <div class="text-center q-pb-md">¿Desea eliminar el recurso?</div>
+      <div class="text-center q-pb-md">¿Desea eliminar el {{ name }}?</div>
     </Dialog>
   </div>
 </template>
@@ -20,7 +20,11 @@
 import { inject, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-const props = defineProps(['storeId', 'id'])
+const props = defineProps({
+  storeId: String,
+  id: String,
+  name: { type: String, default: 'recurso' }
+})
 
 const router = useRouter()
 const store = inject(props.storeId)
