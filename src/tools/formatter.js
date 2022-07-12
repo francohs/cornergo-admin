@@ -39,7 +39,6 @@ const formatter = {
     return parseInt(
       value
         .toString()
-        .replace('-', '')
         .replace('%', '')
         .replace('$', '')
         .replaceAll('.', '')

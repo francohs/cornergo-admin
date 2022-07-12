@@ -11,8 +11,8 @@ const receivedDtes = inject('receiveddtes')
 const supplies = inject('supplies')
 const products = inject('products')
 
-const supply = reactive(props.item.supply)
-const product = reactive(supply.product)
+const supply = reactive(props.item.supply || {})
+const product = reactive(supply.product || {})
 const loading = ref(false)
 const emptyCode = ref('')
 
@@ -73,7 +73,7 @@ supply.calcShippingCost = computed(() => {
 })
 
 const unitShippingCost = computed(() => {
-  if (receivedDtes.doc.provider.shippingCosts) {
+  if (receivedDtes.doc.provider && receivedDtes.doc.provider.shippingCosts) {
     return Math.round(supply.calcShippingCost / supply.units)
   } else {
     return Math.round(supply.shippingCost / supply.units)
@@ -163,6 +163,7 @@ const createProduct = () => {
           <InputRead
             label="Cantidad"
             :modelValue="item.quantity"
+            :hint="item.unit"
             width="70"
             dense
           />
@@ -186,7 +187,6 @@ const createProduct = () => {
             v-model="supply.packageQuantity"
             v-model:isAuto="supply.autoPackageQty"
             :autoValue="supply.multipler"
-            :hint="item.unit"
             storeId="supplies"
             :id="supply._id"
             autoField="autoPackageQty"
@@ -234,7 +234,10 @@ const createProduct = () => {
             :hintManual="`Manual ${formatter.currency(supply.shippingCost)}`"
             width="120"
             format="currency"
-            v-if="receivedDtes.doc.provider.shippingCosts"
+            v-if="
+              receivedDtes.doc.provider &&
+              receivedDtes.doc.provider.shippingCosts
+            "
             dense
           />
           <InputRead
@@ -311,6 +314,9 @@ const createProduct = () => {
           <Input
             label="Nombre Producto"
             v-model="product.name"
+            storeId="products"
+            :id="product._id"
+            field="name"
             :hint="`Creado ${formatter.localDate(product.createdAt)}`"
             input-style="font-size: 14px;"
             width="400"
@@ -320,14 +326,16 @@ const createProduct = () => {
             v-if="!receivedDtes.doc.receptionDate"
             label="Stock"
             v-model="product.stock"
-            field="stock"
             :isAuto="product.autoStock"
             @update:isAuto="product.autoStock = $event"
             autoField="autoStock"
             :autoValue="product.calcStock"
-            :hintManual="`Antes ${item.supply.product.stock}`"
+            :hintManual="`Antes ${
+              item.supply.product && item.supply.product.stock
+            }`"
             storeId="products"
             :id="product._id"
+            field="stock"
             width="90"
             dense
           />

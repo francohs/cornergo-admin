@@ -130,7 +130,7 @@ defineExpose({ queryInit })
           v-model="table.input"
           :placeholder="inputPlaceholder"
           debounce="500"
-          style="width: 268px"
+          style="width: 350px"
           @update:modelValue="queryInputDocs()"
           :onlynumbers="inputOnlynumbers"
           class="q-mr-md"

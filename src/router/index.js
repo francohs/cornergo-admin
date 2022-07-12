@@ -45,7 +45,6 @@ export default route(function (/* { store, ssrContext } */) {
         notify.info('Primero debes ingresar')
         next('/login')
       }
-      console.log(to.meta.requiresAdmin, auth.user.isAdmin)
       if (to.meta.requiresAdmin) {
         if (!auth.user.isAdmin) {
           notify.warning('Acceso no autorizado')
