@@ -14,7 +14,7 @@ const router = useRouter()
 const store = inject(props.storeId)
 
 const onSubmit = async () => {
-  console.log(props.doc)
+  // console.log(props.doc)
   if (props.id) {
     await store.update(props.id, props.doc)
   } else {

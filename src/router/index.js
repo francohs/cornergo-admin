@@ -6,8 +6,8 @@ import {
   createWebHistory
 } from 'vue-router'
 import routes from './routes'
-import { Notify } from 'quasar'
 import { useAuth } from '../stores/auth'
+import notify from 'tools/notify'
 
 /*
  * If not building with SSR mode, you can
@@ -41,18 +41,19 @@ export default route(function (/* { store, ssrContext } */) {
     const auth = useAuth()
 
     if (to.matched.some(record => record.meta.requiresAuth)) {
-      if (auth.isLogged) {
-        next()
-      } else {
-        Notify.create({
-          color: 'primary',
-          message: 'Primero debes ingresar'
-        })
+      if (!auth.isLogged) {
+        notify.info('Primero debes ingresar')
         next('/login')
       }
-    } else {
-      next()
+      console.log(to.meta.requiresAdmin, auth.user.isAdmin)
+      if (to.meta.requiresAdmin) {
+        if (!auth.user.isAdmin) {
+          notify.warning('Acceso no autorizado')
+          next('/')
+        }
+      }
     }
+    next()
   })
 
   return Router

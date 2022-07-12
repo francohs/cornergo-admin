@@ -56,18 +56,21 @@ async function onClickAuto() {
     await store.update(props.id, { [props.autoField]: !props.isAuto })
     loading.value = false
   }
+  if (props.isAuto) {
+    focus()
+  }
   // if (!props.isAuto) {
   //   emit('update:modelValue', props.autoValue)
   // } else {
-  //   onFocus()
+  //   focus()
   // }
   emit('update:isAuto', !props.isAuto)
 }
 
-const onFocus = async () => {
+const focus = async () => {
   isFocus.value = true
   await nextTick()
-  inputRef.value.onFocus()
+  inputRef.value.focus()
 }
 </script>
 
@@ -78,7 +81,7 @@ const onFocus = async () => {
     :modelValue="formatedValue"
     :readonly="isAuto"
     :class="{ readonly: isAuto }"
-    @focus="onFocus"
+    @focus="focus"
     @blur="isFocus = false"
     @keyup.enter="isFocus = false"
     bottom-slots

@@ -13,7 +13,7 @@ const api = axios.create({ baseURL })
 const ServerErrors = {
   NotFound: 'El usuario no existe',
   Unauthorized: 'Acceso no autorizado',
-  AuthTokenIncorrect: 'Acceso no autorizado',
+  AuthTokenIncorrect: 'Sesion expirada',
   AuthTokenMissing: 'Sesion expirada',
   IncorrectPassword: 'Contraseña incorrecta'
 }

@@ -1,13 +1,18 @@
 import loadRoutes from './loader'
 
-const routesNotRequiresAuth = ['login', 'items', 'items/create']
+const routesNotRequiresAuth = ['login', 'items']
+const routesRequiresAdmin = ['clients', 'users']
 
-const pages = loadRoutes().map(route => ({
-  ...route,
-  meta: {
-    requiresAuth: !routesNotRequiresAuth.includes(route.name)
+const pages = loadRoutes().map(route => {
+  const baseName = /(\w*)\/?/.exec(route.name)[1]
+  return {
+    ...route,
+    meta: {
+      requiresAuth: !routesNotRequiresAuth.includes(baseName),
+      requiresAdmin: routesRequiresAdmin.includes(baseName)
+    }
   }
-}))
+})
 
 const routes = [
   {
