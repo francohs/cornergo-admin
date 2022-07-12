@@ -1,5 +1,5 @@
 <script setup>
-import { computed, inject, ref, reactive } from 'vue'
+import { computed, inject, ref, reactive, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import formatter from 'tools/formatter'
 import SelectInputFetch from 'src/components/Select/SelectInputFetch.vue'
@@ -11,19 +11,18 @@ const receivedDtes = inject('receiveddtes')
 const supplies = inject('supplies')
 const products = inject('products')
 
-const { item } = props
-const { supply } = item
-const product = reactive(supply.product ? supply.product : {})
+const supply = reactive(props.item.supply)
+const product = reactive(supply.product)
 const loading = ref(false)
 const emptyCode = ref('')
 
 supply.units = computed(() => {
-  return supply.multipler * item.quantity
+  return supply.multipler * props.item.quantity
 })
 
 const netAmount = computed(() => {
-  const discount = item.discountAmount ? item.discountAmount : 0
-  return Math.round(item.netAmount * item.quantity - discount)
+  const discount = props.item.discountAmount ? props.item.discountAmount : 0
+  return Math.round(props.item.netAmount * props.item.quantity - discount)
 })
 
 const unitNetAmount = computed(() => {
@@ -31,7 +30,7 @@ const unitNetAmount = computed(() => {
 })
 
 const taxAmount = computed(() => {
-  return Math.round(netAmount.value * (item.taxRate / 100))
+  return Math.round(netAmount.value * (props.item.taxRate / 100))
 })
 
 const unitTaxAmount = computed(() => {
@@ -93,8 +92,8 @@ supply.calcCost = computed(() => {
 })
 
 const unitDiscountAmount = computed(() => {
-  if (item.discountAmount) {
-    return Math.round(item.discountAmount / supply.units)
+  if (props.item.discountAmount) {
+    return Math.round(props.item.discountAmount / supply.units)
   } else {
     return 0
   }
@@ -132,7 +131,7 @@ const removeMatch = async () => {
 
 const createProduct = () => {
   products.doc = {
-    name: item.name,
+    name: props.item.name,
     code: product.code,
     provider: supply.providerAlias
   }
@@ -318,6 +317,7 @@ const createProduct = () => {
             dense
           />
           <InputAuto
+            v-if="!receivedDtes.doc.receptionDate"
             label="Stock"
             v-model="product.stock"
             field="stock"
@@ -325,14 +325,14 @@ const createProduct = () => {
             @update:isAuto="product.autoStock = $event"
             autoField="autoStock"
             :autoValue="product.calcStock"
-            :hintManual="`Antes ${product.stock}`"
+            :hintManual="`Antes ${item.supply.product.stock}`"
             storeId="products"
             :id="product._id"
             width="90"
             dense
-            v-if="!receivedDtes.doc.receptionDate"
           />
           <Input
+            v-else
             label="Stock"
             v-model="item.supply.product.stock"
             storeId="products"
@@ -340,7 +340,6 @@ const createProduct = () => {
             field="stock"
             width="90"
             dense
-            v-else
           />
           <InputRead
             label="Pedido"

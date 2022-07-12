@@ -29,8 +29,10 @@ const clearDate = () => {
 }
 
 onMounted(async () => {
-  initDate()
-  await tableRef.value.queryInit()
+  if (!receivedDtes.docs.length) {
+    initDate()
+    await tableRef.value.queryInit()
+  }
 })
 
 const onDate = async () => {

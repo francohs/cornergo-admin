@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, provide, onMounted, ref } from 'vue'
+import { reactive, provide, onMounted, ref, nextTick } from 'vue'
 import { useRoute } from 'vue-router'
 import { useReceivedDtes } from 'stores/receiveddtes'
 import { useProducts } from 'stores/products'
@@ -27,10 +27,12 @@ onMounted(async () => {
 const receiveDte = async () => {
   loading.value = true
   await receivedDtes.replace(receivedDte._id, receivedDte)
+  console.log(receivedDtes.doc)
   Object.assign(receivedDte, receivedDtes.doc)
   loading.value = false
 }
 </script>
+
 <template>
   <LayoutPage :loading="receivedDtes.loading" class="q-pa-md">
     <q-card flat bordered class="q-mb-sm q-pt-md" style="border-color: grey">
@@ -59,10 +61,11 @@ const receiveDte = async () => {
           <InputRead
             label="Fecha Emisión"
             :modelValue="receivedDte.emissionDate"
-            format="date"
+            format="localDate"
             input-class="text-bold"
           />
         </div>
+
         <div class="row q-gutter-x-sm">
           <InputRead
             v-if="receivedDte.receptionDate"
@@ -76,6 +79,7 @@ const receiveDte = async () => {
               <q-icon name="check_circle" color="positive" size="sm" />
             </template>
           </InputRead>
+
           <q-btn
             v-else
             label="Recibir Stock"
@@ -96,7 +100,7 @@ const receiveDte = async () => {
       style="border-color: grey"
     >
       <ItemDte
-        v-for="item of receivedDtes.doc.items"
+        v-for="item of receivedDte.items"
         :key="item.line"
         :item="item"
       />
@@ -106,6 +110,7 @@ const receiveDte = async () => {
       <q-card-section class="full-width row justify-end">
         <div class="row q-gutter-x-sm">
           <InputRead
+            v-if="receivedDte.paymentMethod"
             label="Tipo de Pago"
             :modelValue="receivedDte.paymentMethod"
             input-class="text-bold"
@@ -114,7 +119,7 @@ const receiveDte = async () => {
             v-if="receivedDte.expirationDate"
             label="Expiración de Pago"
             :modelValue="receivedDte.expirationDate"
-            format="date"
+            format="localDate"
             input-class="text-bold"
           />
           <InputRead

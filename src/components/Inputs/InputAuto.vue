@@ -16,7 +16,7 @@ const props = defineProps({
   hideAutoBtn: Boolean
 })
 
-const emit = defineEmits(['update:isAuto', 'update:modelValue'])
+const emit = defineEmits(['update:isAuto'])
 
 const isFocus = ref(false)
 const inputRef = ref(null)
@@ -28,7 +28,6 @@ const formatedValue = computed(() => {
   if (props.isAuto) {
     value = props.autoValue
   }
-  console.log(isFocus.value, props.isAuto, props.format)
   if ((!isFocus.value || props.isAuto) && props.format) {
     value = formatter[props.format](value)
   }
@@ -57,11 +56,11 @@ async function onClickAuto() {
     await store.update(props.id, { [props.autoField]: !props.isAuto })
     loading.value = false
   }
-  if (!props.isAuto) {
-    emit('update:modelValue', props.autoValue)
-  } else {
-    onFocus()
-  }
+  // if (!props.isAuto) {
+  //   emit('update:modelValue', props.autoValue)
+  // } else {
+  //   onFocus()
+  // }
   emit('update:isAuto', !props.isAuto)
 }
 
@@ -73,10 +72,10 @@ const onFocus = async () => {
 </script>
 
 <template>
+  <!-- @update:modelValue="emit('update:modelValue', $event)" -->
   <Input
     v-bind="$attrs"
     :modelValue="formatedValue"
-    @update:modelValue="emit('update:modelValue', $event)"
     :readonly="isAuto"
     :class="{ readonly: isAuto }"
     @focus="onFocus"
