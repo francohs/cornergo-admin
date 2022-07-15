@@ -13,8 +13,9 @@ const formatter = {
 
   currency: value => {
     if (!value) return '$ 0'
-    const isNegative = value < 0
-    const splited = value.toString().replace('-', '').split('')
+    const numValue = parseInt(value)
+    const isNegative = numValue < 0
+    const splited = numValue.toString().replace('-', '').split('')
     if (splited.length > 6) {
       splited.splice(-6, 0, '.')
       splited.splice(-3, 0, '.')

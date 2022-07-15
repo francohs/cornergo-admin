@@ -6,8 +6,8 @@
       size="md"
       icon="launch"
       :to="{ name: 'receiveddtes/:id', params: { id: cell.row[field] } }"
-      target="_blank"
     />
+    <!-- target="_blank" -->
     <q-btn
       v-else
       dense

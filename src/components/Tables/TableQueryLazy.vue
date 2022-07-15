@@ -123,7 +123,7 @@ defineExpose({ queryInit })
           size="sm"
           class="q-mx-none"
         />
-        <div v-if="title" class="text-h6 q-mr-md">{{ title }}</div>
+        <div v-if="title" class="text-h6 q-mr-md q-ml-sm">{{ title }}</div>
 
         <InputTable
           v-if="withInput"
@@ -139,6 +139,12 @@ defineExpose({ queryInit })
         <slot name="extracontrols" />
 
         <q-space />
+
+        <ToggleActives
+          v-if="activeToggle"
+          v-model="table.actives"
+          @update:modelValue="onVisbleOrSort"
+        />
 
         <SelectTableVisibles
           v-model="table.visibles"
@@ -172,15 +178,7 @@ defineExpose({ queryInit })
 
     <template v-slot:bottom>
       <div class="full-width row justify-between items-center">
-        <div class="row items-center">
-          {{ store.count }} Resultados
-
-          <ToggleActives
-            v-if="activeToggle"
-            v-model="table.actives"
-            @update:modelValue="onVisbleOrSort"
-          />
-        </div>
+        <div class="row items-center">{{ store.count }} Resultados</div>
 
         <div class="row items-center">
           <SelectRowsPerPage

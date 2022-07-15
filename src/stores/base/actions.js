@@ -71,6 +71,7 @@ export const baseActions = () => {
         this.saving = true
         const { data } = await api.post(this.$id, { doc })
         this.docs.push(data.doc)
+        this.clearDoc()
         notify.positive('Datos creados con éxito')
       } catch (error) {
         throw error
@@ -78,7 +79,7 @@ export const baseActions = () => {
         this.saving = false
       }
     },
-    async update(id, mod) {
+    async update(id, mod, message = 'Datos modificados con éxito') {
       try {
         this.saving = true
 
@@ -92,14 +93,14 @@ export const baseActions = () => {
           this.docs[index] = data.doc
         }
 
-        notify.positive('Datos modificados con éxito')
+        notify.positive(message)
       } catch (error) {
         throw error
       } finally {
         this.saving = false
       }
     },
-    async replace(id, doc) {
+    async replace(id, doc, message = 'Datos modificados con éxito') {
       try {
         this.saving = true
 
@@ -113,7 +114,7 @@ export const baseActions = () => {
           this.docs[index] = data.doc
         }
 
-        notify.positive('Datos modificados con éxito')
+        notify.positive(message)
       } catch (error) {
         throw error
       } finally {

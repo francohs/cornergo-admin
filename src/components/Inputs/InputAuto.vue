@@ -43,6 +43,7 @@ watch(isFocus, async () => {
     prevModelValue != props.modelValue
   ) {
     loading.value = true
+    // console.log({ [props.field]: props.modelValue })
     await store.update(props.id, { [props.field]: props.modelValue })
     loading.value = false
   } else {

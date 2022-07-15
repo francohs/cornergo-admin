@@ -111,7 +111,7 @@ const columns = [
         :columns="columns"
         inputOnlynumbers
         :minInput="1"
-        :forceSort="{ emissionDate: -1, providerName: -1, number: -1 }"
+        :forceSort="{ emissionDate: -1 }"
         ref="emittedDtesTable"
         loadingText="Sincronizando dtes..."
         noDataText="Sin resultados, puedes filtrar dtes por folio, proveedor o fecha de emisión"

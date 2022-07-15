@@ -31,7 +31,7 @@ const columns = [
   { label: 'COSTO', name: 'cost' },
   { label: '% MARGEN', name: 'marginRate' },
   { label: 'PRECIO', name: 'price' },
-  { label: 'PROVEEDOR', name: 'provider' },
+  { label: 'PROVEEDOR', name: 'providers' },
   { label: 'ÚLTIMA COMPRA', name: 'lastBuy' },
   { label: 'ÚLTIMA VENTA', name: 'lastSale' },
   { label: 'VENTAS', name: 'totalSales' },
@@ -90,7 +90,11 @@ const columns = [
           :storeId="products.$id"
           :cell="props"
         />
-        <CellInput field="provider" :storeId="products.$id" :cell="props" />
+        <q-td key="providers" :props="props">
+          <q-chip v-for="provider in props.row.providers" :key="provider">{{
+            provider
+          }}</q-chip>
+        </q-td>
         <CellInput field="lastBuy" :storeId="products.$id" :cell="props" />
         <CellInput
           field="lastSale"

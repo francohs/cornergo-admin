@@ -47,7 +47,7 @@ const fetchOptions = async () => {
 const filterFn = async (value, update) => {
   if (options.value.length === 0) {
     if (props.lazy) await fetchOptions()
-    update()
   }
+  update()
 }
 </script>

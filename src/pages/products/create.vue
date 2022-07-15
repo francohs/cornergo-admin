@@ -2,17 +2,16 @@
 import { provide, reactive, computed, ref } from 'vue'
 import { useProducts } from 'stores/products'
 import { useProviders } from 'stores/providers'
-import { useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 import ItemPack from './components/ItemPack.vue'
 
 const products = useProducts()
 const providers = useProviders()
-const $route = useRoute()
-const id = $route.params.id
+const router = useRouter()
 
 const product = reactive({
-  name: products.doc.name || '',
-  code: products.doc.code || '',
+  name: products.doc ? products.doc.name : '',
+  code: products.doc ? products.doc.code : '',
   pack: [],
   active: true,
   exempt: false,
@@ -21,7 +20,7 @@ const product = reactive({
   showcase: 3,
   cost: 1000,
   price: 1400,
-  provider: products.doc.provider || ''
+  providers: products.doc ? products.doc.providers : ''
 })
 
 const loading = ref(false)
@@ -73,11 +72,20 @@ const findProduct = async () => {
   }
   return !product.code || !products.doc || 'El código ya existe'
 }
+
+const save = async () => {
+  if (isAutoPrice.value) {
+    product.price = autoPrice.value
+  }
+  console.log(product)
+  await products.create(product)
+  router.go(-1)
+}
 </script>
 
 <template>
-  <PageResponsive :loading="product.loading" :maxWidth="900">
-    <FormSave :storeId="products.$id" :doc="product">
+  <PageResponsive :maxWidth="900">
+    <Form @submit="save" class="q-pa-lg">
       <div class="row items-center justify-between q-pb-lg">
         <div class="row">
           <ButtonBack />
@@ -107,6 +115,7 @@ const findProduct = async () => {
           :minInput="2"
           class="col"
           hint=""
+          required
         />
         <Input
           label="Código"
@@ -116,6 +125,7 @@ const findProduct = async () => {
           :loading="loading"
           onlynumbers
           style="width: 300px"
+          required
         />
       </RowMultiCols>
 
@@ -144,16 +154,17 @@ const findProduct = async () => {
           onlynumbers
           class="col"
         />
-        <SelectInputFetch
+        <SelectFetch
           label="Proveedor"
           storeId="providers"
-          v-model="product.provider"
-          lazy
+          v-model="product.providers"
+          multiple
+          use-chips
           field="alias"
+          emittedField="alias"
           icon="local_shipping"
-          fetchAll
-          style="width: 240px"
           class="col"
+          required
         />
       </RowMultiCols>
 
@@ -212,6 +223,6 @@ const findProduct = async () => {
           />
         </div>
       </div>
-    </FormSave>
+    </Form>
   </PageResponsive>
 </template>

@@ -1,10 +1,7 @@
 <script setup>
-import { ref, inject } from 'vue'
+import { ref } from 'vue'
 import { api } from 'boot/axios'
-import formatter from 'tools/formatter'
-import notify from 'tools/notify'
 
-const props = defineProps(['modelValue'])
 const emit = defineEmits(['chose'])
 
 const inputValue = ref('')
@@ -18,10 +15,17 @@ const filterFn = async (value, update) => {
         contains: {
           fields: ['code', 'name'],
           value
-        },
-        equal: { active: true }
+        }
       },
-      select: ['code', 'name', 'stock', 'price', 'exempt'],
+      select: [
+        'code',
+        'name',
+        'stock',
+        'price',
+        'exempt',
+        'providers',
+        'active'
+      ],
       sort: { name: -1 }
     })
 
@@ -49,7 +53,7 @@ const onEnter = () => {
 
 const clear = () => {
   inputValue.value = ''
-  // selectRef.value.updateInputValue('')
+  selectRef.value.clear()
   // selectRef.value.focus()
 }
 </script>
@@ -77,7 +81,10 @@ const clear = () => {
       <q-item v-bind="scope.itemProps" @click="addItem(scope.opt)">
         <q-item-section>
           <q-item-label>{{ scope.opt.name }}</q-item-label>
-          <q-item-label caption>Código: {{ scope.opt.code }}</q-item-label>
+          <q-item-label caption
+            >Código: {{ scope.opt.code }} ({{ scope.opt.providers.join(', ') }})
+            {{ scope.opt.active ? '' : '(no activo)' }}</q-item-label
+          >
         </q-item-section>
       </q-item>
     </template>

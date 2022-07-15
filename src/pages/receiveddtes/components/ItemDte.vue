@@ -81,13 +81,20 @@ const unitShippingCost = computed(() => {
 })
 
 product.calcStock = computed(() => {
-  return parseInt(product.stock) + supply.units
+  let stock = Number.isInteger(parseFloat(product.stock))
+    ? parseInt(product.stock)
+    : parseFloat(parseFloat(product.stock).toFixed(2))
+
+  stock +=
+    receivedDtes.doc.dteTypeName == 'Nota de Credito'
+      ? -supply.units
+      : supply.units
+  return stock
 })
 
 supply.calcCost = computed(() => {
-  return (
-    Math.round((unitNetAmount.value + unitShippingCost.value) * 1.19) +
-    unitTaxAmount.value
+  return Math.round(
+    (unitNetAmount.value + unitShippingCost.value) * 1.19 + unitTaxAmount.value
   )
 })
 
@@ -111,6 +118,7 @@ const matchProduct = async selectedProduct => {
   })
 
   props.item.supply.product = product
+  props.item.supply.cost = product.cost
 
   loading.value = false
 }
@@ -147,11 +155,17 @@ const createProduct = () => {
           <InputRead
             label="Línea"
             :modelValue="item.line"
-            input-class="text-bold"
+            bold
             width="50"
             dense
           />
-          <InputRead label="SKU" :modelValue="item.sku" width="180" dense />
+          <InputRead
+            label="SKU"
+            :modelValue="item.sku"
+            width="180"
+            dense
+            bold
+          />
           <InputRead
             label="Nombre Suministro"
             :modelValue="item.name"
@@ -159,6 +173,7 @@ const createProduct = () => {
             input-style="font-size: 14px;"
             width="400"
             dense
+            bold
           />
           <InputRead
             label="Cantidad"
@@ -166,6 +181,7 @@ const createProduct = () => {
             :hint="item.unit"
             width="70"
             dense
+            bold
           />
           <Input
             label="Multiplicador"
@@ -275,7 +291,7 @@ const createProduct = () => {
             v-model="emptyCode"
             @chose="matchProduct"
             :loading="loading"
-            width="250"
+            width="350"
             hint=""
             dense
           />
@@ -324,7 +340,7 @@ const createProduct = () => {
           />
           <InputAuto
             v-if="!receivedDtes.doc.receptionDate"
-            label="Stock"
+            label="Nuevo Stock"
             v-model="product.stock"
             :isAuto="product.autoStock"
             @update:isAuto="product.autoStock = $event"
@@ -336,7 +352,7 @@ const createProduct = () => {
             storeId="products"
             :id="product._id"
             field="stock"
-            width="90"
+            width="120"
             dense
           />
           <Input
@@ -346,7 +362,7 @@ const createProduct = () => {
             storeId="products"
             :id="product._id"
             field="stock"
-            width="90"
+            width="100"
             dense
           />
           <InputRead
@@ -374,7 +390,10 @@ const createProduct = () => {
             :modelValue="unitShippingCost"
             format="currency"
             width="100"
-            v-if="receivedDtes.doc.provider.shippingCosts"
+            v-if="
+              receivedDtes.doc.provider &&
+              receivedDtes.doc.provider.shippingCosts
+            "
             dense
           />
           <InputAuto
@@ -385,7 +404,7 @@ const createProduct = () => {
             :autoValue="supply.calcCost"
             storeId="supplies"
             :id="supply._id"
-            field="unitCost"
+            field="cost"
             :hintManual="`Manual ${formatter.currency(supply.cost)}`"
             :hintAuto="`Calculado ${formatter.currency(supply.calcCost)}`"
             format="currency"

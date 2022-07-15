@@ -26,8 +26,11 @@ onMounted(async () => {
 
 const receiveDte = async () => {
   loading.value = true
-  await receivedDtes.replace(receivedDte._id, receivedDte)
-  console.log(receivedDtes.doc)
+  await receivedDtes.replace(
+    receivedDte._id,
+    receivedDte,
+    'Dte recibido con éxito'
+  )
   Object.assign(receivedDte, receivedDtes.doc)
   loading.value = false
 }
@@ -63,31 +66,6 @@ const receiveDte = async () => {
             :modelValue="receivedDte.emissionDate"
             format="localDate"
             input-class="text-bold"
-          />
-        </div>
-
-        <div class="row q-gutter-x-sm">
-          <InputRead
-            v-if="receivedDte.receptionDate"
-            label="Recibido"
-            :modelValue="receivedDte.receptionDate"
-            format="datetime"
-            input-class="text-bold"
-            width="220"
-          >
-            <template v-slot:append>
-              <q-icon name="check_circle" color="positive" size="sm" />
-            </template>
-          </InputRead>
-
-          <q-btn
-            v-else
-            label="Recibir Stock"
-            icon="library_add_check"
-            color="positive"
-            style="height: 54px"
-            @click="receiveDte"
-            :loading="loading"
           />
         </div>
       </q-card-section>
@@ -155,6 +133,29 @@ const receiveDte = async () => {
             :modelValue="receivedDte.totalAmount"
             format="currency"
             input-class="text-bold"
+          />
+
+          <InputRead
+            v-if="receivedDte.receptionDate"
+            label="Recibido"
+            :modelValue="receivedDte.receptionDate"
+            format="datetime"
+            input-class="text-bold"
+            width="220"
+          >
+            <template v-slot:append>
+              <q-icon name="check_circle" color="positive" size="sm" />
+            </template>
+          </InputRead>
+
+          <q-btn
+            v-else
+            label="Recibir Stock"
+            icon="library_add_check"
+            color="positive"
+            style="height: 54px"
+            @click="receiveDte"
+            :loading="loading"
           />
         </div>
       </q-card-section>

@@ -6,6 +6,7 @@
       :columns="columns"
       title="Suministros"
       titleIcon="inventory"
+      withInput
       inputPlaceholder="Buscar suministro..."
       noDataText="Puedes filtrar suministros codigo de producto o nombre"
       ref="tableRef"
@@ -29,7 +30,7 @@
       <template v-slot="{ props }">
         <Cell field="providerAlias" :cell="props" />
         <Cell field="sku" :cell="props" />
-        <CellInput field="unitCode" :storeId="supplies.$id" :cell="props" />
+        <CellInput field="productCode" :storeId="supplies.$id" :cell="props" />
         <Cell field="name" :cell="props" />
         <Cell field="unit" :cell="props" />
         <CellInput field="multipler" :storeId="supplies.$id" :cell="props" />
@@ -78,7 +79,7 @@ export default {
         // { label: 'DETALLE', name: '_id', size: 50 },
         { label: 'PROVEEDOR', name: 'providerAlias' },
         { label: 'SKU', name: 'sku' },
-        { label: 'CÓDIGO UND', name: 'unitCode' },
+        { label: 'CÓDIGO UND', name: 'productCode' },
         { label: 'NOMBRE', name: 'name', align: 'left' },
         { label: 'MEDIDA', name: 'unit' },
         { label: 'MULTI', name: 'multipler' },

@@ -14,9 +14,9 @@ export const useReceivedDtes = defineStore({
         '_id',
         'dteTypeName',
         'number',
-        'emissionDate',
         'providerAlias',
-        'totalAmount'
+        'totalAmount',
+        'receptionDate'
       ],
       forceSelect: ['providerName', 'providerRut', 'xmlUrl', 'bsaleId'],
       containsFields: ['number'],

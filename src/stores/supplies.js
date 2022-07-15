@@ -8,9 +8,9 @@ export const useSupplies = defineStore({
   state: () => ({
     ...baseState(),
     suppliesTable: tableState('suppliesTable', {
-      visibles: ['name'],
+      visibles: ['name', 'sku'],
       forceSelect: [],
-      containsFields: ['unitCode', 'name'],
+      containsFields: ['name', 'sku', 'productCode'],
       equalFilter: {
         providerAlias: null
       },
