@@ -31,7 +31,8 @@ const checkColor = computed(() => {
   if (!props.cell.row.lastStockUpdate) return 'grey'
   const lastStockUpdate = moment(props.cell.row.lastStockUpdate)
   const diff = lastStockUpdate.diff(moment.now(), 'days')
-  return diff > 3 ? 'grey' : 'positive'
+  console.log(diff)
+  return diff < -3 ? 'grey' : 'positive'
 })
 
 const stockChanged = async id => {

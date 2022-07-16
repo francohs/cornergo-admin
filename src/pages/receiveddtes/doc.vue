@@ -41,6 +41,7 @@ const receiveDte = async () => {
     <q-card flat bordered class="q-mb-sm q-pt-md" style="border-color: grey">
       <q-card-section class="row justify-between">
         <div class="row q-gutter-x-sm">
+          <div class="q-pt-md"><ButtonBack /></div>
           <InputRead
             label="Tipo DTE"
             :modelValue="receivedDte.dteTypeName"

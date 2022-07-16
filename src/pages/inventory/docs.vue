@@ -1,58 +1,3 @@
-<template>
-  <q-page>
-    <TableQuery
-      :storeId="inventory.$id"
-      :columns="columns"
-      title="Revisar Stock"
-      titleIcon="fact_check"
-      inputPlaceholder="Buscar producto..."
-      noDataText="Puedes filtrar productos por nombre o codigo"
-      tableName="inventoryTable"
-    >
-      <template v-slot:extracontrols>
-        <SelectInputFetch
-          lazy
-          fetchAll
-          :storeId="providers.$id"
-          v-model="inventory.provider"
-          @update:modelValue="queryDocs"
-          field="alias"
-          label="Proveedor"
-          icon="local_shipping"
-          style="width: 240px"
-        />
-      </template>
-
-      <template v-slot="{ props }">
-        <CellLink field="_id" :name="products.$id" :cell="props" />
-        <Cell field="code" :cell="props" />
-        <CellInput field="name" :storeId="products.$id" :cell="props" />
-        <CellInput field="category" :storeId="products.$id" :cell="props" />
-        <CellInput
-          field="stock"
-          format="decimal"
-          :storeId="products.$id"
-          :cell="props"
-          @editOutChange="CellCheckedRef.stockChanged(props.row._id)"
-        />
-        <CellInput field="minimum" :storeId="products.$id" :cell="props" />
-        <CellInput field="showcase" :storeId="products.$id" :cell="props" />
-        <Cell field="lastBuy" :storeId="products.$id" :cell="props" />
-        <Cell field="lastSale" :storeId="products.$id" :cell="props" />
-        <Cell field="sale" :storeId="products.$id" :cell="props" />
-        <Cell field="saleAvg" :storeId="products.$id" :cell="props" />
-        <Cell
-          field="totalSales"
-          format="decimal"
-          :storeId="products.$id"
-          :cell="props"
-        />
-        <CellChecked :cell="props" ref="CellCheckedRef" />
-      </template>
-    </TableQuery>
-  </q-page>
-</template>
-
 <script setup>
 import { useProducts } from 'stores/products'
 import { useInventory } from 'stores/inventory'
@@ -91,3 +36,57 @@ const queryDocs = async provider => {
   }
 }
 </script>
+
+<template>
+  <q-page>
+    <TableQuery
+      :storeId="inventory.$id"
+      :columns="columns"
+      title="Revisar Stock"
+      titleIcon="fact_check"
+      inputPlaceholder="Buscar producto..."
+      noDataText="Puedes filtrar productos por nombre o codigo"
+      tableName="inventoryTable"
+    >
+      <template v-slot:extracontrols>
+        <SelectInputFetch
+          lazy
+          fetchAll
+          :storeId="providers.$id"
+          v-model="inventory.provider"
+          @update:modelValue="queryDocs"
+          field="alias"
+          label="Proveedor"
+          icon="local_shipping"
+          style="width: 240px"
+        />
+      </template>
+
+      <template v-slot="{ props }">
+        <CellLink field="_id" :name="products.$id" :cell="props" />
+        <Cell field="code" :cell="props" />
+        <CellInput field="name" :storeId="products.$id" :cell="props" />
+        <CellInput field="category" :storeId="products.$id" :cell="props" />
+        <CellInput
+          field="stock"
+          :storeId="products.$id"
+          :cell="props"
+          @editOutChange="CellCheckedRef.stockChanged(props.row._id)"
+        />
+        <CellInput field="minimum" :storeId="products.$id" :cell="props" />
+        <CellInput field="showcase" :storeId="products.$id" :cell="props" />
+        <Cell field="lastBuy" :storeId="products.$id" :cell="props" />
+        <Cell field="lastSale" :storeId="products.$id" :cell="props" />
+        <Cell field="sale" :storeId="products.$id" :cell="props" />
+        <Cell field="saleAvg" :storeId="products.$id" :cell="props" />
+        <Cell
+          field="totalSales"
+          format="decimal"
+          :storeId="products.$id"
+          :cell="props"
+        />
+        <CellChecked :cell="props" ref="CellCheckedRef" />
+      </template>
+    </TableQuery>
+  </q-page>
+</template>
