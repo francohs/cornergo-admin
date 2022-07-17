@@ -7,7 +7,7 @@ import formatter from 'tools/formatter'
 import ButtonPayCalc from './components/ButtonPayCalc.vue'
 import CellLinkDte from './components/CellLinkDte.vue'
 
-const $router = useRouter()
+const router = useRouter()
 
 const receivedDtes = useReceivedDtes()
 provide(receivedDtes.$id, receivedDtes)
@@ -67,7 +67,7 @@ const createProvider = (rut, name) => {
     rut,
     name
   }
-  $router.push({ name: 'providers/create' })
+  router.push({ name: 'providers/create' })
 }
 
 const columns = [

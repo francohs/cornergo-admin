@@ -12,6 +12,7 @@ const auth = useAuth()
       <ItemLink page="supplies" icon="widgets" label="Suministros" />
       <ItemLink page="products" icon="inventory" label="Productos" />
       <ItemLink page="inventory" icon="fact_check" label="Inventario" />
+      <ItemLink page="labels" icon="sell" label="Etiquetas" />
       <ItemLink page="providers" icon="support_agent" label="Proveedores" />
       <ItemLink
         page="clients"

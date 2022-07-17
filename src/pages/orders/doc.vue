@@ -1,49 +1,3 @@
-<template>
-  <LayoutPage :loading="orders.loading" class="q-pa-md">
-    <div class="text-h4 q-mb-md">
-      <div class="row">
-        Pedido {{ provider }} {{ orderDate }}
-        <q-space />
-        <q-btn
-          label="GENERAR PDF"
-          icon="sim_card_download"
-          @click="genPDF"
-          color="positive"
-        />
-      </div>
-
-      <div class="q-pt-md">
-        <q-banner inline-actions rounded class="bg-orange text-white">
-          Existen <b>{{ checkStockCount }}</b> productos con stock posiblemente
-          erroneo
-
-          <template v-slot:action>
-            <q-btn
-              flat
-              label="Revisar Stock"
-              @click="goto"
-              icon="fact_check"
-              :loading="loadingGoto"
-            />
-          </template>
-        </q-banner>
-      </div>
-    </div>
-    <q-list
-      bordered
-      separator
-      class="rounded-borders"
-      style="border-color: grey"
-    >
-      <ItemOrder
-        :product="product"
-        v-for="product of orders.doc.order"
-        :key="product._id"
-      />
-    </q-list>
-  </LayoutPage>
-</template>
-
 <script setup>
 import { jsPDF } from 'jspdf'
 import { onMounted, provide, reactive, ref } from 'vue'
@@ -129,3 +83,49 @@ const genPDF = () => {
   pdf.save(`${title}.pdf`)
 }
 </script>
+
+<template>
+  <LayoutPage :loading="orders.loading" class="q-pa-md">
+    <div class="text-h4 q-mb-md">
+      <div class="row">
+        Pedido {{ provider }} {{ orderDate }}
+        <q-space />
+        <q-btn
+          label="GENERAR PDF"
+          icon="sim_card_download"
+          @click="genPDF"
+          color="positive"
+        />
+      </div>
+
+      <div class="q-pt-md">
+        <q-banner inline-actions rounded class="bg-orange text-white">
+          Existen <b>{{ checkStockCount }}</b> productos con stock posiblemente
+          erroneo
+
+          <template v-slot:action>
+            <q-btn
+              flat
+              label="Revisar Stock"
+              @click="goto"
+              icon="fact_check"
+              :loading="loadingGoto"
+            />
+          </template>
+        </q-banner>
+      </div>
+    </div>
+    <q-list
+      bordered
+      separator
+      class="rounded-borders"
+      style="border-color: grey"
+    >
+      <ItemOrder
+        :product="product"
+        v-for="product of orders.doc.order"
+        :key="product._id"
+      />
+    </q-list>
+  </LayoutPage>
+</template>
