@@ -8,6 +8,7 @@ import { useSupplies } from 'stores/supplies'
 import { useInventory } from 'stores/inventory'
 import formatter from 'tools/formatter'
 import ItemOrder from './components/ItemOrder.vue'
+import { computed } from '@vue/reactivity'
 
 const route = useRoute()
 const router = useRouter()
@@ -32,6 +33,7 @@ provide(orders.$id, orders)
 onMounted(async () => {
   try {
     await orders.getDoc(id)
+    console.log(orders.doc)
     Object.assign(order, orders.doc)
     provider.value = orders.doc.provider.alias
     checkStockCount.value = orders.doc.checkStock.length
@@ -40,7 +42,18 @@ onMounted(async () => {
   }
 })
 
-const goto = async () => {
+const total = computed(() =>
+  orders.doc.order.reduce(
+    (acc, curr) =>
+      acc +
+      curr.supply.orderQuantity *
+        curr.supply.packageQuantity *
+        curr.supply.cost,
+    0
+  )
+)
+
+async function goto() {
   loadingGoto.value = true
   await inventory.getDocs(provider.value)
   loadingGoto.value = false
@@ -48,12 +61,15 @@ const goto = async () => {
   router.push({ name: 'inventory' })
 }
 
-const genPDF = () => {
+function genPDF() {
   const pdf = new jsPDF({ format: 'letter' })
 
-  const title = `PEDIDO ${provider.value} ${orderDate}`
+  const title = `PEDIDO ${provider.value} ${orderDate.replaceAll('/', '-')}`
   pdf.setFont('helvetica', 'bold')
   pdf.text(title, 5, 10)
+
+  const totalText = `TOTAL ${formatter.currency(total.value)}`
+  pdf.text(totalText, 211, 10, { align: 'right' })
 
   const data = orders.doc.order.reduce((prev, curr) => {
     const { supply } = curr
@@ -68,8 +84,6 @@ const genPDF = () => {
       }
     ]
   }, [])
-
-  console.log(data)
 
   const headers = [
     { name: 'sku', prompt: 'SKU', align: 'center', width: 50 },
@@ -88,18 +102,27 @@ const genPDF = () => {
   <LayoutPage :loading="orders.loading" class="q-pa-md">
     <div class="text-h4 q-mb-md">
       <div class="row">
-        Pedido {{ provider }} {{ orderDate }}
+        PEDIDO {{ provider }} {{ orderDate }}
+
         <q-space />
+
+        TOTAL: {{ formatter.currency(total) }}
         <q-btn
           label="GENERAR PDF"
           icon="sim_card_download"
           @click="genPDF"
           color="positive"
+          class="q-ml-lg"
         />
       </div>
 
       <div class="q-pt-md">
-        <q-banner inline-actions rounded class="bg-orange text-white">
+        <q-banner
+          v-if="checkStockCount"
+          inline-actions
+          rounded
+          class="bg-orange text-white"
+        >
           Existen <b>{{ checkStockCount }}</b> productos con stock posiblemente
           erroneo
 

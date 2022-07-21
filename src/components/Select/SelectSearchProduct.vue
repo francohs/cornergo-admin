@@ -26,7 +26,7 @@ const filterFn = async (value, update) => {
         'providers',
         'active'
       ],
-      sort: { name: -1 }
+      sort: { totalSales: -1 }
     })
 
     options.value = data.docs

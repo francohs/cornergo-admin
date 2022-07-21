@@ -20,12 +20,17 @@ const product = reactive({
   showcase: 3,
   cost: 1000,
   price: 1400,
-  providers: products.doc ? products.doc.providers : ''
+  providers: []
 })
 
 const loading = ref(false)
 const isPack = ref(false)
 const isAutoPrice = ref(true)
+const provider = ref(
+  products.doc.providers && products.doc.providers.length
+    ? products.doc.providers[0]
+    : null
+)
 
 const addItemPack = newProduct => {
   product.pack.push({
@@ -77,6 +82,7 @@ const save = async () => {
   if (isAutoPrice.value) {
     product.price = autoPrice.value
   }
+  product.providers = [provider.value]
   console.log(product)
   await products.create(product)
   router.go(-1)
@@ -146,7 +152,6 @@ const save = async () => {
       <div class="text-subtitle2 q-mb-md q-pl-sm">INVENTARIO</div>
 
       <RowMultiCols>
-        <Input v-model="product.stock" label="Stock" onlynumbers class="col" />
         <Input
           label="Vitrina"
           v-model="product.showcase"
@@ -156,14 +161,12 @@ const save = async () => {
         />
         <SelectFetch
           label="Proveedor"
-          storeId="providers"
-          v-model="product.providers"
-          multiple
-          use-chips
-          field="alias"
-          emittedField="alias"
-          icon="local_shipping"
+          optionStore="providers"
+          v-model="provider"
+          optionLabel="alias"
+          optionValue="alias"
           class="col"
+          fetch-all
           required
         />
       </RowMultiCols>

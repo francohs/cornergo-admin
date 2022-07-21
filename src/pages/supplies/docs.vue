@@ -56,22 +56,24 @@ export default {
       activeToggle
     >
       <template v-slot:extracontrols>
-        <SelectInputFetch
-          lazy
-          fetchAll
-          :storeId="providers.$id"
-          v-model="supplies.suppliesTable.equalFilter.providerAlias"
-          field="alias"
+        <SelectProvider
           label="Proveedor"
           icon="local_shipping"
+          v-model="supplies.suppliesTable.equalFilter.providerAlias"
           style="width: 240px"
+          autofocus
         />
         <q-space />
         <!-- <ButtonLinkCreate /> -->
       </template>
 
       <template v-slot="{ props }">
-        <Cell field="providerAlias" :cell="props" />
+        <!-- <CellInput
+          field="providerAlias"
+          :storeId="supplies.$id"
+          :cell="props"
+        /> -->
+        <CellSelectProvider field="providerAlias" :cell="props" />
         <Cell field="sku" :cell="props" />
         <CellInput field="productCode" :storeId="supplies.$id" :cell="props" />
         <Cell field="name" :cell="props" />

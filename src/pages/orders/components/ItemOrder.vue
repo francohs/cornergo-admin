@@ -1,3 +1,19 @@
+<script setup>
+import { computed, inject, ref, reactive } from 'vue'
+import formatter from 'tools/formatter'
+const props = defineProps(['product'])
+const { product } = props
+const { supply } = product
+supply.units = computed(() => {
+  if (!supply) return 0
+  return supply.packageQuantity * supply.orderQuantity
+})
+supply.subtotal = computed(() => {
+  if (!supply) return 0
+  return supply.units * supply.cost
+})
+</script>
+
 <template>
   <q-item v-bind="$attrs" style="border-color: grey">
     <div class="full-width row q-gutter-y-sm q-py-sm">
@@ -45,7 +61,7 @@
             dense
           />
           <InputRead
-            label="Venta"
+            label="Venta Sem"
             :modelValue="product.sale"
             width="90"
             dense
@@ -96,11 +112,11 @@
             bold
           />
           <Input
-            label="Multiplicador"
-            :modelValue="supply.multipler"
+            label="Cnt x Pack"
+            :modelValue="supply.packageQuantity"
             storeId="supplies"
             :id="supply._id"
-            field="multipler"
+            field="packageQuantity"
             width="90"
             dense
           />
@@ -129,19 +145,3 @@
     </div>
   </q-item>
 </template>
-
-<script setup>
-import { computed, inject, ref, reactive } from 'vue'
-import formatter from 'tools/formatter'
-const props = defineProps(['product'])
-const { product } = props
-const { supply } = product
-supply.units = computed(() => {
-  if (!supply) return 0
-  return supply.multipler * supply.orderQuantity
-})
-supply.subtotal = computed(() => {
-  if (!supply) return 0
-  return supply.units * supply.cost
-})
-</script>

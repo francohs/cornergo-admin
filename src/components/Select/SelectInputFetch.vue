@@ -1,23 +1,3 @@
-<template>
-  <Select
-    v-bind="$attrs"
-    outlined
-    use-input
-    input-debounce="0"
-    clearable
-    options-dense
-    @filter="filterFn"
-    :options="options"
-    :loading="store.loading"
-    fill-input
-    hide-selected
-  >
-    <template v-if="icon" v-slot:prepend>
-      <q-icon :name="icon" />
-    </template>
-  </Select>
-</template>
-
 <script setup>
 import { onMounted, inject, ref } from 'vue'
 
@@ -32,7 +12,6 @@ const props = defineProps({
 })
 
 const store = inject(props.storeId)
-const model = ref(null)
 const options = ref([])
 const fetchedOptions = ref([])
 
@@ -86,3 +65,23 @@ const fetchOptions = async (field, input) => {
   fetchedOptions.value = store.options.map(doc => doc[field])
 }
 </script>
+
+<template>
+  <Select
+    v-bind="$attrs"
+    outlined
+    use-input
+    input-debounce="0"
+    clearable
+    options-dense
+    @filter="filterFn"
+    :options="options"
+    :loading="store.loading"
+    fill-input
+    hide-selected
+  >
+    <template v-if="icon" v-slot:prepend>
+      <q-icon :name="icon" />
+    </template>
+  </Select>
+</template>

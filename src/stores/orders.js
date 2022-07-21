@@ -5,7 +5,8 @@ export const useOrders = defineStore({
   id: 'orders',
 
   state: () => ({
-    ...baseState()
+    ...baseState(),
+    doc: { order: [] }
   }),
 
   getters: {

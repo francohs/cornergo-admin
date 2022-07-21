@@ -56,16 +56,13 @@ const columns = [
       createBtn
     >
       <template v-slot:extracontrols>
-        <SelectInputFetch
-          lazy
-          fetchAll
-          :storeId="providers.$id"
+        <SelectProvider
           v-model="table.equalFilter.providers"
           @update:modelValue="onFilter"
-          field="alias"
           label="Proveedor"
-          icon="local_shipping"
           style="width: 240px"
+          icon="local_shipping"
+          autofocus
         />
       </template>
 
@@ -90,11 +87,12 @@ const columns = [
           :storeId="products.$id"
           :cell="props"
         />
-        <q-td key="providers" :props="props">
+        <!-- <q-td key="providers" :props="props">
           <q-chip v-for="provider in props.row.providers" :key="provider">{{
             provider
           }}</q-chip>
-        </q-td>
+        </q-td> -->
+        <CellSelectProvider :cell="props" />
         <CellInput field="lastBuy" :storeId="products.$id" :cell="props" />
         <CellInput
           field="lastSale"

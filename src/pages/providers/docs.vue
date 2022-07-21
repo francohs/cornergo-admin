@@ -8,6 +8,7 @@
       titleIcon="local_shipping"
       inputPlaceholder="Buscar proveedor..."
       noDataText="Puedes filtrar proveedores por nombre o rut"
+      withInput
       initFetch
       activeToggle
       createBtn

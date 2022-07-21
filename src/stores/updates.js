@@ -16,11 +16,11 @@ export const useUpdates = defineStore({
   actions: {
     ...baseActions(),
 
-    async getPriceLabels() {
+    async getPriceLabels(date) {
       try {
         this.loading = true
         const { data } = await api.get(this.$id + '/pricelabels', {
-          params: { date: '2022-07-15' }
+          params: { date }
         })
         return data.docs
       } catch (error) {

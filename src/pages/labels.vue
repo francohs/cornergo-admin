@@ -12,11 +12,13 @@ const loading = ref(false)
 const updates = useUpdates()
 provide(updates.$id, updates)
 
-onMounted(async () => {})
+onMounted(async () => {
+  await onDate()
+})
 
 const onDate = async () => {
   loading.value = true
-  priceLabels.value = await updates.getPriceLabels()
+  priceLabels.value = await updates.getPriceLabels(date.value)
 
   const letterWidth = 216
   const letterHeigh = 280
@@ -29,18 +31,6 @@ const onDate = async () => {
   const maxCharacters = 31
 
   const pdf = new jsPDF({ format: 'letter' })
-
-  // const price = '$ 2.690'
-  // const description = 'DESODORANTE OLD SPICE BARRA 600'
-  // const description = 'DESODORANTE OLD SPICE BARRA HIPOALEGENICO 60 G'
-
-  // const priceLabels = []
-  // for (let n = 0; n < 45; n++) {
-  //   priceLabels.push({
-  //     price,
-  //     description
-  //   })
-  // }
 
   const pages = Math.ceil(priceLabels.value.length / labelsPerPage)
 

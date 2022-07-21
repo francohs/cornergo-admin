@@ -11,7 +11,7 @@ const props = defineProps({
   hintAuto: [String, Number],
   format: String,
   autoField: String,
-  autoValue: Number,
+  autoValue: [String, Number],
   isAuto: Boolean,
   hideAutoBtn: Boolean
 })

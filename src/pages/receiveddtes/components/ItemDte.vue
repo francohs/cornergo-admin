@@ -67,13 +67,17 @@ product.calcMargin = computed(() => {
 supply.calcShippingCost = computed(() => {
   const calcCostWithoutShipping =
     Math.round(unitNetAmount.value * 1.19) + unitTaxAmount.value
-  return Math.round(
-    (supply.units * (supply.cost - calcCostWithoutShipping)) / 1.19
-  )
+
+  let cost = supply.autoCost ? supply.calcCost : supply.cost
+  return Math.round((supply.units * (cost - calcCostWithoutShipping)) / 1.19)
 })
 
 const unitShippingCost = computed(() => {
-  if (receivedDtes.doc.provider && receivedDtes.doc.provider.shippingCosts) {
+  if (
+    !supply.autoCost &&
+    receivedDtes.doc.provider &&
+    receivedDtes.doc.provider.shippingCosts
+  ) {
     return Math.round(supply.calcShippingCost / supply.units)
   } else {
     return Math.round(supply.shippingCost / supply.units)
@@ -141,14 +145,14 @@ const createProduct = () => {
   products.doc = {
     name: props.item.name,
     code: product.code,
-    provider: supply.providerAlias
+    providers: [supply.providerAlias]
   }
   router.push({ name: 'products/create' })
 }
 </script>
 
 <template>
-  <q-item class="q-pb-none q-pt-md bg-white">
+  <q-item class="q-pb-none q-pt-md bg-white" style="border-color: grey">
     <div class="full-width row q-gutter-y-sm">
       <div class="full-width row justify-between">
         <div class="row q-gutter-x-sm">
@@ -240,7 +244,9 @@ const createProduct = () => {
           />
           <InputAuto
             label="Flete"
-            autoField="autoShippingCost"
+            storeId="supplies"
+            field="shippingCost"
+            :id="supply._id"
             v-model="supply.shippingCost"
             :isAuto="!supply.autoCost"
             :autoValue="supply.calcShippingCost"
@@ -373,6 +379,17 @@ const createProduct = () => {
             width="90"
             dense
           />
+          <div class="column items-center text-grey-7" style="font-size: 12px">
+            Activo
+            <Toggle
+              storeId="products"
+              :id="product._id"
+              field="active"
+              v-model="product.active"
+              size="sm"
+              dense
+            />
+          </div>
         </div>
 
         <div class="row q-gutter-x-sm">

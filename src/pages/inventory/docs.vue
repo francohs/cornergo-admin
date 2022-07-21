@@ -42,23 +42,20 @@ const queryDocs = async provider => {
     <TableQuery
       :storeId="inventory.$id"
       :columns="columns"
-      title="Revisar Stock"
+      title="Inventario"
       titleIcon="fact_check"
       inputPlaceholder="Buscar producto..."
-      noDataText="Puedes filtrar productos por nombre o codigo"
+      noDataText="Busca por proveedor y luego puedes filtrar por producto"
       tableName="inventoryTable"
     >
       <template v-slot:extracontrols>
-        <SelectInputFetch
-          lazy
-          fetchAll
-          :storeId="providers.$id"
-          v-model="inventory.provider"
-          @update:modelValue="queryDocs"
-          field="alias"
+        <SelectProvider
           label="Proveedor"
           icon="local_shipping"
+          v-model="inventory.provider"
+          @update:modelValue="queryDocs"
           style="width: 240px"
+          autofocus
         />
       </template>
 
