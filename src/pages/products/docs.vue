@@ -62,7 +62,7 @@ const columns = [
           label="Proveedor"
           style="width: 240px"
           icon="local_shipping"
-          autofocus
+          clearable
         />
       </template>
 
@@ -92,7 +92,7 @@ const columns = [
             provider
           }}</q-chip>
         </q-td> -->
-        <CellSelectProvider :cell="props" />
+        <CellProviders :cell="props" />
         <CellInput field="lastBuy" :storeId="products.$id" :cell="props" />
         <CellInput
           field="lastSale"

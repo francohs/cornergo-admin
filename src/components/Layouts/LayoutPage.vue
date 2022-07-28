@@ -1,5 +1,5 @@
 <template>
-  <q-page class="row q-pa-lg">
+  <q-page class="row q-pa-sm">
     <div class="col" v-if="!loading"><slot /></div>
 
     <Loading :state="loading" />

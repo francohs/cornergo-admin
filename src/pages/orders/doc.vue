@@ -71,28 +71,32 @@ function genPDF() {
   const totalText = `TOTAL ${formatter.currency(total.value)}`
   pdf.text(totalText, 211, 10, { align: 'right' })
 
-  const data = orders.doc.order.reduce((prev, curr) => {
-    const { supply } = curr
+  const data = orders.doc.order.reduce((prev, item) => {
+    const { supply } = item
     if (!supply) return prev
+
+    let unit = supply.unit || 'UND'
+    unit += unit == 'UND' ? '' : ` (${supply.packageQuantity})`
+
     return [
       ...prev,
       {
         sku: supply.sku || '-',
-        name: supply.name || '',
+        name: item.name || '',
         quantity: supply.orderQuantity ? supply.orderQuantity.toString() : '-',
-        unit: supply.unit || '-'
+        unit
       }
     ]
   }, [])
 
   const headers = [
     { name: 'sku', prompt: 'SKU', align: 'center', width: 50 },
-    { name: 'name', prompt: 'NOMBRE', width: 145 },
-    { name: 'quantity', prompt: 'CANTIDAD', align: 'center', width: 40 },
+    { name: 'name', prompt: 'NOMBRE', width: 150 },
+    { name: 'quantity', prompt: 'CANTIDAD', align: 'center', width: 35 },
     { name: 'unit', prompt: 'UNIDAD', align: 'center', width: 40 }
   ]
 
-  pdf.table(5, 15, data, headers)
+  pdf.table(5, 15, data, headers, { fontSize: 11 })
 
   pdf.save(`${title}.pdf`)
 }

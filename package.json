@@ -1,7 +1,7 @@
 {
   "name": "cornergo-admin",
   "version": "0.0.1",
-  "description": "A Quasar Project",
+  "description": "Software de Administración para CornerGO",
   "productName": "CornerGO Admin",
   "author": "Franco <franco@gmail.com>",
   "private": true,
@@ -12,11 +12,11 @@
     "deploy": "vercel"
   },
   "dependencies": {
-    "@quasar/extras": "^1.14.2",
+    "@quasar/extras": "^1.15.0",
     "axios": "^0.27.2",
     "jspdf": "^2.5.1",
     "moment": "^2.29.4",
-    "pinia": "^2.0.15",
+    "pinia": "^2.0.17",
     "quasar": "^2.7.5",
     "vue": "^3.2.37",
     "vue-router": "^4.1.1",

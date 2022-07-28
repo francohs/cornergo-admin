@@ -12,14 +12,26 @@ const loading = ref(false)
 const updates = useUpdates()
 provide(updates.$id, updates)
 
-onMounted(async () => {
-  await onDate()
-})
+// const provider = ref(null)
 
-const onDate = async () => {
+onMounted(() => onDate())
+
+const columns = [
+  { label: 'CODIGO', name: 'code' },
+  { label: 'PROVEEDORES', name: 'providers' },
+  { label: 'NOMBRE', name: 'name' },
+  { label: 'PRECIO', name: 'price' }
+]
+
+async function onDate() {
   loading.value = true
-  priceLabels.value = await updates.getPriceLabels(date.value)
+  let data = await updates.getPriceLabels(date.value)
+  console.log(data)
+  priceLabels.value = data
+  loading.value = false
+}
 
+function printLabels() {
   const letterWidth = 216
   const letterHeigh = 280
   const labelWidth = 72
@@ -78,18 +90,9 @@ const onDate = async () => {
     pdf.addPage('letter', 'portrait')
   }
 
-  // pdf.rect(0, 270, labelWidth, 10)
-
   // pdf.autoPrint()
   pdf.save(`PRECIOS ${date.value}.pdf`)
-  loading.value = false
 }
-
-const columns = [
-  { label: 'CODIGO', name: 'code' },
-  { label: 'NOMBRE', name: 'name' },
-  { label: 'PRECIO', name: 'price' }
-]
 </script>
 
 <template>
@@ -123,14 +126,18 @@ const columns = [
 
         <Calendar v-model="date" @update:modelValue="onDate" />
 
-        <q-separator />
+        <q-separator class="q-mb-md" />
+
+        <!-- <SelectProvider v-model="provider" class="full-width q-mb-lg" /> -->
+
+        <q-btn label="GENERAR PDF" color="primary" @click="printLabels" />
       </q-card>
       <Table
         :rows="priceLabels"
         :columns="columns"
         ref="tableRef"
-        loadingText="Sincronizando dtes..."
-        noDataText="Selecciona un dia para ver los cambios de precio"
+        loadingText="Obteniendo datos..."
+        noDataText="Puedes filtrar por día o por proveedor"
         :hide-bottom="!!priceLabels.length"
         class="col"
         :pagination="{ rowsPerPage: 0 }"
@@ -138,6 +145,7 @@ const columns = [
       >
         <template v-slot="{ props }">
           <Cell field="code" :cell="props" />
+          <CellProviders :cell="props" />
           <Cell field="name" :cell="props" />
           <Cell field="price" :cell="props" format="currency" />
         </template>

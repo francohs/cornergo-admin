@@ -16,21 +16,27 @@ const product = reactive(supply.product || {})
 const loading = ref(false)
 const emptyCode = ref('')
 
+const providerWithShipping =
+  receivedDtes.doc.provider && receivedDtes.doc.provider.shippingCosts
+
 supply.units = computed(() => {
   return supply.multipler * props.item.quantity
 })
 
 const netAmount = computed(() => {
+  console.log(props.item.discountAmount, props.item.netAmount)
   const discount = props.item.discountAmount ? props.item.discountAmount : 0
   return Math.round(props.item.netAmount * props.item.quantity - discount)
+  // console.log(props.item.subtotal, props.item.quantity)
+  // return Math.round(props.item.subtotal / props.item.quantity)
 })
 
 const unitNetAmount = computed(() => {
-  return Math.round(netAmount.value / supply.units)
+  return Math.round(props.item.subtotal / supply.units)
 })
 
 const taxAmount = computed(() => {
-  return Math.round(netAmount.value * (props.item.taxRate / 100))
+  return Math.round(props.item.subtotal * (props.item.taxRate / 100))
 })
 
 const unitTaxAmount = computed(() => {
@@ -43,7 +49,8 @@ const unitIvaAmount = computed(() => {
 
 product.calcPrice = computed(() => {
   let cost = supply.autoCost ? supply.calcCost : supply.cost
-  let price = Math.round(cost * (1 + product.marginRate / 100))
+  let marginRate = 40
+  let price = Math.round(cost * (1 + marginRate / 100))
   let lastTwo = price.toString().slice(-2)
   const lastTwoNum = parseInt(lastTwo)
 
@@ -64,7 +71,7 @@ product.calcMargin = computed(() => {
   return Math.round((price / cost - 1) * 100)
 })
 
-supply.calcShippingCost = computed(() => {
+supply.calcPackShippingCost = computed(() => {
   const calcCostWithoutShipping =
     Math.round(unitNetAmount.value * 1.19) + unitTaxAmount.value
 
@@ -72,15 +79,13 @@ supply.calcShippingCost = computed(() => {
   return Math.round((supply.units * (cost - calcCostWithoutShipping)) / 1.19)
 })
 
-const unitShippingCost = computed(() => {
-  if (
-    !supply.autoCost &&
-    receivedDtes.doc.provider &&
-    receivedDtes.doc.provider.shippingCosts
-  ) {
-    return Math.round(supply.calcShippingCost / supply.units)
+const packShippingCost = ref(supply.shippingCost * supply.units)
+
+supply.calcShippingCost = computed(() => {
+  if (supply.autoCost && providerWithShipping) {
+    return Math.round(packShippingCost.value / supply.units)
   } else {
-    return Math.round(supply.shippingCost / supply.units)
+    return Math.round(supply.calcPackShippingCost / supply.units)
   }
 })
 
@@ -97,9 +102,14 @@ product.calcStock = computed(() => {
 })
 
 supply.calcCost = computed(() => {
-  return Math.round(
-    (unitNetAmount.value + unitShippingCost.value) * 1.19 + unitTaxAmount.value
-  )
+  if (providerWithShipping) {
+    return Math.round(
+      (unitNetAmount.value + supply.calcShippingCost) * 1.19 +
+        unitTaxAmount.value
+    )
+  } else {
+    return Math.round(unitNetAmount.value * 1.19 + unitTaxAmount.value)
+  }
 })
 
 const unitDiscountAmount = computed(() => {
@@ -182,18 +192,25 @@ const createProduct = () => {
           <InputRead
             label="Cantidad"
             :modelValue="item.quantity"
-            :hint="item.unit"
+            width="70"
+            dense
+            bold
+          />
+          <InputRead
+            v-if="item.unit"
+            label="Unidad"
+            :modelValue="item.unit"
             width="70"
             dense
             bold
           />
           <Input
-            label="Multiplicador"
+            label="Multi"
             v-model="supply.multipler"
             storeId="supplies"
             :id="supply._id"
             field="multipler"
-            width="90"
+            width="70"
             dense
           />
           <InputRead
@@ -212,6 +229,15 @@ const createProduct = () => {
             autoField="autoPackageQty"
             field="packageQuantity"
             width="120"
+            dense
+          />
+          <Input
+            label="Unidad Pack"
+            v-model="supply.unit"
+            storeId="supplies"
+            :id="supply._id"
+            field="unit"
+            width="90"
             dense
           />
         </div>
@@ -244,22 +270,15 @@ const createProduct = () => {
           />
           <InputAuto
             label="Flete"
-            storeId="supplies"
-            field="shippingCost"
-            :id="supply._id"
-            v-model="supply.shippingCost"
+            v-model="packShippingCost"
             :isAuto="!supply.autoCost"
-            :autoValue="supply.calcShippingCost"
+            :autoValue="supply.calcPackShippingCost"
             :hintAuto="`Calculado ${formatter.currency(
-              supply.calcShippingCost
+              supply.calcPackShippingCost
             )}`"
-            :hintManual="`Manual ${formatter.currency(supply.shippingCost)}`"
             width="120"
             format="currency"
-            v-if="
-              receivedDtes.doc.provider &&
-              receivedDtes.doc.provider.shippingCosts
-            "
+            v-if="providerWithShipping"
             dense
           />
           <InputRead
@@ -404,15 +423,13 @@ const createProduct = () => {
           />
           <InputRead
             label="Flete Und"
-            :modelValue="unitShippingCost"
+            :modelValue="supply.calcShippingCost"
             format="currency"
             width="100"
-            v-if="
-              receivedDtes.doc.provider &&
-              receivedDtes.doc.provider.shippingCosts
-            "
+            v-if="providerWithShipping"
             dense
           />
+
           <InputAuto
             label="Costo"
             v-model="supply.cost"
@@ -435,8 +452,10 @@ const createProduct = () => {
             autoField="autoPrice"
             :autoValue="product.calcPrice"
             :hintAuto="`Calculado ${formatter.currency(product.calcPrice)}`"
+            :hintManual="`Anterior ${formatter.currency(product.price)}`"
             storeId="products"
             :id="product._id"
+            field="price"
             format="currency"
             width="120"
             dense
@@ -446,6 +465,9 @@ const createProduct = () => {
             v-model="product.marginRate"
             :isAuto="!product.autoPrice"
             :autoValue="product.calcMargin"
+            storeId="products"
+            :id="product._id"
+            field="marginRate"
             :low="30"
             :high="40"
             format="percent"

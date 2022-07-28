@@ -23,6 +23,7 @@ const props = defineProps({
   bold: Boolean,
   width: [String, Number]
 })
+const emit = defineEmits(['update:modelValue'])
 
 const rules = []
 const isFocus = ref(false)
@@ -133,6 +134,10 @@ const focus = async () => {
   inputRef.value.select()
 }
 
+function escape() {
+  emit('update:modelValue', prevModelValue)
+}
+
 defineExpose({ focus })
 </script>
 
@@ -144,6 +149,7 @@ defineExpose({ focus })
     bottom-slots
     :label="label"
     :modelValue="formattedValue"
+    @update:model-value="emit('update:modelValue', $event)"
     :rules="rules"
     lazy-rules
     :input-class="limitClass"
@@ -151,6 +157,7 @@ defineExpose({ focus })
     @focus="focus"
     @blur="isFocus = false"
     @keyup.enter="isFocus = false"
+    @keyup.esc="escape"
     @keypress="numberValidation"
     :loading="loading"
     ref="inputRef"

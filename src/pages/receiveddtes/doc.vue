@@ -48,11 +48,7 @@ const receiveDte = async () => {
             input-class="text-bold"
             width="200"
           />
-          <InputRead
-            label="Folio"
-            :modelValue="receivedDte.number"
-            input-class="text-bold"
-          />
+
           <InputRead
             v-if="receivedDte.providerAlias"
             label="Proveedor"
@@ -62,6 +58,11 @@ const receiveDte = async () => {
           >
             <q-tooltip>{{ receivedDte.providerName }}</q-tooltip>
           </InputRead>
+          <InputRead
+            label="Folio"
+            :modelValue="receivedDte.number"
+            input-class="text-bold"
+          />
           <InputRead
             label="Fecha Emisión"
             :modelValue="receivedDte.emissionDate"

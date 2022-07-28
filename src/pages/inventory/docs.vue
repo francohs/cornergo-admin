@@ -56,6 +56,7 @@ const queryDocs = async provider => {
           @update:modelValue="queryDocs"
           style="width: 240px"
           autofocus
+          clearable
         />
       </template>
 
@@ -72,8 +73,18 @@ const queryDocs = async provider => {
         />
         <CellInput field="minimum" :storeId="products.$id" :cell="props" />
         <CellInput field="showcase" :storeId="products.$id" :cell="props" />
-        <Cell field="lastBuy" :storeId="products.$id" :cell="props" />
-        <Cell field="lastSale" :storeId="products.$id" :cell="props" />
+        <Cell
+          field="lastBuy"
+          format="localDate"
+          :storeId="products.$id"
+          :cell="props"
+        />
+        <Cell
+          field="lastSale"
+          format="localDate"
+          :storeId="products.$id"
+          :cell="props"
+        />
         <Cell field="sale" :storeId="products.$id" :cell="props" />
         <Cell field="saleAvg" :storeId="products.$id" :cell="props" />
         <Cell

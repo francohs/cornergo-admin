@@ -1,11 +1,3 @@
-<template>
-  <q-td :key="field" :props="cell">
-    <slot>
-      {{ formatedValue }}
-    </slot>
-  </q-td>
-</template>
-
 <script setup>
 import { computed } from 'vue'
 import formatter from 'tools/formatter'
@@ -22,3 +14,11 @@ const formatedValue = computed(() => {
   return value
 })
 </script>
+
+<template>
+  <q-td :key="field" :props="cell">
+    <slot>
+      {{ formatedValue }}
+    </slot>
+  </q-td>
+</template>

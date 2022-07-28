@@ -2,10 +2,11 @@
 import { useProducts } from 'stores/products'
 import { useProviders } from 'stores/providers'
 import { useSupplies } from 'stores/supplies'
-import { onMounted, provide, reactive, computed } from 'vue'
+import { onMounted, provide, reactive, computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import formatter from 'tools/formatter'
 import RowJumbo from './components/RowJumbo.vue'
+import ItemPack from './components/ItemPack.vue'
 
 const products = useProducts()
 const providers = useProviders()
@@ -13,6 +14,7 @@ const supplies = useSupplies()
 const $route = useRoute()
 const id = $route.params.id
 const product = reactive({})
+const isPack = ref(false)
 
 provide(products.$id, products)
 provide(providers.$id, providers)
@@ -22,6 +24,8 @@ onMounted(async () => {
   supplies.clearDocs()
   await products.getDoc(id)
   Object.assign(product, products.doc)
+
+  if (product.pack && product.pack.length) isPack.value = true
 
   await supplies.getQueryDocs({ query: { equal: { product: id } } })
 })
@@ -33,6 +37,26 @@ const calcPrice = computed(() =>
 const calcMarginRate = computed(() =>
   Math.round((product.price / product.cost - 1) * 100)
 )
+
+const addItemPack = newProduct => {
+  product.pack.push({
+    product: newProduct,
+    quantity: 1
+  })
+}
+
+const removeItemPack = id => {
+  product.pack = product.pack.filter(i => i.product._id != id)
+}
+
+const findProduct = async () => {
+  if (product.code != '') {
+    loading.value = true
+    await products.findDoc({ code: product.code })
+    loading.value = false
+  }
+  return !product.code || !products.doc || 'El código ya existe'
+}
 </script>
 
 <template>
@@ -50,7 +74,10 @@ const calcMarginRate = computed(() =>
         <div class="text-subtitle2 q-pl-sm" style="line-height: 35px">
           GENERAL
         </div>
-        <Toggle v-model="product.active" label="Activo" />
+        <div>
+          <Toggle v-model="isPack" label="Pack" />
+          <Toggle v-model="product.active" label="Activo" class="q-ml-md" />
+        </div>
       </div>
 
       <RowMultiCols>
@@ -61,37 +88,48 @@ const calcMarginRate = computed(() =>
           label="Nombre"
           field="name"
           :minInput="2"
-          class="col-8"
+          class="col"
           hint=""
         />
-        <Input label="Código" v-model="product.code" class="col-4" />
+        <div class="col-4">
+          <Input label="Código" v-model="product.code" class="full-width" />
+        </div>
       </RowMultiCols>
+
+      <div v-if="isPack" class="text-subtitle2 q-mb-md q-pl-sm">
+        PRODUCTOS DEL PACK
+      </div>
+
+      <div v-if="isPack">
+        <ItemPack
+          v-for="item of product.pack"
+          :key="item.product._id"
+          :item="item"
+          @remove="removeItemPack"
+        />
+        <SelectSearchProduct
+          label="Agregar producto al pack"
+          @chose="addItemPack"
+          class="q-my-md full-width"
+        />
+      </div>
 
       <div class="text-subtitle2 q-my-md q-pl-sm">INVENTARIO</div>
 
       <RowMultiCols>
-        <Input v-model="product.stock" label="Stock" />
+        <Input v-model="product.stock" label="Stock" class="col" />
         <Input
           label="Vitrina"
           v-model="product.showcase"
           tooltip="Cantidad exhibida"
+          class="col"
         />
         <Input
           label="Mínimo"
           v-model="product.minimum"
           tooltip="Cantidad mínima en tienda"
-          :readonly="product.autoMin"
-        >
-          <template v-slot:append>
-            <q-btn
-              flat
-              dense
-              label="AUTO"
-              :color="product.autoMin ? 'primary' : ''"
-              @click="product.autoMin = !product.autoMin"
-            />
-          </template>
-        </Input>
+          class="col"
+        />
       </RowMultiCols>
 
       <div class="text-subtitle2 q-my-md q-pl-sm">SUMINISTROS</div>
@@ -103,9 +141,9 @@ const calcMarginRate = computed(() =>
           { label: 'NOMBRE', name: 'name', align: 'left' },
           { label: 'MEDIDA', name: 'unit' },
           { label: 'UNIDADES', name: 'packageQuantity' },
-          { label: 'COSTO', name: 'unitCost' },
+          { label: 'COSTO', name: 'cost' },
           { label: 'MARGEN', name: 'pmargin' },
-          { label: 'RECIBIDO', name: 'updatedAt' },
+          { label: 'RECIBIDO', name: 'lastReceived.updatedAt' },
           { label: 'ACTIVO', name: 'active', size: 50 }
         ]"
         :loading="supplies.loading"
@@ -115,20 +153,24 @@ const calcMarginRate = computed(() =>
         class="q-mb-lg"
       >
         <template v-slot="{ props }">
-          <Cell field="providerAlias" :props="props" />
-          <Cell field="name" :props="props" />
-          <Cell field="unit" :props="props" />
-          <Cell field="packageQuantity" :props="props" />
-          <Cell field="unitCost" format="currency" :props="props" />
-          <Cell field="pmargin" :props="props" v-if="product.price"
+          <Cell field="providerAlias" :cell="props" />
+          <Cell field="name" :cell="props" />
+          <Cell field="unit" :cell="props" />
+          <Cell field="packageQuantity" :cell="props" />
+          <Cell field="cost" format="currency" :cell="props" />
+          <Cell field="pmargin" :cell="props" v-if="product.price"
             ><ValuePercent
               :value="product.price"
               :total="product.cost"
               :high="40"
               :low="30"
           /></Cell>
-          <Cell field="updatedAt" format="date" :props="props" />
-          <CellToggle field="active" :storeId="supplies.$id" :props="props" />
+          <Cell
+            field="lastReceived.updatedAt"
+            format="localDate"
+            :cell="props"
+          />
+          <CellToggle field="active" :storeId="supplies.$id" :cell="props" />
         </template>
       </Table>
 
@@ -140,32 +182,45 @@ const calcMarginRate = computed(() =>
       </div>
 
       <RowMultiCols>
-        <Input v-model="product.cost" label="Último Costo" format="currency" />
+        <Input
+          v-model="product.cost"
+          label="Último Costo"
+          format="currency"
+          class="col"
+        />
         <Input
           label="Margen Esperado"
           v-model="product.marginRate"
           format="percent"
-          class="col-shrink"
+          class="col"
         />
         <Input
           :label="`Precio ($ ${calcPrice})`"
           v-model="product.price"
           format="currency"
+          class="col"
         />
         <Input
           label="Margen"
           v-model="calcMarginRate"
           format="percent"
-          class="col-shrink"
+          class="col"
           :high="40"
           :low="30"
           readonly
+        />
+        <Input
+          label="Precio BAT"
+          v-model="product.batPrice"
+          format="currency"
+          class="col"
+          v-if="product.exempt"
         />
       </RowMultiCols>
 
       <div class="text-subtitle2 q-my-md q-pl-sm">JUMBO</div>
 
-      <RowJumbo :storeId="products.$id" />
+      <RowJumbo :product="product" />
 
       <div class="text-subtitle2 q-my-md q-pl-sm">VENTAS</div>
 
@@ -174,8 +229,14 @@ const calcMarginRate = computed(() =>
           label="Última Venta"
           :modelValue="formatter.localDate(product.lastSale)"
           readonly
+          class="col"
         />
-        <Input label="Total Ventas" :modelValue="product.totalSales" readonly />
+        <Input
+          label="Total Ventas"
+          :modelValue="product.totalSales"
+          readonly
+          class="col"
+        />
       </RowMultiCols>
 
       <div class="row justify-between q-mt-md">

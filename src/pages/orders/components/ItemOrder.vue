@@ -42,18 +42,18 @@ supply.subtotal = computed(() => {
             width="90"
             dense
           />
-          <Input
+          <!-- <Input
             label="Mínimo"
-            :modelValue="product.minimum"
+            v-model="product.minimum"
             storeId="products"
             :id="product._id"
             field="minimum"
             width="90"
             dense
-          />
+          /> -->
           <Input
             label="Vitrína"
-            :modelValue="product.showcase"
+            v-model="product.showcase"
             storeId="products"
             :id="product._id"
             field="showcase"
@@ -104,16 +104,19 @@ supply.subtotal = computed(() => {
             dense
             bold
           />
-          <InputRead
+          <Input
             label="Unidad"
-            :modelValue="supply.unit"
+            v-model="supply.unit"
+            storeId="supplies"
+            :id="supply._id"
+            field="unit"
             width="120"
             dense
             bold
           />
           <Input
             label="Cnt x Pack"
-            :modelValue="supply.packageQuantity"
+            v-model="supply.packageQuantity"
             storeId="supplies"
             :id="supply._id"
             field="packageQuantity"

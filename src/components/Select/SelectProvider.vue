@@ -1,5 +1,6 @@
 <script setup>
 import { onMounted, inject, ref } from 'vue'
+import { useProviders } from 'stores/providers'
 
 const props = defineProps({
   modelValue: [String, Array],
@@ -8,8 +9,8 @@ const props = defineProps({
   id: String
 })
 
-const storeId = inject(props.storeId)
-const providers = inject('providers')
+const storeId = props.storeId ? inject(props.storeId) : null
+const providers = useProviders()
 const options = ref([])
 const model = ref(props.modelValue)
 
@@ -48,6 +49,7 @@ async function update(value) {
 <template>
   <Select
     v-bind="$attrs"
+    label="Proveedor"
     option-label="alias"
     option-value="alias"
     :model-value="model"

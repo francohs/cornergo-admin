@@ -20,7 +20,6 @@ const editMode = ref(false)
     <div v-if="editMode" class="row justify-center">
       <SelectProvider
         v-model="cell.row.providerAlias"
-        label="Proveedor"
         storeId="supplies"
         field="providerAlias"
         :id="cell.row._id"

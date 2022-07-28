@@ -146,7 +146,7 @@ const save = async () => {
           :item="item"
           @remove="removeItemPack"
         />
-        <SelectSearchProduct @chose="addItemPack" class="q-my-md" />
+        <SelectSearchProduct @chose="addItemPack" class="q-my-md full-width" />
       </div>
 
       <div class="text-subtitle2 q-mb-md q-pl-sm">INVENTARIO</div>

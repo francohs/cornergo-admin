@@ -7,22 +7,22 @@ const props = defineProps({
   field: String,
   modelValue: Boolean
 })
+const emit = defineEmits(['update:modelValue'])
 
-const model = ref(props.modelValue)
 const store = props.storeId ? inject(props.storeId) : null
 
 async function update(value) {
-  if (props.storeId) {
+  if (props.id) {
     await store.update(props.id, { [props.field]: value })
   }
-  model.value = value
+  emit('update:modelValue', value)
 }
 </script>
 
 <template>
   <q-toggle
     v-bind="$attrs"
-    :model-value="model"
+    :model-value="modelValue"
     @update:model-value="update"
     color="green"
     class="q-ma-none text-grey-8"

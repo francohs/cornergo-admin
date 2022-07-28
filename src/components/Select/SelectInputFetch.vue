@@ -72,7 +72,6 @@ const fetchOptions = async (field, input) => {
     outlined
     use-input
     input-debounce="0"
-    clearable
     options-dense
     @filter="filterFn"
     :options="options"

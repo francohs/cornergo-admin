@@ -134,6 +134,7 @@ defineExpose({ queryInit })
           @update:modelValue="queryInputDocs()"
           :onlynumbers="inputOnlynumbers"
           class="q-mr-md"
+          autofocus
         />
 
         <slot name="extracontrols" />
