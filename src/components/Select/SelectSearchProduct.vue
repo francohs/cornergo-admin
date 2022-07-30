@@ -21,6 +21,7 @@ const filterFn = async (value, update) => {
         'code',
         'name',
         'stock',
+        'cost',
         'price',
         'exempt',
         'providers',

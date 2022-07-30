@@ -31,8 +31,8 @@ const formatter = {
   },
 
   decimal: value => {
-    if (!value) return 0
-    return Math.round((parseFloat(value) + Number.EPSILON) * 100) / 100
+    if (!value) return '0'
+    return Number.isInteger(value) ? value : value.toFixed(2)
   },
 
   unformat: value => {

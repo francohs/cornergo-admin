@@ -4,6 +4,7 @@ import { useProducts } from 'stores/products'
 import { useProviders } from 'stores/providers'
 import { useRouter } from 'vue-router'
 import ItemPack from './components/ItemPack.vue'
+import formatter from 'tools/formatter'
 
 const products = useProducts()
 const providers = useProviders()
@@ -77,6 +78,13 @@ const findProduct = async () => {
   }
   return !product.code || !products.doc || 'El código ya existe'
 }
+
+const packCost = computed(() => {
+  if (product.pack && product.pack.length) {
+    return product.pack.reduce((acc, curr) => acc + curr.product.cost, 0)
+  }
+  return 0
+})
 
 const save = async () => {
   if (isAutoPrice.value) {
@@ -159,16 +167,7 @@ const save = async () => {
           onlynumbers
           class="col"
         />
-        <SelectFetch
-          label="Proveedor"
-          optionStore="providers"
-          v-model="provider"
-          optionLabel="alias"
-          optionValue="alias"
-          class="col"
-          fetch-all
-          required
-        />
+        <SelectProvider v-model="provider" class="col" />
       </RowMultiCols>
 
       <div class="row justify-between q-mb-md">
@@ -181,8 +180,9 @@ const save = async () => {
 
       <RowMultiCols>
         <Input
-          v-model="product.cost"
           label="Costo"
+          v-model="product.cost"
+          :hint="packCost ? `Costo Pack: ${formatter.currency(packCost)}` : ''"
           format="currency"
           class="col"
         />

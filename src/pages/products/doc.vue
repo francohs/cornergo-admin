@@ -7,6 +7,7 @@ import { useRoute } from 'vue-router'
 import formatter from 'tools/formatter'
 import RowJumbo from './components/RowJumbo.vue'
 import ItemPack from './components/ItemPack.vue'
+import ChartSales from './components/ChartSales.vue'
 
 const products = useProducts()
 const providers = useProviders()
@@ -15,6 +16,7 @@ const $route = useRoute()
 const id = $route.params.id
 const product = reactive({})
 const isPack = ref(false)
+const chart = ref(null)
 
 provide(products.$id, products)
 provide(providers.$id, providers)
@@ -28,11 +30,20 @@ onMounted(async () => {
   if (product.pack && product.pack.length) isPack.value = true
 
   await supplies.getQueryDocs({ query: { equal: { product: id } } })
+
+  chart.value.create(product.weekSales)
 })
 
 const calcPrice = computed(() =>
   Math.round(product.cost * (1 + product.marginRate / 100))
 )
+
+const packCost = computed(() => {
+  if (product.pack && product.pack.length) {
+    return product.pack.reduce((acc, curr) => acc + curr.product.cost, 0)
+  }
+  return 0
+})
 
 const calcMarginRate = computed(() =>
   Math.round((product.price / product.cost - 1) * 100)
@@ -47,15 +58,6 @@ const addItemPack = newProduct => {
 
 const removeItemPack = id => {
   product.pack = product.pack.filter(i => i.product._id != id)
-}
-
-const findProduct = async () => {
-  if (product.code != '') {
-    loading.value = true
-    await products.findDoc({ code: product.code })
-    loading.value = false
-  }
-  return !product.code || !products.doc || 'El código ya existe'
 }
 </script>
 
@@ -81,16 +83,7 @@ const findProduct = async () => {
       </div>
 
       <RowMultiCols>
-        <SelectInputFetch
-          v-model="product.name"
-          :storeId="products.$id"
-          lazy
-          label="Nombre"
-          field="name"
-          :minInput="2"
-          class="col"
-          hint=""
-        />
+        <Input label="Nombre" v-model="product.name" class="col" />
         <div class="col-4">
           <Input label="Código" v-model="product.code" class="full-width" />
         </div>
@@ -124,12 +117,12 @@ const findProduct = async () => {
           tooltip="Cantidad exhibida"
           class="col"
         />
-        <Input
+        <!-- <Input
           label="Mínimo"
           v-model="product.minimum"
           tooltip="Cantidad mínima en tienda"
           class="col"
-        />
+        /> -->
       </RowMultiCols>
 
       <div class="text-subtitle2 q-my-md q-pl-sm">SUMINISTROS</div>
@@ -184,8 +177,9 @@ const findProduct = async () => {
       <RowMultiCols>
         <Input
           v-model="product.cost"
-          label="Último Costo"
+          label="Costo"
           format="currency"
+          :hint="packCost ? `Costo Pack: ${formatter.currency(packCost)}` : ''"
           class="col"
         />
         <Input
@@ -225,21 +219,34 @@ const findProduct = async () => {
       <div class="text-subtitle2 q-my-md q-pl-sm">VENTAS</div>
 
       <RowMultiCols>
-        <Input
+        <InputRead
           label="Última Venta"
           :modelValue="formatter.localDate(product.lastSale)"
-          readonly
           class="col"
         />
-        <Input
+        <InputRead
+          label="Venta Semanal Prom"
+          :modelValue="product.weekSaleAvg"
+          class="col"
+        />
+        <InputRead
+          label="Margen Semanal Prom"
+          :modelValue="product.weekMarginAvg"
+          class="col"
+          format="currency"
+        />
+        <InputRead
           label="Total Ventas"
           :modelValue="product.totalSales"
-          readonly
           class="col"
         />
       </RowMultiCols>
 
-      <div class="row justify-between q-mt-md">
+      <div class="text-subtitle2 q-my-md q-pl-sm">VENTAS SEMANALES</div>
+
+      <ChartSales ref="chart" />
+
+      <div class="row justify-between q-mt-lg">
         <ButtonDelete :storeId="products.$id" :id="id" />
 
         <div>

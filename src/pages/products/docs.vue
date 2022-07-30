@@ -26,15 +26,19 @@ const columns = [
   { label: 'NOMBRE', name: 'name', align: 'left' },
   { label: 'CATEGORÍA', name: 'category' },
   { label: 'STOCK', name: 'stock' },
-  { label: 'VITRINA', name: 'showcase' },
   { label: 'MÍNIMO', name: 'minimum' },
   { label: 'COSTO', name: 'cost' },
   { label: '% MARGEN', name: 'marginRate' },
   { label: 'PRECIO', name: 'price' },
   { label: 'PROVEEDOR', name: 'providers' },
-  { label: 'ÚLTIMA COMPRA', name: 'lastBuy' },
-  { label: 'ÚLTIMA VENTA', name: 'lastSale' },
+  { label: 'VITRINA', name: 'showcase' },
+  { label: 'ROTACIÓN', name: 'weekSale' },
+  { label: 'ROT PROM', name: 'weekSaleAvg' },
+  { label: 'MARGEN', name: 'marginAvg' },
   { label: 'VENTAS', name: 'totalSales' },
+  { label: 'ÚLTIMA COMPRA', name: 'lastReceive.updatedAt' },
+  { label: 'ÚLTIMA VENTA', name: 'lastSale' },
+  { label: 'CREACIÓN', name: 'createdAt' },
   { label: 'EXENTO', name: 'exempt', size: 50 },
   { label: 'ACTIVO', name: 'active', size: 50 }
 ]
@@ -67,12 +71,16 @@ const columns = [
       </template>
 
       <template v-slot="{ props }">
-        <CellLink field="_id" :name="products.$id" :cell="props" />
+        <CellLink field="_id" :name="products.$id" :cell="props" blank />
         <Cell field="code" :cell="props" />
         <CellInput field="name" :storeId="products.$id" :cell="props" />
         <CellInput field="category" :storeId="products.$id" :cell="props" />
-        <CellInput field="stock" :storeId="products.$id" :cell="props" />
-        <CellInput field="showcase" :storeId="products.$id" :cell="props" />
+        <CellInput
+          field="stock"
+          :storeId="products.$id"
+          :cell="props"
+          format="decimal"
+        />
         <CellInput field="minimum" :storeId="products.$id" :cell="props" />
         <CellInput
           field="cost"
@@ -80,7 +88,7 @@ const columns = [
           :storeId="products.$id"
           :cell="props"
         />
-        <Cell field="marginRate" :storeId="products.$id" :cell="props" />
+        <Cell field="marginRate" :cell="props" />
         <CellInput
           format="currency"
           field="price"
@@ -93,14 +101,14 @@ const columns = [
           }}</q-chip>
         </q-td> -->
         <CellProviders :cell="props" />
-        <CellInput field="lastBuy" :storeId="products.$id" :cell="props" />
-        <CellInput
-          field="lastSale"
-          :storeId="products.$id"
-          :cell="props"
-          format="localDate"
-        />
-        <CellInput field="totalSales" :storeId="products.$id" :cell="props" />
+        <CellInput field="showcase" :storeId="products.$id" :cell="props" />
+        <Cell field="weekSale" :cell="props" />
+        <Cell field="weekSaleAvg" :cell="props" />
+        <Cell field="marginAvg" :cell="props" format="currency" />
+        <Cell field="totalSales" :cell="props" format="decimal" />
+        <Cell field="lastReceive.updatedAt" :cell="props" format="localDate" />
+        <Cell field="lastSale" :cell="props" format="localDate" />
+        <Cell field="createdAt" :cell="props" format="localDate" />
         <CellToggle field="exempt" :storeId="products.$id" :cell="props" />
         <CellToggle field="active" :storeId="products.$id" :cell="props" />
       </template>

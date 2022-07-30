@@ -21,7 +21,7 @@ onMounted(async () => {
 async function fetchOptions() {
   if (!providers.options.length) {
     await providers.getQueryOptions({
-      query: {},
+      query: { equal: { active: true } },
       select: ['alias'],
       sort: {
         alias: 1

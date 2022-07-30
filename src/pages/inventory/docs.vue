@@ -70,6 +70,7 @@ const queryDocs = async provider => {
           :storeId="products.$id"
           :cell="props"
           @editOutChange="CellCheckedRef.stockChanged(props.row._id)"
+          format="decimal"
         />
         <CellInput field="minimum" :storeId="products.$id" :cell="props" />
         <CellInput field="showcase" :storeId="products.$id" :cell="props" />

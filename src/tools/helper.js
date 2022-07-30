@@ -4,7 +4,9 @@ const helper = {
     const nestedField = field.split('.')
 
     if (nestedField.length > 1) {
-      value = object[nestedField[0]][nestedField[1]]
+      if (object[nestedField[0]]) {
+        value = object[nestedField[0]][nestedField[1]]
+      }
     }
 
     return value

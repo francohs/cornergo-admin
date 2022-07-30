@@ -176,7 +176,7 @@ const createProduct = () => {
           <InputRead
             label="SKU"
             :modelValue="item.sku"
-            width="180"
+            width="150"
             dense
             bold
           />
@@ -185,14 +185,14 @@ const createProduct = () => {
             :modelValue="item.name"
             :hint="`Creado ${formatter.localDate(supply.createdAt)}`"
             input-style="font-size: 14px;"
-            width="400"
+            width="370"
             dense
             bold
           />
           <InputRead
             label="Cantidad"
             :modelValue="item.quantity"
-            width="70"
+            width="68"
             dense
             bold
           />
@@ -210,7 +210,7 @@ const createProduct = () => {
             storeId="supplies"
             :id="supply._id"
             field="multipler"
-            width="70"
+            width="50"
             dense
           />
           <InputRead
@@ -220,7 +220,7 @@ const createProduct = () => {
             :modelValue="supply.units"
           />
           <InputAuto
-            label="Unds x Pack"
+            label="UndsxPack"
             v-model="supply.packageQuantity"
             v-model:isAuto="supply.autoPackageQty"
             :autoValue="supply.multipler"
@@ -228,7 +228,7 @@ const createProduct = () => {
             :id="supply._id"
             autoField="autoPackageQty"
             field="packageQuantity"
-            width="120"
+            width="110"
             dense
           />
           <Input
@@ -248,7 +248,7 @@ const createProduct = () => {
             label="Neto Bruto"
             :modelValue="item.netAmount"
             format="currency"
-            width="100"
+            width="90"
           />
           <InputRead
             label="Descuento"
@@ -273,10 +273,10 @@ const createProduct = () => {
             v-model="packShippingCost"
             :isAuto="!supply.autoCost"
             :autoValue="supply.calcPackShippingCost"
-            :hintAuto="`Calculado ${formatter.currency(
+            :hintAuto="`Calc ${formatter.currency(
               supply.calcPackShippingCost
             )}`"
-            width="120"
+            width="110"
             format="currency"
             v-if="providerWithShipping"
             dense
@@ -350,7 +350,7 @@ const createProduct = () => {
             dense
             label="Código"
             :modelValue="product.code"
-            width="180"
+            width="150"
           />
           <Input
             label="Nombre Producto"
@@ -360,7 +360,7 @@ const createProduct = () => {
             field="name"
             :hint="`Creado ${formatter.localDate(product.createdAt)}`"
             input-style="font-size: 14px;"
-            width="400"
+            width="370"
             dense
           />
           <InputAuto

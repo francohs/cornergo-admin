@@ -1,3 +1,18 @@
+<script setup>
+import formatter from 'tools/formatter'
+
+const props = defineProps(['item'])
+const emit = defineEmits(['remove'])
+
+const subtract = () => {
+  if (props.item.quantity > 1) {
+    props.item.quantity--
+  } else {
+    emit('remove', props.item.product._id)
+  }
+}
+</script>
+
 <template>
   <q-item class="q-px-none">
     <div class="full-width row items-center q-pb-sm">
@@ -18,24 +33,17 @@
         />
       </div>
       <div class="col q-pr-md text-left" style="font-size: 18px">
-        <q-item-label caption>Código: {{ item.product.code }}</q-item-label>
+        <q-item-label caption>Código: {{ item.product.code }} </q-item-label>
         <q-item-label>
           {{ item.product.name }}
+        </q-item-label>
+        <q-item-label caption>
+          <span>Costo: {{ formatter.currency(item.product.cost) }}</span>
+          <span class="q-ml-sm"
+            >Precio: {{ formatter.currency(item.product.price) }}</span
+          >
         </q-item-label>
       </div>
     </div>
   </q-item>
 </template>
-
-<script setup>
-const props = defineProps(['item'])
-const emit = defineEmits(['remove'])
-
-const subtract = () => {
-  if (props.item.quantity > 1) {
-    props.item.quantity--
-  } else {
-    emit('remove', props.item.product._id)
-  }
-}
-</script>
