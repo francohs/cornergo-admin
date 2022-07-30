@@ -32,7 +32,7 @@ const auth = useAuth()
         label="Usuarios"
         v-if="auth.user.isAdmin"
       />
-      <ItemLink page="chart" icon="equalizer" label="Chart" />
+      <!-- <ItemLink page="chart" icon="equalizer" label="Chart" /> -->
     </q-list>
   </q-drawer>
 </template>
