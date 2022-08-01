@@ -42,6 +42,14 @@ const subtract = () => {
           <span class="q-ml-sm"
             >Precio: {{ formatter.currency(item.product.price) }}</span
           >
+          <span class="q-ml-sm"
+            >Margen:
+            {{
+              formatter.percent(
+                Math.round((item.product.price / item.product.cost - 1) * 100)
+              )
+            }}</span
+          >
         </q-item-label>
       </div>
     </div>

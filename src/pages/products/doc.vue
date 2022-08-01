@@ -40,7 +40,10 @@ const calcPrice = computed(() =>
 
 const packCost = computed(() => {
   if (product.pack && product.pack.length) {
-    return product.pack.reduce((acc, curr) => acc + curr.product.cost, 0)
+    return product.pack.reduce(
+      (acc, curr) => acc + curr.product.cost * curr.quantity,
+      0
+    )
   }
   return 0
 })
@@ -78,12 +81,26 @@ const removeItemPack = id => {
         </div>
         <div>
           <Toggle v-model="isPack" label="Pack" />
-          <Toggle v-model="product.active" label="Activo" class="q-ml-md" />
+          <Toggle
+            v-model="product.active"
+            label="Activo"
+            storeId="products"
+            :id="product._id"
+            field="active"
+            class="q-ml-md"
+          />
         </div>
       </div>
 
       <RowMultiCols>
-        <Input label="Nombre" v-model="product.name" class="col" />
+        <Input
+          label="Nombre"
+          v-model="product.name"
+          storeId="products"
+          :id="product._id"
+          field="name"
+          class="col"
+        />
         <div class="col-4">
           <Input label="Código" v-model="product.code" class="full-width" />
         </div>
@@ -110,10 +127,20 @@ const removeItemPack = id => {
       <div class="text-subtitle2 q-my-md q-pl-sm">INVENTARIO</div>
 
       <RowMultiCols>
-        <Input v-model="product.stock" label="Stock" class="col" />
+        <Input
+          v-model="product.stock"
+          storeId="products"
+          :id="product._id"
+          field="stock"
+          label="Stock"
+          class="col"
+        />
         <Input
           label="Vitrina"
           v-model="product.showcase"
+          storeId="products"
+          :id="product._id"
+          field="showcase"
           tooltip="Cantidad exhibida"
           class="col"
         />
@@ -179,6 +206,9 @@ const removeItemPack = id => {
           v-model="product.cost"
           label="Costo"
           format="currency"
+          storeId="products"
+          :id="product._id"
+          field="cost"
           :hint="packCost ? `Costo Pack: ${formatter.currency(packCost)}` : ''"
           class="col"
         />
@@ -191,6 +221,9 @@ const removeItemPack = id => {
         <Input
           :label="`Precio ($ ${calcPrice})`"
           v-model="product.price"
+          storeId="products"
+          :id="product._id"
+          field="price"
           format="currency"
           class="col"
         />

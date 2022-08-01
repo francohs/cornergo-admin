@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 
-const props = defineProps(['cell', 'field'])
+const props = defineProps(['cell'])
 const editMode = ref(false)
 // const model = ref(props.cell.row.providers)
 // const loading = ref(false)

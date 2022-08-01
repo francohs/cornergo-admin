@@ -31,7 +31,7 @@ const formatter = {
   },
 
   decimal: value => {
-    if (!value) return '0'
+    if (!value || value == '0') return '0'
     return Number.isInteger(value) ? value : value.toFixed(2)
   },
 

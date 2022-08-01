@@ -42,7 +42,6 @@ export default {
           label="RUT"
           v-model="provider.rut"
           format="rut"
-          onlynumbers
           required
           class="col"
         />

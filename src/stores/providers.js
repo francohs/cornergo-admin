@@ -7,9 +7,9 @@ export const useProviders = defineStore({
   state: () => ({
     ...baseState(),
     providersTable: tableState('providersTable', {
-      visibles: ['name', 'rut'],
+      visibles: ['name', 'rut', 'alias'],
       forceSelect: [],
-      containsFields: ['name', 'rut'],
+      containsFields: ['name', 'rut', 'alias'],
       equalFilter: {},
       dateFilter: {}
     })
