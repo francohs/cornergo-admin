@@ -27,6 +27,7 @@ const columns = [
   { label: 'VENTAS SEMANAL', name: 'sale' },
   { label: 'VENTAS PROMEDIO', name: 'saleAvg' },
   { label: 'VENTAS TOTAL', name: 'totalSales' },
+  { label: 'ACTIVO', name: 'active' },
   { label: 'REVISADO', name: 'checked' }
 ]
 
@@ -94,6 +95,7 @@ const queryDocs = async provider => {
           :storeId="products.$id"
           :cell="props"
         />
+        <CellToggle field="active" :storeId="products.$id" :cell="props" />
         <CellChecked :cell="props" ref="CellCheckedRef" />
       </template>
     </TableQuery>

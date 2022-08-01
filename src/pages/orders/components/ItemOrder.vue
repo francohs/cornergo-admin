@@ -72,10 +72,21 @@ supply.subtotal = computed(() => {
             width="90"
             dense
           />
-
-          <div>
-            <q-btn label="ALTERNATIVAS" rounded size="sm" />
+          <div class="column items-center text-grey-7" style="font-size: 12px">
+            Activo
+            <Toggle
+              storeId="products"
+              :id="product._id"
+              field="active"
+              v-model="product.active"
+              size="sm"
+              dense
+            />
           </div>
+
+          <!-- <div>
+            <q-btn label="ALTERNATIVAS" rounded size="sm" />
+          </div> -->
         </div>
       </div>
 
