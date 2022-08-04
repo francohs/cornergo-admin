@@ -73,7 +73,7 @@ export default {
           :storeId="supplies.$id"
           :cell="props"
         /> -->
-        <CellSelectProvider field="providerAlias" :cell="props" />
+        <CellSelectProvider :cell="props" />
         <Cell field="sku" :cell="props" />
         <CellInput field="productCode" :storeId="supplies.$id" :cell="props" />
         <Cell field="name" :cell="props" />

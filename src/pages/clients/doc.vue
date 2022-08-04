@@ -1,3 +1,32 @@
+<script setup>
+import { useClients } from 'stores/clients'
+import { onMounted, provide, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+
+const clients = useClients()
+const route = useRoute()
+const router = useRouter()
+const id = route.params.id
+const client = ref({})
+const dialogPassword = ref(false)
+const password1 = ref('')
+const password2 = ref('')
+
+provide(clients.$id, clients)
+
+onMounted(async () => {
+  await clients.getDoc(id)
+  client.value = { ...clients.doc }
+})
+
+async function updatePasswornd() {
+  await clients.updatePassword(id, { password: password1.value })
+  dialogPassword.value = false
+  password1.value = ''
+  password2.value = ''
+}
+</script>
+
 <template>
   <PageResponsive :loading="clients.loading">
     <FormSave :storeId="clients.$id" :id="id" :doc="client">
@@ -63,13 +92,30 @@
       <RowTimestamps v-if="client._id" :doc="client" />
 
       <div class="row justify-between q-mt-md">
-        <ButtonDelete :storeId="clients.$id" :id="id" />
+        <div class="q-gutter-sm">
+          <q-btn
+            label="ABONAR"
+            color="positive"
+            @click="router.push({ name: 'clientPayment' })"
+          />
+          <q-btn
+            label="HISTORIAL ABONOS"
+            @click="router.push({ name: 'clientPayments' })"
+          />
+          <q-btn
+            label="HISTORIAL COMPRAS"
+            @click="router.push({ name: 'clientPurchases' })"
+          />
+        </div>
 
-        <div>
+        <div class="row">
+          <ButtonDelete :storeId="clients.$id" :id="id" />
+
           <q-btn
             label="GUARDAR"
             color="positive"
             type="submit"
+            class="q-ml-sm"
             :loading="clients.saving"
           />
         </div>
@@ -101,46 +147,3 @@
     </Dialog>
   </PageResponsive>
 </template>
-
-<script>
-import { useClients } from 'stores/clients'
-import { onMounted, provide, ref } from 'vue'
-import { useRoute } from 'vue-router'
-
-export default {
-  name: 'UsersDoc',
-  setup() {
-    const clients = useClients()
-    const $route = useRoute()
-    const id = $route.params.id
-    const client = ref({})
-    const dialogPassword = ref(false)
-    const password1 = ref('')
-    const password2 = ref('')
-
-    provide(clients.$id, clients)
-
-    onMounted(async () => {
-      await clients.getDoc(id)
-      client.value = { ...clients.doc }
-    })
-
-    async function updatePasswornd() {
-      await clients.updatePassword(id, { password: password1.value })
-      dialogPassword.value = false
-      password1.value = ''
-      password2.value = ''
-    }
-
-    return {
-      id,
-      client,
-      clients,
-      dialogPassword,
-      password1,
-      password2,
-      updatePasswornd
-    }
-  }
-}
-</script>

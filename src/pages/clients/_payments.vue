@@ -8,6 +8,7 @@ const route = useRoute()
 
 const payments = usePayments()
 const page = ref(1)
+const pageNext = ref(1)
 const rowsPerPage = 5
 const pages = ref(1)
 
@@ -27,10 +28,7 @@ const getDocs = async () => {
       rowsPerPage
     }
   })
-}
-
-const changePage = async () => {
-  await getDocs()
+  pageNext.value = page.value
 }
 
 const payIcons = {
@@ -59,7 +57,10 @@ const payIcons = {
 
       <q-list v-if="payments.docs.length > 0" bordered separator>
         <q-item
-          v-for="payment of payments.docs"
+          v-for="payment of payments.docs.slice(
+            (pageNext - 1) * rowsPerPage,
+            pageNext * rowsPerPage
+          )"
           :key="payment._id"
           class="q-py-md"
         >
@@ -92,7 +93,8 @@ const payIcons = {
         <q-pagination
           v-model="page"
           :max="pages"
-          @update:modelValue="changePage"
+          :max-pages="5"
+          @update:modelValue="getDocs"
         />
       </div>
 

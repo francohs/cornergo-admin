@@ -16,7 +16,7 @@ const editMode = ref(false)
 </script>
 
 <template>
-  <q-td :key="field" :props="cell">
+  <q-td key="providerAlias" :props="cell">
     <div v-if="editMode" class="row justify-center">
       <SelectProvider
         v-model="cell.row.providerAlias"

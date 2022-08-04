@@ -1,6 +1,10 @@
 import { date } from 'quasar'
 import moment from 'moment'
 
+function isNumeric(num) {
+  return !isNaN(num)
+}
+
 const formatter = {
   rut: value => {
     if (!value) return ''
@@ -31,8 +35,15 @@ const formatter = {
   },
 
   decimal: value => {
-    if (!value || value == '0') return '0'
-    return Number.isInteger(value) ? value : value.toFixed(2)
+    if (!value) return '0'
+    // if (Number.isInteger(value)) {
+    //   return value
+    // } else {
+    //   console.log({ value })
+    //   return value.toFixed(2)
+    // }
+    value = parseFloat(value)
+    return Number.isInteger(value) ? parseInt(value) : value.toFixed(2)
   },
 
   unformat: value => {

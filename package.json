@@ -12,20 +12,19 @@
     "deploy": "vercel"
   },
   "dependencies": {
-    "@quasar/extras": "^1.15.0",
+    "@quasar/extras": "^1.15.1",
     "axios": "^0.27.2",
     "chart.js": "^3.8.2",
-    "chartjs-plugin-datalabels": "^2.0.0",
     "jspdf": "^2.5.1",
     "moment": "^2.29.4",
     "pinia": "^2.0.17",
-    "quasar": "^2.7.5",
+    "quasar": "^2.7.7",
     "vue": "^3.2.37",
     "vue-router": "^4.1.1",
     "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
-    "@quasar/app-vite": "^1.0.5",
+    "@quasar/app-vite": "^1.0.6",
     "autoprefixer": "^10.4.7"
   },
   "engines": {

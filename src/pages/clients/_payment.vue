@@ -25,7 +25,7 @@ const payTypes = ref([
   'Efectivo',
   'Tarjeta de Debito',
   'Tarjeta de Credito',
-  'Trasferencia',
+  'Transferencia',
   'Cheque'
 ])
 

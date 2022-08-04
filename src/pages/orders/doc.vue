@@ -91,9 +91,9 @@ function genPDF() {
 
   const headers = [
     { name: 'sku', prompt: 'SKU', align: 'center', width: 50 },
-    { name: 'name', prompt: 'NOMBRE', width: 150 },
+    { name: 'name', prompt: 'NOMBRE', width: 145 },
     { name: 'quantity', prompt: 'CANTIDAD', align: 'center', width: 35 },
-    { name: 'unit', prompt: 'UNIDAD', align: 'center', width: 40 }
+    { name: 'unit', prompt: 'UNIDAD', align: 'center', width: 45 }
   ]
 
   pdf.table(5, 15, data, headers, { fontSize: 11 })
