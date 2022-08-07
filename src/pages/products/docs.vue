@@ -35,10 +35,11 @@ const columns = [
   { label: 'ROTACIÓN', name: 'weekSale' },
   { label: 'ROT PROM', name: 'weekSaleAvg' },
   { label: 'MARGEN', name: 'marginAvg' },
+  { label: 'MARGEN MAX', name: 'marginMax' },
   { label: 'VENTAS', name: 'totalSales' },
+  { label: 'CREACIÓN', name: 'createdAt' },
   { label: 'ÚLTIMA COMPRA', name: 'lastReceive.updatedAt' },
   { label: 'ÚLTIMA VENTA', name: 'lastSale' },
-  { label: 'CREACIÓN', name: 'createdAt' },
   { label: 'EXENTO', name: 'exempt', size: 50 },
   { label: 'ACTIVO', name: 'active', size: 50 }
 ]
@@ -105,10 +106,11 @@ const columns = [
         <Cell field="weekSale" :cell="props" />
         <Cell field="weekSaleAvg" :cell="props" />
         <Cell field="marginAvg" :cell="props" format="currency" />
+        <Cell field="marginMax" :cell="props" format="currency" />
         <Cell field="totalSales" :cell="props" format="decimal" />
+        <Cell field="createdAt" :cell="props" format="localDate" />
         <Cell field="lastReceive.updatedAt" :cell="props" format="localDate" />
         <Cell field="lastSale" :cell="props" format="localDate" />
-        <Cell field="createdAt" :cell="props" format="localDate" />
         <CellToggle field="exempt" :storeId="products.$id" :cell="props" />
         <CellToggle field="active" :storeId="products.$id" :cell="props" />
       </template>
