@@ -62,14 +62,21 @@ supply.subtotal = computed(() => {
           />
           <InputRead
             label="Venta Sem"
-            :modelValue="product.sale"
+            :modelValue="product.weekSale"
             width="90"
             dense
           />
           <InputRead
             label="Venta Prom"
-            :modelValue="product.saleAvg"
+            :modelValue="product.weekSaleAvg"
             width="90"
+            dense
+          />
+          <InputRead
+            label="Margen Prom"
+            :modelValue="product.marginAvg"
+            width="90"
+            format="currency"
             dense
           />
           <div class="column items-center text-grey-7" style="font-size: 12px">
