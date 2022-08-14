@@ -30,6 +30,7 @@ const columns = [
   { label: 'COSTO', name: 'cost' },
   { label: '% MARGEN', name: 'marginRate' },
   { label: 'PRECIO', name: 'price' },
+  { label: 'PRECIO BAT', name: 'batPrice' },
   { label: 'PROVEEDOR', name: 'providers' },
   { label: 'VITRINA', name: 'showcase' },
   { label: 'ROTACIÓN', name: 'weekSale' },
@@ -93,6 +94,12 @@ const columns = [
         <CellInput
           format="currency"
           field="price"
+          :storeId="products.$id"
+          :cell="props"
+        />
+        <CellInput
+          format="currency"
+          field="batPrice"
           :storeId="products.$id"
           :cell="props"
         />

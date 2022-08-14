@@ -15,7 +15,7 @@ supply.subtotal = computed(() => {
 </script>
 
 <template>
-  <q-item v-bind="$attrs" style="border-color: grey">
+  <q-item v-bind="$attrs" style="border-color: grey" class="bg-white">
     <div class="full-width row q-gutter-y-sm q-py-sm">
       <div class="full-width row justify-between" v-if="product._id">
         <div class="row q-gutter-x-sm">
