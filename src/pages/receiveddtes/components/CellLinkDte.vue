@@ -1,7 +1,7 @@
 <template>
   <q-td key="_id" :props="cell">
     <q-btn
-      v-if="cell.row.xmlUrl"
+      v-if="cell.row.hasXML"
       flat
       size="md"
       icon="launch"
