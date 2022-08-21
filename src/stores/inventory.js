@@ -9,7 +9,7 @@ export const useInventory = defineStore({
   state: () => ({
     ...baseState(),
     inventoryTable: tableState('inventoryTable', {
-      visibles: ['code', 'name', 'stock', 'price', 'active'],
+      visibles: ['code', 'name', 'stock', 'checked'],
       containsFields: ['code', 'name']
     }),
     provider: null

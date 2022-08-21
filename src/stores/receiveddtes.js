@@ -18,7 +18,7 @@ export const useReceivedDtes = defineStore({
         'totalAmount',
         'receptionDate'
       ],
-      forceSelect: ['providerName', 'providerRut', 'hasXML'],
+      forceSelect: ['providerName', 'providerRut', 'hasXML', 'provider'],
       containsFields: ['number'],
       equalFilter: {
         providerAlias: null

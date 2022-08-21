@@ -25,9 +25,12 @@ supply.subtotal = computed(() => {
             width="180"
             dense
           />
-          <InputRead
+          <Input
             label="Nombre Producto"
-            :modelValue="product.name"
+            v-model="product.name"
+            storeId="products"
+            :id="product._id"
+            field="name"
             :hint="`Creado ${formatter.localDate(product.createdAt)}`"
             input-style="font-size: 14px;"
             width="400"
