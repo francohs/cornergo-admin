@@ -11,10 +11,20 @@ const auth = useAuth()
       <ItemLink page="orders" icon="local_shipping" label="Pedidos" />
       <ItemLink page="supplies" icon="widgets" label="Suministros" />
       <ItemLink page="products" icon="inventory" label="Productos" />
-      <ItemLink page="productssales" icon="change_circle" label="Rotacion" />
+      <ItemLink
+        page="productssales"
+        icon="change_circle"
+        label="Rotacion"
+        v-if="auth.user.isAdmin"
+      />
       <ItemLink page="inventory" icon="fact_check" label="Inventario" />
       <ItemLink page="labels" icon="sell" label="Etiquetas" />
-      <ItemLink page="productsupdates" icon="edit_note" label="Cambios" />
+      <ItemLink
+        page="productsupdates"
+        icon="edit_note"
+        label="Cambios"
+        v-if="auth.user.isAdmin"
+      />
       <ItemLink page="providers" icon="support_agent" label="Proveedores" />
       <ItemLink
         page="clients"
