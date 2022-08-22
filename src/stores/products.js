@@ -13,6 +13,13 @@ export const useProducts = defineStore({
       equalFilter: {
         providers: null
       }
+    }),
+    productsSalesTable: tableState('productsSalesTable', {
+      visibles: ['code', 'name', 'stock', 'price', 'active'],
+      containsFields: ['code', 'name'],
+      equalFilter: {
+        providers: null
+      }
     })
   }),
 

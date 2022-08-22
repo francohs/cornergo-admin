@@ -6,7 +6,7 @@ import { useProviders } from 'stores/providers'
 const tableRef = ref({})
 
 const products = useProducts()
-const table = products.productsTable
+const table = products.productsSalesTable
 const providers = useProviders()
 provide(products.$id, products)
 provide(providers.$id, providers)
@@ -26,17 +26,17 @@ const columns = [
   { label: 'NOMBRE', name: 'name', align: 'left' },
   { label: 'CATEGORÍA', name: 'category' },
   { label: 'STOCK', name: 'stock' },
-  // { label: 'MÍNIMO', name: 'minimum' },
+  { label: 'MÍNIMO', name: 'minimum' },
   { label: 'COSTO', name: 'cost' },
-  // { label: '% MARGEN', name: 'marginRate' },
+  { label: '% MARGEN', name: 'marginRate' },
   { label: 'PRECIO', name: 'price' },
   { label: 'PRECIO BAT', name: 'batPrice' },
   { label: 'PROVEEDOR', name: 'providers' },
   { label: 'VITRINA', name: 'showcase' },
-  // { label: 'ROTACIÓN', name: 'weekSale' },
-  // { label: 'ROT PROM', name: 'weekSaleAvg' },
-  // { label: 'MARGEN', name: 'marginAvg' },
-  // { label: 'MARGEN MAX', name: 'marginMax' },
+  { label: 'ROTACIÓN', name: 'weekSale' },
+  { label: 'ROT PROM', name: 'weekSaleAvg' },
+  { label: 'MARGEN', name: 'marginAvg' },
+  { label: 'MARGEN MAX', name: 'marginMax' },
   { label: 'VENTAS', name: 'totalSales' },
   { label: 'CREACIÓN', name: 'createdAt' },
   { label: 'ÚLTIMA COMPRA', name: 'lastReceive.updatedAt' },
@@ -49,12 +49,12 @@ const columns = [
 <template>
   <q-page class="q-pa-md">
     <TableQueryLazy
-      tableName="productsTable"
+      tableName="productsSalesTable"
       ref="tableRef"
       :storeId="products.$id"
       :columns="columns"
-      title="Productos"
-      titleIcon="widgets"
+      title="Rotación"
+      titleIcon="change_circle"
       withInput
       inputPlaceholder="Buscar producto..."
       noDataText="Puedes filtrar productos por nombre o codigo"
@@ -83,14 +83,14 @@ const columns = [
           :cell="props"
           format="decimal"
         />
-        <!-- <CellInput field="minimum" :storeId="products.$id" :cell="props" /> -->
+        <CellInput field="minimum" :storeId="products.$id" :cell="props" />
         <CellInput
           field="cost"
           format="currency"
           :storeId="products.$id"
           :cell="props"
         />
-        <!-- <Cell field="marginRate" :cell="props" /> -->
+        <Cell field="marginRate" :cell="props" />
         <CellInput
           format="currency"
           field="price"
@@ -110,10 +110,10 @@ const columns = [
         </q-td> -->
         <CellProviders :cell="props" />
         <CellInput field="showcase" :storeId="products.$id" :cell="props" />
-        <!-- <Cell field="weekSale" :cell="props" />
+        <Cell field="weekSale" :cell="props" />
         <Cell field="weekSaleAvg" :cell="props" />
         <Cell field="marginAvg" :cell="props" format="currency" />
-        <Cell field="marginMax" :cell="props" format="currency" /> -->
+        <Cell field="marginMax" :cell="props" format="currency" />
         <Cell field="totalSales" :cell="props" format="decimal" />
         <Cell field="createdAt" :cell="props" format="localDate" />
         <Cell field="lastReceive.updatedAt" :cell="props" format="localDate" />

@@ -1,7 +1,7 @@
 <script setup>
 import { jsPDF } from 'jspdf'
 import { onMounted, ref, provide } from 'vue'
-import { useUpdates } from 'stores/updates'
+import { useProductsUpdates } from 'src/stores/productsupdates'
 import formatter from 'tools/formatter'
 
 const tableRef = ref({})
@@ -9,8 +9,8 @@ const date = ref(formatter.date(new Date()))
 const priceLabels = ref([])
 const loading = ref(false)
 
-const updates = useUpdates()
-provide(updates.$id, updates)
+const productsUpdates = useProductsUpdates()
+provide(productsUpdates.$id, productsUpdates)
 
 // const provider = ref(null)
 
@@ -20,12 +20,12 @@ const columns = [
   { label: 'CODIGO', name: 'code' },
   { label: 'PROVEEDORES', name: 'providers' },
   { label: 'NOMBRE', name: 'name' },
-  { label: 'PRECIO', name: 'price' }
+  { label: 'PRECIO', name: 'newValue' }
 ]
 
 async function onDate() {
   loading.value = true
-  let data = await updates.getPriceLabels(date.value)
+  let data = await productsUpdates.getPriceLabels(date.value)
   console.log(data)
   priceLabels.value = data
   loading.value = false
@@ -57,7 +57,7 @@ function printLabels() {
         pdf.setFont('helvetica', 'bold')
         pdf.setFontSize(46)
         pdf.text(
-          formatter.currency(priceLabels.value[labelCount].price),
+          formatter.currency(priceLabels.value[labelCount].newValue),
           x + labelWidth / 2,
           y + priceHeigth / 2,
           {
@@ -147,7 +147,7 @@ function printLabels() {
           <Cell field="code" :cell="props" />
           <CellProviders :cell="props" />
           <Cell field="name" :cell="props" />
-          <Cell field="price" :cell="props" format="currency" />
+          <Cell field="newValue" :cell="props" format="currency" />
         </template>
       </Table>
     </div>

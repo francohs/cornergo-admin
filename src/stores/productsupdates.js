@@ -1,12 +1,29 @@
 import { defineStore } from 'pinia'
 import { baseState, baseGetters, baseActions } from './base'
+import { tableState } from './base/state'
 import { api } from 'boot/axios'
 
-export const useUpdates = defineStore({
-  id: 'updates',
+export const useProductsUpdates = defineStore({
+  id: 'productsupdates',
 
   state: () => ({
-    ...baseState()
+    ...baseState(),
+    productsUpdatesTable: tableState('productsUpdatesTable', {
+      visibles: [
+        'username',
+        'code',
+        'providers',
+        'name',
+        'field',
+        'oldValue',
+        'newValue'
+      ],
+      containsFields: ['code', 'name'],
+      equalFilter: {
+        username: null,
+        field: null
+      }
+    })
   }),
 
   getters: {

@@ -13,7 +13,7 @@ const props = defineProps({
   descending: Boolean
 })
 
-const storeId = inject(props.storeId)
+const storeId = props.storeId ? inject(props.storeId) : null
 const optionStore = inject(props.optionStore)
 const options = ref([])
 const model = ref(props.modelValue)
