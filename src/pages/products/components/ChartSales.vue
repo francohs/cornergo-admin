@@ -1,7 +1,7 @@
 <script setup>
 import Chart from 'chart.js/auto'
 import formatter from 'tools/formatter'
-import { watchEffect, ref } from 'vue'
+import { ref } from 'vue'
 
 const chart = ref(null)
 

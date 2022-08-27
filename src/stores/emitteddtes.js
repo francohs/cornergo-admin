@@ -20,7 +20,8 @@ export const useEmittedDtes = defineStore({
         value: null
       },
       populate: ['client']
-    })
+    }),
+    sales: []
   }),
 
   getters: {
@@ -29,6 +30,21 @@ export const useEmittedDtes = defineStore({
 
   actions: {
     ...baseActions(),
+    async getSalesByDate(date) {
+      try {
+        this.loading = true
+        const { data } = await api.get('emitteddtes/sales', {
+          params: {
+            date
+          }
+        })
+        this.sales = data
+      } catch (error) {
+        throw error
+      } finally {
+        this.loading = false
+      }
+    },
     async create(doc) {
       try {
         this.saving = true

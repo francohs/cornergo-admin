@@ -8,6 +8,7 @@ const auth = useAuth()
     <q-list bordered padding class="text-grey-9">
       <ItemLink page="receiveddtes" icon="file_copy" label="DTEs Recibidos" />
       <ItemLink page="emitteddtes" icon="receipt_long" label="DTEs Emitidos" />
+      <ItemLink page="sales" icon="bar_chart" label="Ventas" />
       <ItemLink page="orders" icon="local_shipping" label="Pedidos" />
       <ItemLink page="supplies" icon="widgets" label="Suministros" />
       <ItemLink page="products" icon="inventory" label="Productos" />
