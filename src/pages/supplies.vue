@@ -84,7 +84,12 @@ export default {
           :storeId="supplies.$id"
           :cell="props"
         />
-        <Cell format="currency" field="shippingCost" :cell="props" />
+        <CellInput
+          format="currency"
+          field="shippingCost"
+          :storeId="supplies.$id"
+          :cell="props"
+        />
         <Cell format="currency" field="unitShipping" :cell="props" />
         <Cell field="taxCode" :cell="props" />
         <Cell field="exempt" format="boolean" :cell="props" />
