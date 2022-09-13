@@ -26,7 +26,8 @@ const columns = [
   { label: 'PROVEEDORES', name: 'providers' },
   { label: 'CAMPO', name: 'field' },
   { label: 'ANTERIOR', name: 'oldValue' },
-  { label: 'ACTUAL', name: 'newValue' }
+  { label: 'ACTUAL', name: 'newValue' },
+  { label: 'FECHA', name: 'createdAt' }
 ]
 </script>
 
@@ -66,6 +67,7 @@ const columns = [
         <Cell field="field" :cell="props" />
         <Cell field="oldValue" :cell="props" />
         <Cell field="newValue" :cell="props" />
+        <Cell field="createdAt" format="datetime" :cell="props" />
       </template>
     </TableQueryLazy>
   </q-page>

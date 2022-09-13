@@ -33,7 +33,6 @@ provide(orders.$id, orders)
 onMounted(async () => {
   try {
     await orders.getDoc(id)
-    console.log(orders.doc)
     Object.assign(order, orders.doc)
     provider.value = orders.doc.provider.alias
     checkStockCount.value = orders.doc.checkStock.length
@@ -61,7 +60,7 @@ async function goto() {
   router.push({ name: 'inventory' })
 }
 
-function genPDF() {
+async function genPDF() {
   const pdf = new jsPDF({ format: 'letter' })
 
   const title = `PEDIDO ${provider.value} ${orderDate.replaceAll('/', '-')}`
@@ -88,6 +87,37 @@ function genPDF() {
       }
     ]
   }, [])
+
+  const itemsSave = orders.doc.order.reduce((prev, item) => {
+    const { supply } = item
+    if (!supply) return prev
+
+    const itemSave = {
+      product: {
+        _id: item._id,
+        name: item.name,
+        code: item.code
+      },
+      supply: {
+        _id: supply._id,
+        sku: supply.sku,
+        name: supply.name,
+        unit: supply.unit,
+        packageQuantity: supply.packageQuantity,
+        cost: supply.cost
+      },
+      quantity: supply.orderQuantity
+    }
+
+    return [...prev, itemSave]
+  }, [])
+
+  await orders.create({
+    provider: orders.doc.provider._id,
+    providerAlias: orders.doc.provider.alias,
+    items: itemsSave,
+    total: total.value
+  })
 
   const headers = [
     { name: 'sku', prompt: 'SKU', align: 'center', width: 50 },
@@ -117,6 +147,7 @@ function genPDF() {
           @click="genPDF"
           color="positive"
           class="q-ml-lg"
+          :loading="orders.saving"
         />
       </div>
 
