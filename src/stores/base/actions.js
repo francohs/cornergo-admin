@@ -70,9 +70,8 @@ export const baseActions = () => {
       try {
         this.saving = true
         const { data } = await api.post(this.$id, { doc })
-        console.log({ docs: this.docs })
         this.docs.push(data.doc)
-        // this.clearDoc()
+        this.clearDoc()
         notify.positive('Datos creados con éxito')
       } catch (error) {
         throw error

@@ -12,6 +12,22 @@ supply.subtotal = computed(() => {
   if (!supply) return 0
   return supply.units * supply.cost
 })
+const lastOrdered = computed(() => {
+  const message = `${product.lastOrdered.quantity} ${product.lastOrdered.unit}`
+  const units =
+    product.lastOrdered.unit == 'UND'
+      ? ''
+      : ` (${product.lastOrdered.packageQuantity})`
+  return message + units
+})
+const lastReceived = computed(() => {
+  const message = `${product.lastReceived.quantity} ${product.lastReceived.unit}`
+  const units =
+    product.lastReceived.unit == 'UND'
+      ? ''
+      : ` (${product.lastReceived.packageQuantity})`
+  return message + units
+})
 </script>
 
 <template>
@@ -80,6 +96,22 @@ supply.subtotal = computed(() => {
             :modelValue="product.marginAvg"
             width="90"
             format="currency"
+            dense
+          />
+          <InputRead
+            label="Última Orden"
+            v-if="product.lastOrdered"
+            :modelValue="lastOrdered"
+            :hint="formatter.localDate(product.lastOrdered.updatedAt)"
+            width="140"
+            dense
+          />
+          <InputRead
+            label="Última Recepción"
+            v-if="product.lastReceived"
+            :modelValue="lastReceived"
+            :hint="formatter.localDate(product.lastReceived.updatedAt)"
+            width="140"
             dense
           />
           <div class="column items-center text-grey-7" style="font-size: 12px">

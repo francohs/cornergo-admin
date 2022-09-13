@@ -1,3 +1,5 @@
+import { api } from 'boot/axios'
+import notify from 'tools/notify'
 import { defineStore } from 'pinia'
 import { baseState, baseGetters, baseActions } from './base'
 
@@ -14,7 +16,19 @@ export const useOrders = defineStore({
   },
 
   actions: {
-    ...baseActions()
+    ...baseActions(),
+
+    async create(doc) {
+      try {
+        this.saving = true
+        await api.post(this.$id, { doc })
+        notify.positive('Datos creados con éxito')
+      } catch (error) {
+        throw error
+      } finally {
+        this.saving = false
+      }
+    }
 
     // async getDoc(id, day) {
     //   try {
