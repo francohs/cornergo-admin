@@ -1,44 +1,43 @@
-<script>
+<script setup>
 import { useSupplies } from 'stores/supplies'
 import { useProviders } from 'stores/providers'
 import { provide, ref } from 'vue'
 
-export default {
-  setup() {
-    const supplies = useSupplies()
-    const providers = useProviders()
-    const tableRef = ref({})
-    provide(supplies.$id, supplies)
-    provide(providers.$id, providers)
+const supplies = useSupplies()
+const providers = useProviders()
+const table = supplies.suppliesTable
+const tableRef = ref({})
+provide(supplies.$id, supplies)
+provide(providers.$id, providers)
 
-    return {
-      supplies,
-      providers,
-      tableRef,
-      columns: [
-        // { label: 'DETALLE', name: '_id', size: 50 },
-        { label: 'PROVEEDOR', name: 'providerAlias' },
-        { label: 'SKU', name: 'sku' },
-        { label: 'CÓDIGO UND', name: 'productCode' },
-        { label: 'NOMBRE', name: 'name', align: 'left' },
-        { label: 'MEDIDA', name: 'unit' },
-        { label: 'MULTI', name: 'multipler' },
-        { label: 'UNIDADES', name: 'packageQuantity' },
-        { label: 'FLETE', name: 'shippingCost' },
-        { label: 'FLETE UND', name: 'unitShipping' },
-        { label: 'ILA', name: 'taxCode' },
-        { label: 'EXENTO', name: 'exempt' },
-        { label: 'COSTO', name: 'cost' },
-        { label: 'COSTO UND', name: 'unitCost' },
-        { label: 'CREADO', name: 'createdAt' },
-        { label: 'ACTUALIZADO', name: 'updatedAt' },
-        { label: 'ACTIVO', name: 'active', size: 50 }
-      ]
-    }
-  },
-
-  name: 'ProductsDocs'
+async function onFilter(provider) {
+  if (!provider) {
+    table.pagination.page = 1
+    supplies.clearDocs()
+    return
+  }
+  await tableRef.value.queryInit()
 }
+
+const columns = [
+  // { label: 'DETALLE', name: '_id', size: 50 },
+  { label: 'PROVEEDOR', name: 'providerAlias' },
+  { label: 'SKU', name: 'sku' },
+  { label: 'CÓDIGO UND', name: 'productCode' },
+  { label: 'NOMBRE', name: 'name', align: 'left' },
+  { label: 'MEDIDA', name: 'unit' },
+  { label: 'MULTI', name: 'multipler' },
+  { label: 'UNIDADES', name: 'packageQuantity' },
+  { label: 'FLETE', name: 'shippingCost' },
+  { label: 'FLETE UND', name: 'unitShipping' },
+  { label: 'ILA', name: 'taxCode' },
+  { label: 'EXENTO', name: 'exempt' },
+  { label: 'COSTO', name: 'cost' },
+  { label: 'COSTO UND', name: 'unitCost' },
+  { label: 'CREADO', name: 'createdAt' },
+  { label: 'ACTUALIZADO', name: 'updatedAt' },
+  { label: 'ACTIVO', name: 'active', size: 50 }
+]
 </script>
 
 <template>
@@ -59,9 +58,9 @@ export default {
         <SelectProvider
           label="Proveedor"
           icon="local_shipping"
-          v-model="supplies.suppliesTable.equalFilter.providerAlias"
-          style="width: 240px"
-          autofocus
+          v-model="table.equalFilter.providerAlias"
+          @update:modelValue="onFilter"
+          style="width: 260px"
         />
         <q-space />
         <!-- <ButtonLinkCreate /> -->

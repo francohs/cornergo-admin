@@ -1,3 +1,14 @@
+<script setup>
+const props = defineProps({
+  title: String,
+  confirmColor: { type: String, default: 'positive' },
+  loading: Boolean,
+  noFooter: Boolean,
+  width: { type: [String, Number], default: 380 }
+})
+const emit = defineEmits(['confirm'])
+</script>
+
 <template>
   <q-dialog v-bind="$attrs">
     <q-card class="q-pa-sm" :style="`width: ${width}px; max-width: 80vw`">
@@ -28,14 +39,3 @@
     </q-card>
   </q-dialog>
 </template>
-
-<script setup>
-const props = defineProps({
-  title: String,
-  confirmColor: { type: String, default: 'positive' },
-  loading: Boolean,
-  noFooter: Boolean,
-  width: { type: Number, default: 380 }
-})
-const emit = defineEmits(['confirm'])
-</script>

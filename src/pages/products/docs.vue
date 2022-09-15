@@ -66,7 +66,7 @@ const columns = [
           v-model="table.equalFilter.providers"
           @update:modelValue="onFilter"
           label="Proveedor"
-          style="width: 240px"
+          style="width: 260px"
           icon="local_shipping"
           clearable
         />

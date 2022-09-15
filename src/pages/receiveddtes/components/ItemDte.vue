@@ -159,6 +159,15 @@ const createProduct = () => {
   }
   router.push({ name: 'products/create' })
 }
+
+const lastOrdered = computed(() => {
+  const message = `${product.lastOrdered.quantity} ${product.lastOrdered.unit}`
+  const units =
+    product.lastOrdered.unit == 'UND'
+      ? ''
+      : ` (${product.lastOrdered.packageQuantity})`
+  return message + units
+})
 </script>
 
 <template>
@@ -392,10 +401,10 @@ const createProduct = () => {
           />
           <InputRead
             label="Pedido"
-            v-if="supply.lastOrdered"
-            :modelValue="supply.lastOrdered.quantity"
-            :hint="formatter.localDate(supply.lastOrdered.updatedAt)"
-            width="90"
+            v-if="product.lastOrdered"
+            :modelValue="lastOrdered"
+            :hint="formatter.localDate(product.lastOrdered.updatedAt)"
+            width="140"
             dense
           />
           <div class="column items-center text-grey-7" style="font-size: 12px">

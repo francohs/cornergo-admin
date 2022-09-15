@@ -1,9 +1,15 @@
 <script setup>
-import { computed, inject, ref, reactive } from 'vue'
+import { computed, inject, ref } from 'vue'
 import formatter from 'tools/formatter'
+import Dialog from 'src/components/Dialog.vue'
+
 const props = defineProps(['product'])
+
 const { product } = props
 const { supply } = product
+const supplies = inject('supplies')
+const dialog = ref(false)
+
 supply.units = computed(() => {
   if (!supply) return 0
   return supply.packageQuantity * supply.orderQuantity
@@ -99,18 +105,22 @@ const lastReceived = computed(() => {
             dense
           />
           <InputRead
-            label="Última Orden"
+            :label="product.lastOrdered.providerAlias"
             v-if="product.lastOrdered"
             :modelValue="lastOrdered"
-            :hint="formatter.localDate(product.lastOrdered.updatedAt)"
+            :hint="`Pedido ${formatter.localDate(
+              product.lastOrdered.updatedAt
+            )}`"
             width="140"
             dense
           />
           <InputRead
-            label="Última Recepción"
+            :label="product.lastReceived.providerAlias"
             v-if="product.lastReceived"
             :modelValue="lastReceived"
-            :hint="formatter.localDate(product.lastReceived.updatedAt)"
+            :hint="`Recepción ${formatter.localDate(
+              product.lastReceived.updatedAt
+            )}`"
             width="140"
             dense
           />
@@ -125,10 +135,6 @@ const lastReceived = computed(() => {
               dense
             />
           </div>
-
-          <!-- <div>
-            <q-btn label="ALTERNATIVAS" rounded size="sm" />
-          </div> -->
         </div>
       </div>
 
@@ -196,8 +202,66 @@ const lastReceived = computed(() => {
             format="currency"
             dense
           />
+          <div>
+            <q-btn
+              v-if="product.supplies.length > 1"
+              :label="`ALTERNATIVAS (${product.supplies.length})`"
+              rounded
+              size="sm"
+              @click="dialog = true"
+            />
+          </div>
         </div>
       </div>
     </div>
   </q-item>
+
+  <Dialog
+    v-model="dialog"
+    no-footer
+    :title="`${product.name} ${formatter.currency(
+      product.price
+    )} (PROVEEDORES)`"
+    width="1100"
+  >
+    <Table
+      :rows="product.supplies"
+      :columns="[
+        { label: 'PROVEEDOR', name: 'providerAlias', align: 'left' },
+        { label: 'NOMBRE', name: 'name', align: 'left' },
+        { label: 'MEDIDA', name: 'unit' },
+        { label: 'UNIDADES', name: 'packageQuantity' },
+        { label: 'COSTO', name: 'cost' },
+        { label: 'MARGEN', name: 'pmargin' },
+        { label: 'RECIBIDO', name: 'lastReceived.updatedAt' },
+        { label: 'ACTIVO', name: 'active', size: 50 }
+      ]"
+      hide-bottom
+      flat
+      bordered
+      class="q-mb-lg"
+    >
+      <template v-slot="{ props }">
+        <Cell field="providerAlias" :cell="props" />
+        <Cell field="name" :cell="props" />
+        <Cell field="unit" :cell="props" />
+        <Cell field="packageQuantity" :cell="props" />
+        <Cell field="cost" format="currency" :cell="props" />
+        <Cell field="pmargin" :cell="props" v-if="product.price"
+          ><ValuePercent
+            :value="product.price"
+            :total="props.row.cost"
+            :high="40"
+            :low="30"
+        /></Cell>
+        <Cell field="lastReceived.updatedAt" format="localDate" :cell="props" />
+        <CellToggle
+          field="active"
+          :storeId="supplies.$id"
+          :cell="props"
+          v-model="props.row.active"
+        />
+      </template>
+    </Table>
+  </Dialog>
 </template>
