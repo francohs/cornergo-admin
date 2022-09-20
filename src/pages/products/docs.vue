@@ -118,8 +118,8 @@ const columns = [
         <Cell field="createdAt" :cell="props" format="localDate" />
         <Cell field="lastReceive.updatedAt" :cell="props" format="localDate" />
         <Cell field="lastSale" :cell="props" format="localDate" />
-        <CellToggle field="exempt" :storeId="products.$id" :cell="props" />
-        <CellToggle field="active" :storeId="products.$id" :cell="props" />
+        <CellToggle field="exempt" :storeId="products.$id" :cell="props" v-model="props.row.exempt" />
+        <CellToggle field="active" :storeId="products.$id" :cell="props" v-model="props.row.active" />
       </template>
     </TableQueryLazy>
   </q-page>

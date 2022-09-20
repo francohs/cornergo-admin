@@ -101,7 +101,12 @@ const columns = [
         />
         <Cell field="createdAt" format="date" :cell="props" />
         <Cell field="updatedAt" format="date" :cell="props" />
-        <CellToggle field="active" :storeId="supplies.$id" :cell="props" />
+        <CellToggle
+          field="active"
+          :storeId="supplies.$id"
+          :cell="props"
+          v-model="props.row.active"
+        />
       </template>
     </TableQueryLazy>
   </q-page>

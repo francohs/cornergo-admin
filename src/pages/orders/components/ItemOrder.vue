@@ -208,6 +208,7 @@ const lastReceived = computed(() => {
               :label="`ALTERNATIVAS (${product.supplies.length})`"
               rounded
               size="sm"
+              color="primary"
               @click="dialog = true"
             />
           </div>
