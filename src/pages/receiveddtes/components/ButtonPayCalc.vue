@@ -18,7 +18,13 @@ const payCalc = async () => {
           value: props.date
         }
       },
-      select: ['providerName', 'expirationDate', 'paymentMethod', 'totalAmount']
+      select: [
+        'provider',
+        'providerName',
+        'expirationDate',
+        'paymentMethod',
+        'totalAmount'
+      ]
     })
 
     pays.value = data.docs.reduce((acc, val) => {

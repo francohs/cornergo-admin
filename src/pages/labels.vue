@@ -1,10 +1,10 @@
 <script setup>
 import { jsPDF } from 'jspdf'
-import { onMounted, ref, provide } from 'vue'
+import { onMounted, ref, provide, nextTick } from 'vue'
 import { useProductsUpdates } from 'src/stores/productsupdates'
 import formatter from 'tools/formatter'
 
-const tableRef = ref({})
+const tableRef = ref(null)
 const date = ref(formatter.date(new Date()))
 const priceLabels = ref([])
 const loading = ref(false)
@@ -26,14 +26,14 @@ const columns = [
 async function onDate() {
   loading.value = true
   let data = await productsUpdates.getPriceLabels(date.value)
-  console.log(data)
   priceLabels.value = data
+  await nextTick()
   loading.value = false
 }
 
 function printLabels() {
-  const letterWidth = 216
-  const letterHeigh = 280
+  // const letterWidth = 216
+  // const letterHeigh = 280
   const labelWidth = 72
   const labelHeigh = 40
   const priceHeigth = 28
@@ -140,8 +140,9 @@ function printLabels() {
         noDataText="Puedes filtrar por día o por proveedor"
         :hide-bottom="!!priceLabels.length"
         class="col"
-        :pagination="{ rowsPerPage: 0 }"
+        :rows-per-page-options="[0]"
         :loading="loading"
+        :key="loading"
       >
         <template v-slot="{ props }">
           <Cell field="code" :cell="props" />

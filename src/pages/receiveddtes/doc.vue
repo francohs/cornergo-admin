@@ -14,6 +14,9 @@ const supplies = useSupplies()
 provide(supplies.$id, supplies)
 const loading = ref(false)
 
+const noOrderedDialog = ref(false)
+const noReceivedDialog = ref(false)
+
 const $route = useRoute()
 const id = $route.params.id
 
@@ -68,6 +71,18 @@ const receiveDte = async () => {
             :modelValue="receivedDte.emissionDate"
             format="localDate"
             input-class="text-bold"
+          />
+        </div>
+        <q-separator />
+        <div>
+          <q-btn
+            :label="`Productos No Pedidos (${receivedDte.noOrderedItems.length})`"
+            @click="noOrderedDialog = true"
+          />
+          <q-btn
+            :label="`Productos No Recibidos (${receivedDte.noReceivedItems.length})`"
+            @click="noReceivedDialog = true"
+            class="q-ml-md"
           />
         </div>
       </q-card-section>
@@ -163,4 +178,62 @@ const receiveDte = async () => {
       </q-card-section>
     </q-card>
   </LayoutPage>
+
+  <Dialog
+    v-model="noOrderedDialog"
+    no-footer
+    title="PRODUCTOS NO PEDIDOS"
+    width="1100"
+  >
+    <Table
+      :rows="receivedDte.noOrderedItems"
+      :columns="[
+        { label: 'SKU', name: 'sku' },
+        { label: 'NOMBRE', name: 'name', align: 'left' },
+        { label: 'CANTIDAD', name: 'quantity' },
+        { label: 'MEDIDA', name: 'unit' }
+      ]"
+      hide-bottom
+      flat
+      bordered
+      :rows-per-page-options="[0]"
+      class="q-mb-lg"
+    >
+      <template v-slot="{ props }">
+        <Cell field="sku" :cell="props" />
+        <Cell field="name" :cell="props" />
+        <Cell field="quantity" :cell="props" />
+        <Cell field="unit" :cell="props" />
+      </template>
+    </Table>
+  </Dialog>
+
+  <Dialog
+    v-model="noReceivedDialog"
+    no-footer
+    title="PRODUCTOS NO RECIBIDOS"
+    width="1100"
+  >
+    <Table
+      :rows="receivedDte.noReceivedItems"
+      :columns="[
+        { label: 'SKU', name: 'sku' },
+        { label: 'NOMBRE', name: 'name', align: 'left' },
+        { label: 'CANTIDAD', name: 'quantity' },
+        { label: 'MEDIDA', name: 'unit' }
+      ]"
+      hide-bottom
+      flat
+      bordered
+      :rows-per-page-options="[0]"
+      class="q-mb-lg"
+    >
+      <template v-slot="{ props }">
+        <Cell field="sku" :cell="props" />
+        <Cell field="name" :cell="props" />
+        <Cell field="quantity" :cell="props" />
+        <Cell field="unit" :cell="props" />
+      </template>
+    </Table>
+  </Dialog>
 </template>
