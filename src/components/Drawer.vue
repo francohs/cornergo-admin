@@ -40,6 +40,12 @@ const auth = useAuth()
         v-if="auth.user.isAdmin"
       />
       <ItemLink
+        page="cashmoves"
+        icon="payments"
+        label="Arqueos"
+        v-if="auth.user.isAdmin"
+      />
+      <ItemLink
         page="users"
         icon="people"
         label="Usuarios"

@@ -1,3 +1,60 @@
+<script setup>
+import { LocalStorage } from 'quasar'
+import { inject, computed } from 'vue'
+
+const props = defineProps({
+  storeId: String,
+  tableName: String,
+  columns: Array,
+  title: String,
+  titleIcon: String,
+  activeToggle: Boolean,
+  inputPlaceholder: String,
+  inputOnlynumbers: Boolean,
+  forceSort: Object,
+  createBtn: Boolean,
+  noDataText: String
+})
+
+const store = inject(props.storeId)
+const table = store[props.tableName]
+
+// onMounted(async () => {
+//   table.input = ''
+//   table.pagination.page = 1
+//   store.clearDocs()
+// })
+
+const filteredRows = computed(() => {
+  let filteredRows = store.docs
+
+  if (table.actives) {
+    filteredRows = store.docs.filter(row => row.active)
+  }
+
+  if (table.input) {
+    filteredRows = store.docs.filter(row => {
+      for (let field of table.containsFields) {
+        let rowValue = row[field]
+        if (
+          rowValue &&
+          rowValue.toUpperCase().includes(table.input.toUpperCase())
+        ) {
+          return true
+        }
+      }
+      return false
+    })
+  }
+
+  return filteredRows
+})
+
+const saveTable = () => {
+  LocalStorage.set(props.tableName, table)
+}
+</script>
+
 <template>
   <div class="q-pa-md">
     <Table
@@ -8,6 +65,7 @@
       v-model:pagination="table.pagination"
       :loading="store.loading"
     >
+      <!-- :key="store.loading" -->
       <template v-slot:top>
         <div class="full-width row items-center q-gutter-x-sm">
           <q-icon :name="titleIcon" size="sm" class="q-mx-none" />
@@ -86,60 +144,3 @@
     </Table>
   </div>
 </template>
-
-<script setup>
-import { LocalStorage } from 'quasar'
-import { inject, computed } from 'vue'
-
-const props = defineProps({
-  storeId: String,
-  tableName: String,
-  columns: Array,
-  title: String,
-  titleIcon: String,
-  activeToggle: Boolean,
-  inputPlaceholder: String,
-  inputOnlynumbers: Boolean,
-  forceSort: Object,
-  createBtn: Boolean,
-  noDataText: String
-})
-
-const store = inject(props.storeId)
-const table = store[props.tableName]
-
-// onMounted(async () => {
-//   table.input = ''
-//   table.pagination.page = 1
-//   store.clearDocs()
-// })
-
-const filteredRows = computed(() => {
-  let filteredRows = store.docs
-
-  if (table.actives) {
-    filteredRows = store.docs.filter(row => row.active)
-  }
-
-  if (table.input) {
-    filteredRows = store.docs.filter(row => {
-      for (let field of table.containsFields) {
-        let rowValue = row[field]
-        if (
-          rowValue &&
-          rowValue.toUpperCase().includes(table.input.toUpperCase())
-        ) {
-          return true
-        }
-      }
-      return false
-    })
-  }
-
-  return filteredRows
-})
-
-const saveTable = () => {
-  LocalStorage.set(props.tableName, table)
-}
-</script>

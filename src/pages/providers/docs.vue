@@ -27,8 +27,14 @@
           field="shippingCosts"
           :storeId="providers.$id"
           :cell="props"
+          v-model="props.row.shippingCosts"
         />
-        <CellToggle field="active" :storeId="providers.$id" :cell="props" />
+        <CellToggle
+          field="active"
+          :storeId="providers.$id"
+          :cell="props"
+          v-model="props.row.active"
+        />
       </template>
     </TableQueryLazy>
   </LayoutPage>

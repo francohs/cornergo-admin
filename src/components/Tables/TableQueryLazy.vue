@@ -54,9 +54,9 @@ const queryNext = async (page = table.pagination.page) => {
   saveTable()
 }
 
-const queryInputDocs = async (page = table.pagination.page) => {
+const queryInputDocs = async () => {
   if (table.input.length >= props.minInput) {
-    await queryDocs(page)
+    await queryInit()
   } else {
     if (props.initFetch) {
       await queryInit()

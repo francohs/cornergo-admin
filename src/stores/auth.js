@@ -18,6 +18,9 @@ export const useAuth = defineStore({
   getters: {
     isLogged() {
       return this.token !== null
+    },
+    isAdmin() {
+      return this.user.isAdmin
     }
   },
 

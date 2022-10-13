@@ -167,7 +167,7 @@ const save = async () => {
           onlynumbers
           class="col"
         />
-        <SelectProvider v-model="provider" class="col" />
+        <SelectProvider v-model="provider" class="col" required />
       </RowMultiCols>
 
       <div class="row justify-between q-mb-md">
