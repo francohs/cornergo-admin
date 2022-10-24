@@ -33,6 +33,7 @@ const columns = [
   { label: 'PRECIO BAT', name: 'batPrice' },
   { label: 'PROVEEDOR', name: 'providers' },
   { label: 'VITRINA', name: 'showcase' },
+  { label: 'MÁXIMO', name: 'maximum' },
   // { label: 'ROTACIÓN', name: 'weekSale' },
   // { label: 'ROT PROM', name: 'weekSaleAvg' },
   // { label: 'MARGEN', name: 'marginAvg' },
@@ -110,6 +111,7 @@ const columns = [
         </q-td> -->
         <CellProviders :cell="props" />
         <CellInput field="showcase" :storeId="products.$id" :cell="props" />
+        <CellInput field="maximum" :storeId="products.$id" :cell="props" />
         <!-- <Cell field="weekSale" :cell="props" />
         <Cell field="weekSaleAvg" :cell="props" />
         <Cell field="marginAvg" :cell="props" format="currency" />
@@ -118,8 +120,18 @@ const columns = [
         <Cell field="createdAt" :cell="props" format="localDate" />
         <Cell field="lastReceive.updatedAt" :cell="props" format="localDate" />
         <Cell field="lastSale" :cell="props" format="localDate" />
-        <CellToggle field="exempt" :storeId="products.$id" :cell="props" v-model="props.row.exempt" />
-        <CellToggle field="active" :storeId="products.$id" :cell="props" v-model="props.row.active" />
+        <CellToggle
+          field="exempt"
+          :storeId="products.$id"
+          :cell="props"
+          v-model="props.row.exempt"
+        />
+        <CellToggle
+          field="active"
+          :storeId="products.$id"
+          :cell="props"
+          v-model="props.row.active"
+        />
       </template>
     </TableQueryLazy>
   </q-page>

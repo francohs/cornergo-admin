@@ -22,8 +22,9 @@ const columns = [
   { label: 'STOCK', name: 'stock' },
   { label: 'MÍNIMO', name: 'minimum' },
   { label: 'VITRINA', name: 'showcase' },
-  { label: 'ÚLTIMA COMPRA', name: 'lastBuy' },
+  { label: 'ÚLTIMA COMPRA', name: 'lastReceived.updatedAt' },
   { label: 'ÚLTIMA VENTA', name: 'lastSale' },
+  { label: 'ROTACIÓN', name: 'rotation' },
   { label: 'VENTAS SEMANAL', name: 'sale' },
   { label: 'VENTAS PROMEDIO', name: 'saleAvg' },
   { label: 'VENTAS TOTAL', name: 'totalSales' },
@@ -62,7 +63,7 @@ const queryDocs = async provider => {
       </template>
 
       <template v-slot="{ props }">
-        <CellLink field="_id" :name="products.$id" :cell="props" />
+        <CellLink field="_id" :name="products.$id" :cell="props" blank />
         <Cell field="code" :cell="props" />
         <CellInput field="name" :storeId="products.$id" :cell="props" />
         <CellInput field="category" :storeId="products.$id" :cell="props" />
@@ -76,7 +77,7 @@ const queryDocs = async provider => {
         <CellInput field="minimum" :storeId="products.$id" :cell="props" />
         <CellInput field="showcase" :storeId="products.$id" :cell="props" />
         <Cell
-          field="lastBuy"
+          field="lastReceived.updatedAt"
           format="localDate"
           :storeId="products.$id"
           :cell="props"
@@ -87,6 +88,7 @@ const queryDocs = async provider => {
           :storeId="products.$id"
           :cell="props"
         />
+        <CellInput field="rotation" :storeId="products.$id" :cell="props" />
         <Cell field="sale" :storeId="products.$id" :cell="props" />
         <Cell field="saleAvg" :storeId="products.$id" :cell="props" />
         <Cell

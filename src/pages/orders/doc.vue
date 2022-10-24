@@ -77,6 +77,10 @@ async function genPDF() {
     let unit = supply.unit || 'UND'
     unit += unit == 'UND' ? '' : ` (${supply.packageQuantity})`
 
+    if (supply.orderQuantity <= 0) {
+      return prev
+    }
+
     return [
       ...prev,
       {

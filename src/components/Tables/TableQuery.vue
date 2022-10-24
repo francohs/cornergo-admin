@@ -28,7 +28,7 @@ const table = store[props.tableName]
 const filteredRows = computed(() => {
   let filteredRows = store.docs
 
-  if (table.actives) {
+  if (props.activeToggle && table.actives) {
     filteredRows = store.docs.filter(row => row.active)
   }
 

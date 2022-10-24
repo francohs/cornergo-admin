@@ -98,10 +98,18 @@ async function removeSupply(id) {
             width="90"
             dense
           />
+
           <InputRead
             label="Venta Prom"
             :modelValue="product.weekSaleAvg"
             width="90"
+            dense
+          />
+          <InputRead
+            label="Margen Sem"
+            :modelValue="product.weekMargin"
+            width="90"
+            format="currency"
             dense
           />
           <InputRead
@@ -235,7 +243,7 @@ async function removeSupply(id) {
     <Table
       :rows="product.supplies"
       :columns="[
-        { label: '', name: 'remove' },
+        // { label: '', name: 'remove' },
         { label: 'SKU', name: 'sku' },
         { label: 'PROVEEDOR', name: 'providerAlias', align: 'left' },
         { label: 'NOMBRE', name: 'name', align: 'left' },
@@ -252,7 +260,7 @@ async function removeSupply(id) {
       class="q-mb-lg"
     >
       <template v-slot="{ props }">
-        <q-td key="remove">
+        <!-- <q-td key="remove">
           <div style="padding-top: 5px">
             <q-btn
               dense
@@ -264,7 +272,7 @@ async function removeSupply(id) {
               v-if="auth.isAdmin"
             />
           </div>
-        </q-td>
+        </q-td> -->
         <Cell field="sku" :cell="props" />
         <Cell field="providerAlias" :cell="props" />
         <Cell field="name" :cell="props" />
