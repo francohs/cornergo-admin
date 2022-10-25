@@ -430,11 +430,15 @@ const lastOrdered = computed(() => {
             v-if="item.taxCode"
             dense
           />
-          <InputRead
+          <Input
             label="Flete Und"
-            :modelValue="supply.calcShippingCost"
+            v-model="supply.shippingCost"
             format="currency"
-            width="100"
+            width="120"
+            storeId="supplies"
+            :id="supply._id"
+            field="shippingCost"
+            :hint="`Calculado ${formatter.currency(supply.calcShippingCost)}`"
             v-if="providerWithShipping"
             dense
           />
