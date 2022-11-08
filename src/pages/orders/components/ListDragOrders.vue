@@ -49,10 +49,11 @@ const orders = inject('orders')
 const providers = useProviders()
 
 function onClick(provider) {
-  router.push({
+  const { href } = router.resolve({
     name: 'orders/:id',
     params: { id: provider._id }
   })
+  window.open(href, '_blank')
 }
 
 async function onEnd(event) {
