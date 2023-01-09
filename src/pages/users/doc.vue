@@ -1,3 +1,31 @@
+<script setup>
+import { useUsers } from 'stores/users'
+import { onMounted, provide, ref } from 'vue'
+import { useRoute } from 'vue-router'
+
+const users = useUsers()
+const $route = useRoute()
+const id = $route.params.id
+const user = ref({})
+const dialogPassword = ref(false)
+const password1 = ref('')
+const password2 = ref('')
+
+provide(users.$id, users)
+
+onMounted(async () => {
+  await users.getDoc(id)
+  user.value = { ...users.doc }
+})
+
+async function updatePasswornd() {
+  await users.updatePassword(id, { password: password1.value })
+  dialogPassword.value = false
+  password1.value = ''
+  password2.value = ''
+}
+</script>
+
 <template>
   <PageResponsive :loading="users.loading">
     <FormSave :storeId="users.$id" :id="id" :doc="user">
@@ -83,46 +111,3 @@
     </Dialog>
   </PageResponsive>
 </template>
-
-<script>
-import { useUsers } from 'stores/users'
-import { onMounted, provide, ref } from 'vue'
-import { useRoute } from 'vue-router'
-
-export default {
-  name: 'UsersDoc',
-  setup() {
-    const users = useUsers()
-    const $route = useRoute()
-    const id = $route.params.id
-    const user = ref({})
-    const dialogPassword = ref(false)
-    const password1 = ref('')
-    const password2 = ref('')
-
-    provide(users.$id, users)
-
-    onMounted(async () => {
-      await users.getDoc(id)
-      user.value = { ...users.doc }
-    })
-
-    async function updatePasswornd() {
-      await users.updatePassword(id, { password: password1.value })
-      dialogPassword.value = false
-      password1.value = ''
-      password2.value = ''
-    }
-
-    return {
-      id,
-      user,
-      users,
-      dialogPassword,
-      password1,
-      password2,
-      updatePasswornd
-    }
-  }
-}
-</script>

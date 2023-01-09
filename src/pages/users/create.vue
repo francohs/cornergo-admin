@@ -1,3 +1,14 @@
+<script setup>
+import { reactive, provide, ref } from 'vue'
+import { useUsers } from 'stores/users'
+
+const users = useUsers()
+const user = reactive({})
+user.isAdmin = false
+const passwordConfirm = ref('')
+provide(users.$id, users)
+</script>
+
 <template>
   <PageResponsive :loading="users.loading">
     <FormSave :storeId="users.$id" :doc="user">
@@ -64,25 +75,3 @@
     </FormSave>
   </PageResponsive>
 </template>
-
-<script>
-import { reactive, provide, ref } from 'vue'
-import { useUsers } from 'stores/users'
-
-export default {
-  setup() {
-    const users = useUsers()
-    const user = reactive({})
-    user.isAdmin = false
-    const passwordConfirm = ref('')
-    provide(users.$id, users)
-
-    return {
-      user,
-      users,
-      passwordConfirm
-    }
-  },
-  name: 'UsersCreate'
-}
-</script>

@@ -1,6 +1,6 @@
 <script setup>
 import { LocalStorage } from 'quasar'
-import { inject, watch, onMounted } from 'vue'
+import { inject, onMounted } from 'vue'
 
 const props = defineProps({
   storeId: String,
