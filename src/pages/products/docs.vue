@@ -2,6 +2,7 @@
 import { ref, provide } from 'vue'
 import { useProducts } from 'stores/products'
 import { useProviders } from 'stores/providers'
+import CellLabeled from './components/CellLabeled.vue'
 
 const tableRef = ref({})
 
@@ -43,6 +44,7 @@ const columns = [
   { label: 'ÚLTIMA COMPRA', name: 'lastReceive.updatedAt' },
   { label: 'ÚLTIMA VENTA', name: 'lastSale' },
   { label: 'EXENTO', name: 'exempt', size: 50 },
+  { label: 'ETIQUETAR', name: 'labeled' },
   { label: 'ACTIVO', name: 'active', size: 50 }
 ]
 </script>
@@ -126,6 +128,7 @@ const columns = [
           :cell="props"
           v-model="props.row.exempt"
         />
+        <CellLabeled :cell="props" />
         <CellToggle
           field="active"
           :storeId="products.$id"
