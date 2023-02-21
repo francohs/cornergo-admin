@@ -22,6 +22,7 @@ const columns = [
   { label: 'STOCK', name: 'stock' },
   { label: 'MÍNIMO', name: 'minimum' },
   { label: 'VITRINA', name: 'showcase' },
+  { label: 'CREACIÓN', name: 'createdAt' },
   { label: 'ÚLTIMA COMPRA', name: 'lastReceived.updatedAt' },
   { label: 'ÚLTIMA VENTA', name: 'lastSale' },
   { label: 'ROTACIÓN', name: 'rotation' },
@@ -76,6 +77,7 @@ const queryDocs = async provider => {
         />
         <CellInput field="minimum" :storeId="products.$id" :cell="props" />
         <CellInput field="showcase" :storeId="products.$id" :cell="props" />
+        <Cell field="createdAt" :cell="props" format="localDate" />
         <Cell
           field="lastReceived.updatedAt"
           format="localDate"

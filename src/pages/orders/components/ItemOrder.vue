@@ -37,6 +37,10 @@ const lastReceived = computed(() => {
   return message + units
 })
 
+const activeSupplies = computed(
+  () => product.supplies.filter(s => s.active).length
+)
+
 async function removeSupply(id) {
   await supplies.delete(id)
   product.supplies = product.supplies.filter(s => s._id != id)
@@ -220,12 +224,12 @@ async function removeSupply(id) {
           <div>
             <q-btn
               v-if="product.supplies.length > 1"
-              :label="`ALTERNATIVAS (${product.supplies.length})`"
-              rounded
+              :label="`ALTERNATIVAS (${activeSupplies}/${product.supplies.length})`"
               size="sm"
-              color="primary"
+              :class="activeSupplies > 1 ? 'bg-primary text-white' : ''"
               @click="dialog = true"
             />
+            <!-- rounded -->
           </div>
         </div>
       </div>
