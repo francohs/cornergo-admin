@@ -2,6 +2,7 @@
 import { useProducts } from 'stores/products'
 import { useInventory } from 'stores/inventory'
 import { useProviders } from 'stores/providers'
+import { useAuth } from 'stores/auth'
 import { provide, ref } from 'vue'
 import CellChecked from './components/CellChecked.vue'
 
@@ -11,6 +12,7 @@ const inventory = useInventory()
 provide(inventory.$id, inventory)
 const providers = useProviders()
 provide(providers.$id, providers)
+const auth = useAuth()
 
 const CellCheckedRef = ref(null)
 
@@ -29,9 +31,12 @@ const columns = [
   { label: 'VENTAS SEMANAL', name: 'sale' },
   { label: 'VENTAS PROMEDIO', name: 'saleAvg' },
   { label: 'VENTAS TOTAL', name: 'totalSales' },
-  { label: 'ACTIVO', name: 'active' },
-  { label: 'REVISADO', name: 'checked' }
+  { label: 'ACTIVO', name: 'active' }
 ]
+
+if (auth.user.isAdmin) {
+  columns.push({ label: 'REVISADO', name: 'checked' })
+}
 
 const queryDocs = async provider => {
   if (provider) {
@@ -105,7 +110,11 @@ const queryDocs = async provider => {
           :cell="props"
           v-model="props.row.active"
         />
-        <CellChecked :cell="props" ref="CellCheckedRef" />
+        <CellChecked
+          :cell="props"
+          ref="CellCheckedRef"
+          v-if="auth.user.isAdmin"
+        />
       </template>
     </TableQuery>
   </q-page>
