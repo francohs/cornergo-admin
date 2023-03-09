@@ -32,9 +32,12 @@ const columns = [
   { label: 'VENTAS SEMANAL', name: 'sale' },
   { label: 'VENTAS PROMEDIO', name: 'saleAvg' },
   { label: 'VENTAS TOTAL', name: 'totalSales' },
-  { label: 'ACTIVO', name: 'active' },
   { label: 'REVISADO', name: 'checked' }
 ]
+
+if (auth.user.isAdmin) {
+  columns.push({ label: 'ACTIVO', name: 'active' })
+}
 
 const queryDocs = async provider => {
   if (provider) {
@@ -107,6 +110,7 @@ const queryDocs = async provider => {
           :storeId="products.$id"
           :cell="props"
           v-model="props.row.active"
+          v-if="auth.user.isAdmin"
         />
         <CellChecked :cell="props" ref="CellCheckedRef" />
       </template>
