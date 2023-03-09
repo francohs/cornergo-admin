@@ -13,6 +13,7 @@ provide(inventory.$id, inventory)
 const providers = useProviders()
 provide(providers.$id, providers)
 const auth = useAuth()
+provide(auth.$id, auth)
 
 const CellCheckedRef = ref(null)
 
@@ -31,12 +32,9 @@ const columns = [
   { label: 'VENTAS SEMANAL', name: 'sale' },
   { label: 'VENTAS PROMEDIO', name: 'saleAvg' },
   { label: 'VENTAS TOTAL', name: 'totalSales' },
-  { label: 'ACTIVO', name: 'active' }
+  { label: 'ACTIVO', name: 'active' },
+  { label: 'REVISADO', name: 'checked' }
 ]
-
-if (auth.user.isAdmin) {
-  columns.push({ label: 'REVISADO', name: 'checked' })
-}
 
 const queryDocs = async provider => {
   if (provider) {
@@ -110,11 +108,7 @@ const queryDocs = async provider => {
           :cell="props"
           v-model="props.row.active"
         />
-        <CellChecked
-          :cell="props"
-          ref="CellCheckedRef"
-          v-if="auth.user.isAdmin"
-        />
+        <CellChecked :cell="props" ref="CellCheckedRef" />
       </template>
     </TableQuery>
   </q-page>

@@ -7,6 +7,7 @@ const props = defineProps(['cell'])
 
 const products = inject('products')
 const inventory = inject('inventory')
+const auth = inject('auth')
 
 const loading = ref(false)
 
@@ -22,10 +23,12 @@ const stockChanged = async id => {
 }
 
 const stockChecked = async id => {
-  loading.value = true
-  await products.update(id, { lastStockUpdate: new Date() })
-  stockChanged(id)
-  loading.value = false
+  if (auth.user.isAdmin) {
+    loading.value = true
+    await products.update(id, { lastStockUpdate: new Date() })
+    stockChanged(id)
+    loading.value = false
+  }
 }
 
 defineExpose({ stockChanged })
