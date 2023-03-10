@@ -105,6 +105,7 @@ const queryDocs = async provider => {
           :storeId="products.$id"
           :cell="props"
         />
+        <CellChecked :cell="props" ref="CellCheckedRef" />
         <CellToggle
           field="active"
           :storeId="products.$id"
@@ -112,7 +113,6 @@ const queryDocs = async provider => {
           v-model="props.row.active"
           v-if="auth.user.isAdmin"
         />
-        <CellChecked :cell="props" ref="CellCheckedRef" />
       </template>
     </TableQuery>
   </q-page>
