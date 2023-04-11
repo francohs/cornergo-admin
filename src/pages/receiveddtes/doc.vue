@@ -76,11 +76,11 @@ const receiveDte = async () => {
         <q-separator />
         <div>
           <q-btn
-            :label="`Productos No Pedidos (${receivedDte.noOrderedItems.length})`"
+            :label="`Productos No Pedidos (${receivedDte.noOrderedItems?.length})`"
             @click="noOrderedDialog = true"
           />
           <q-btn
-            :label="`Productos No Recibidos (${receivedDte.noReceivedItems.length})`"
+            :label="`Productos No Recibidos (${receivedDte.noReceivedItems?.length})`"
             @click="noReceivedDialog = true"
             class="q-ml-md"
           />

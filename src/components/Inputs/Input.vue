@@ -55,7 +55,7 @@ const limitClass = computed(() => {
   if (props.modelValue) {
     classes = {
       ...classes,
-      'text-red': props.low !== undefined ? value < props.low : false,
+      'text-red': props.low ? value < props.low : false,
       'text-orange':
         props.high !== undefined && props.low !== undefined
           ? value >= props.low && value < props.high

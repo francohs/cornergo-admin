@@ -106,6 +106,7 @@ async function removeSupply(id) {
           <InputRead
             label="Venta Prom"
             :modelValue="product.weekSaleAvg"
+            :hint="`Total ${product.totalSales}`"
             width="90"
             dense
           />
