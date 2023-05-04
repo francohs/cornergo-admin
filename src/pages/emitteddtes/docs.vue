@@ -142,7 +142,7 @@ const columns = [
         </template>
 
         <template v-slot="{ props }">
-          <CellLink field="_id" :name="emittedDtes.$id" :cell="props" />
+          <CellLink field="_id" :name="emittedDtes.$id" :cell="props" blank />
           <Cell field="dteTypeName" :cell="props" />
           <q-td key="emissionDate" :props="props">
             <slot>

@@ -1,11 +1,13 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+import { useClients } from 'stores/clients'
 import { usePayments } from 'stores/payments'
 import formatter from 'tools/formatter'
 
 const route = useRoute()
 
+const clients = useClients()
 const payments = usePayments()
 const page = ref(1)
 const pageNext = ref(1)
@@ -52,7 +54,7 @@ const payIcons = {
       <div class="row items-center q-mb-lg">
         <ButtonBack />
 
-        <div class="text-h5">Historial de Abonos</div>
+        <div class="text-h5">Historial de Abonos: {{ clients.doc.name }}</div>
       </div>
 
       <q-list v-if="payments.docs.length > 0" bordered separator>

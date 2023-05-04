@@ -37,25 +37,6 @@ export const useReceivedDtes = defineStore({
   actions: {
     ...baseActions(),
 
-    async syncBsaleDte(id) {
-      try {
-        this.loading = true
-        const { data } = await api.get(`${this.$id}/sync/${id}`)
-
-        if (data.doc && data.doc.xmlUrl) {
-          const index = this.docs.findIndex(doc => doc._id == data.doc._id)
-          if (index > -1) this.docs[index] = data.doc
-          notify.positive('XML sincronizado')
-        } else {
-          notify.negative('XML no encontrado')
-        }
-      } catch (error) {
-        throw error
-      } finally {
-        this.loading = false
-      }
-    },
-
     async receiveDte(id, receivedDte) {
       try {
         const { data } = await api.post(
