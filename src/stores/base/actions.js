@@ -93,7 +93,7 @@ export const baseActions = () => {
           this.docs[index] = data.doc
         }
 
-        notify.positive(message)
+        if (message) notify.positive(message)
       } catch (error) {
         throw error
       } finally {

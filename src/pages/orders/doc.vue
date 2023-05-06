@@ -25,6 +25,7 @@ const id = route.params.id
 const order = reactive({})
 const provider = ref('')
 const checkStockCount = ref(0)
+const noReceivedDtes = ref(0)
 const loadingGoto = ref(false)
 const orderDate = formatter.localDate(new Date())
 
@@ -33,9 +34,10 @@ provide(orders.$id, orders)
 onMounted(async () => {
   try {
     await orders.getDoc(id)
-    Object.assign(order, orders.doc)
+    Object.assign(order, orders.doc.order)
     provider.value = orders.doc.provider.alias
     checkStockCount.value = orders.doc.checkStock.length
+    noReceivedDtes.value = orders.doc.noReceivedDtes
   } catch (error) {
     console.error(error)
   }
@@ -152,6 +154,7 @@ async function genPDF() {
           color="positive"
           class="q-ml-lg"
           :loading="orders.saving"
+          :disable="!!checkStockCount || !!noReceivedDtes"
         />
       </div>
 
@@ -162,8 +165,10 @@ async function genPDF() {
           rounded
           class="bg-orange text-white"
         >
-          Existen <b>{{ checkStockCount }}</b> productos con stock posiblemente
-          erroneo
+          <b
+            >Existen {{ checkStockCount }} productos de {{ provider }} con stock
+            posiblemente erroneo</b
+          >
 
           <template v-slot:action>
             <q-btn
@@ -175,6 +180,17 @@ async function genPDF() {
             />
           </template>
         </q-banner>
+
+        <q-banner
+          v-if="noReceivedDtes"
+          rounded
+          class="bg-red text-white q-mt-sm"
+        >
+          <b
+            >Existen {{ noReceivedDtes }} facturas de {{ provider }} sin
+            recibir</b
+          >
+        </q-banner>
       </div>
     </div>
     <q-list
@@ -185,7 +201,7 @@ async function genPDF() {
     >
       <ItemOrder
         :product="product"
-        v-for="product of orders.doc.order"
+        v-for="product of order"
         :key="product._id"
       />
     </q-list>
