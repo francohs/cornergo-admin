@@ -1,6 +1,18 @@
 import { api } from 'boot/axios'
 import notify from 'tools/notify'
 
+// request = {
+//   query: {
+//     equal: { field: value },
+//     date: { field: value },
+//     contains: { field: value }
+//   },
+//   select: [],
+//   sort: { field: -1 },
+//   pagination: { page, rowsPerPage },
+//   populate: []
+// }
+
 export const baseActions = () => {
   return {
     async getQueryDocs(request) {

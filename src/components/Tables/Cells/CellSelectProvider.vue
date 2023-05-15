@@ -3,16 +3,6 @@ import { ref } from 'vue'
 
 const props = defineProps(['cell'])
 const editMode = ref(false)
-// const model = ref(props.cell.row.providers)
-// const loading = ref(false)
-// const store = props.storeId ? inject('providers') : null
-
-// async function update(value) {
-//   loading.value = true
-//   await store.update(props.cell.row._id, { providers: value })
-//   model.value = props.modelValue
-//   loading.value = false
-// }
 </script>
 
 <template>
@@ -25,11 +15,18 @@ const editMode = ref(false)
         :id="cell.row._id"
         @blur="editMode = false"
         @update:model-value="editMode = false"
-        style="width: 240px"
+        dense
         autofocus
       />
+      <!-- style="width: 240px" -->
     </div>
 
-    <div v-else @dblclick="editMode = true">{{ cell.row.providerAlias }}</div>
+    <div
+      v-else
+      @dblclick="editMode = true"
+      style="height: 40px; line-height: 40px"
+    >
+      {{ cell.row.providerAlias }}
+    </div>
   </q-td>
 </template>

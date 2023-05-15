@@ -4,11 +4,11 @@ import notify from 'tools/notify'
 import { boot } from 'quasar/wrappers'
 import { useAuth } from '../stores/auth'
 
-let baseURL = 'http://localhost:3015'
-if (process.env.NODE_ENV == 'production') {
-  baseURL = 'https://cornergo-api.herokuapp.com'
-}
-const api = axios.create({ baseURL })
+// const baseURL = 'http://localhost:3015'
+// if (process.env.NODE_ENV == 'production') {
+//   baseURL = 'https://cornergo-api.herokuapp.com'
+// }
+const api = axios.create({ baseURL: process.env.BASE_URL })
 
 const ServerErrors = {
   NotFound: 'El usuario no existe',

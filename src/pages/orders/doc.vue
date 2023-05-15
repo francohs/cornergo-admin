@@ -24,7 +24,7 @@ const inventory = useInventory()
 const id = route.params.id
 const order = reactive({})
 const provider = ref('')
-const checkStockCount = ref(0)
+const checkStock = ref(0)
 const noReceivedDtes = ref(0)
 const loadingGoto = ref(false)
 const orderDate = formatter.localDate(new Date())
@@ -36,8 +36,8 @@ onMounted(async () => {
     await orders.getDoc(id)
     Object.assign(order, orders.doc.order)
     provider.value = orders.doc.provider.alias
-    checkStockCount.value = orders.doc.checkStock.length
-    noReceivedDtes.value = orders.doc.noReceivedDtes
+    checkStock.value = orders.doc.provider.checkStock
+    noReceivedDtes.value = orders.doc.provider.noReceivedDtes
   } catch (error) {
     console.error(error)
   }
@@ -154,19 +154,19 @@ async function genPDF() {
           color="positive"
           class="q-ml-lg"
           :loading="orders.saving"
-          :disable="!!checkStockCount || !!noReceivedDtes"
+          :disable="!!checkStock || !!noReceivedDtes"
         />
       </div>
 
       <div class="q-pt-md">
         <q-banner
-          v-if="checkStockCount"
+          v-if="checkStock"
           inline-actions
           rounded
           class="bg-orange text-white"
         >
           <b
-            >Existen {{ checkStockCount }} productos de {{ provider }} con stock
+            >Existen {{ checkStock }} productos de {{ provider }} con stock
             posiblemente erroneo</b
           >
 

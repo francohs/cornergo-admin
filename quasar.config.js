@@ -19,7 +19,7 @@ module.exports = configure(function (ctx) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli/boot-files
-    boot: ['components', 'vueErrors', 'axios'],
+    boot: ['components', 'vueErrors', 'axios', 'socket'],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
     css: ['app.scss', 'quasar.scss'],
@@ -55,7 +55,11 @@ module.exports = configure(function (ctx) {
 
       // publicPath: '/',
       // analyze: true,
-      // env: {},
+      env: {
+        BASE_URL: ctx.dev
+          ? 'http://localhost:3015'
+          : 'https://cornergo-api.herokuapp.com'
+      },
       // rawDefine: {}
       // ignorePublicFolder: true,
       // minify: false,

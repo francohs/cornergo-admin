@@ -1,4 +1,5 @@
 <script setup>
+import { io } from 'boot/socket'
 import { onMounted, provide, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useReceivedDtes } from 'stores/receiveddtes'
@@ -33,6 +34,24 @@ onMounted(async () => {
     initDate()
     await tableRef.value.queryInit()
   }
+
+  io.on('receiveDte', receivedDte => {
+    const index = receivedDtes.docs.findIndex(
+      rDte => rDte._id == receivedDte._id
+    )
+    receivedDtes.docs[index].receptionDate = receivedDte.receptionDate
+  })
+
+  io.on('newDte', () => newDte => {
+    const index = receivedDtes.docs.findIndex(rDte => rDte._id == newDte._id)
+    if (index > -1) {
+      console.log('newDte', newDte)
+      receivedDtes.docs[index] = newDte
+    } else {
+      console.log('newXml', newDte)
+      receivedDtes.docs = [...receivedDtes.docs, newDte]
+    }
+  })
 })
 
 const onDate = async () => {

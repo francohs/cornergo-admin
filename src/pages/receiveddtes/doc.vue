@@ -35,6 +35,7 @@ const receiveDte = async () => {
     'Dte recibido con éxito'
   )
   Object.assign(receivedDte, receivedDtes.doc)
+
   loading.value = false
 }
 </script>
