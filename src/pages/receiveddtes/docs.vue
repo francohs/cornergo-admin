@@ -42,14 +42,15 @@ onMounted(async () => {
     receivedDtes.docs[index].receptionDate = receivedDte.receptionDate
   })
 
-  io.on('newDte', () => newDte => {
+  io.on('newDte', newDte => {
     const index = receivedDtes.docs.findIndex(rDte => rDte._id == newDte._id)
     if (index > -1) {
-      console.log('newDte', newDte)
+      // console.log('newDte', newDte)
       receivedDtes.docs[index] = newDte
     } else {
-      console.log('newXml', newDte)
-      receivedDtes.docs = [...receivedDtes.docs, newDte]
+      // console.log('newXml', newDte)
+      // receivedDtes.docs = [...receivedDtes.docs, newDte]
+      receivedDtes.docs.push(newDte)
     }
   })
 })

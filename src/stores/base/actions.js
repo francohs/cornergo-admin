@@ -138,7 +138,7 @@ export const baseActions = () => {
         this.deleting = true
         await api.delete(`${this.$id}/${id}`)
         this.doc = {}
-        this.docs.filter(doc => doc._id != id)
+        this.docs = this.docs.filter(doc => doc._id != id)
         notify.positive('Datos eliminados con éxito')
       } catch (error) {
         throw error
