@@ -12,6 +12,10 @@ export const useInventory = defineStore({
       visibles: ['code', 'name', 'stock', 'checked'],
       containsFields: ['code', 'name']
     }),
+    generalInventoryTable: tableState('generalInventoryTable', {
+      visibles: ['code', 'name', 'stock', 'checked'],
+      containsFields: ['code', 'name']
+    }),
     provider: null
   }),
 
@@ -24,6 +28,21 @@ export const useInventory = defineStore({
       try {
         this.loading = true
         const { data } = await api.get('products/inventory', {
+          params: {
+            provider
+          }
+        })
+        this.docs = data.docs
+      } catch (error) {
+        throw error
+      } finally {
+        this.loading = false
+      }
+    },
+    async getGeneralInventrory(provider) {
+      try {
+        this.loading = true
+        const { data } = await api.get('products/inventory/general', {
           params: {
             provider
           }

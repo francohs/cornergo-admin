@@ -95,7 +95,6 @@ const columns = [
   { label: 'EMISIÓN', name: 'emissionDate', size: 250 },
   { label: 'TIPO', name: 'dteTypeName', size: 250 },
   { label: 'FOLIO', name: 'number' },
-  { label: 'ID BSALE', name: 'bsaleId' },
   { label: 'RUT', name: 'providerRut' },
   {
     label: 'RAZÓN SOCIAL',
@@ -197,7 +196,6 @@ const columns = [
           <Cell field="emissionDate" format="localDate" :cell="props" />
           <Cell field="dteTypeName" :cell="props" />
           <Cell field="number" :cell="props" />
-          <Cell field="bsaleId" :cell="props" />
           <Cell format="rut" field="providerRut" :cell="props" />
           <Cell field="providerName" style="font-size: 12px" :cell="props" />
           <Cell

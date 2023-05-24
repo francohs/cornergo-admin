@@ -51,50 +51,55 @@ async function onDate() {
 
           <Calendar v-model="date" @update:modelValue="onDate" />
         </q-card>
-        <q-card class="q-mt-sm">
+        <q-card class="q-mt-sm" style="height: 301.89px">
           <q-card-section>
-            <ItemTotal
-              :label="`TOTAL (${totals.totalSales.count})`"
-              :value="totals.totalSales.amount"
-              format="currency"
-              bold
-              fontSize="20"
-            />
-            <q-separator class="q-mb-md" />
-            <ItemTotal
-              :label="`Efectivo (${totals.cash.count})`"
-              :value="totals.cash.amount"
-              format="currency"
-            />
-            <ItemTotal
-              :label="`Tarjeta Débito (${totals.debit.count})`"
-              :value="totals.debit.amount"
-              format="currency"
-            />
-            <ItemTotal
-              :label="`Tarjeta Crédito (${totals.credit.count})`"
-              :value="totals.credit.amount"
-              format="currency"
-            />
-            <ItemTotal
-              :label="`Transferencia (${totals.transfer.count})`"
-              :value="totals.transfer.amount"
-              format="currency"
-            />
-            <ItemTotal
-              :label="`Crédito Cliente (${totals.clientCredit.count})`"
-              :value="totals.clientCredit.amount"
-              format="currency"
-            />
-            <q-separator class="q-mb-md" />
-            <ItemTotal
-              label="MARGEN"
-              :value="totals.totalMargin"
-              format="currency"
-              bold
-              fontSize="20"
-            />
+            <div v-if="totals.totalSales">
+              <ItemTotal
+                :label="`TOTAL (${totals.totalSales.count})`"
+                :value="totals.totalSales.amount"
+                format="currency"
+                bold
+                fontSize="20"
+              />
+              <q-separator class="q-mb-md" />
+              <ItemTotal
+                :label="`Efectivo (${totals.cash.count})`"
+                :value="totals.cash.amount"
+                format="currency"
+              />
+              <ItemTotal
+                :label="`Tarjeta Débito (${totals.debit.count})`"
+                :value="totals.debit.amount"
+                format="currency"
+              />
+              <ItemTotal
+                :label="`Tarjeta Crédito (${totals.credit.count})`"
+                :value="totals.credit.amount"
+                format="currency"
+              />
+              <ItemTotal
+                :label="`Transferencia (${totals.transfer.count})`"
+                :value="totals.transfer.amount"
+                format="currency"
+              />
+              <ItemTotal
+                :label="`Crédito Cliente (${totals.clientCredit.count})`"
+                :value="totals.clientCredit.amount"
+                format="currency"
+              />
+              <q-separator class="q-mb-md" />
+              <ItemTotal
+                label="MARGEN"
+                :value="totals.totalMargin"
+                format="currency"
+                bold
+                fontSize="20"
+              />
+            </div>
           </q-card-section>
+          <q-inner-loading :showing="!totals.totalSales">
+            <q-spinner-audio color="primary" size="2em" />
+          </q-inner-loading>
         </q-card>
       </div>
 

@@ -13,10 +13,10 @@
 const options = [
   'lunes',
   'martes',
-  'miércoles',
+  'miercoles',
   'jueves',
   'viernes',
-  'sábado',
+  'sabado',
   'domingo'
 ]
 </script>
