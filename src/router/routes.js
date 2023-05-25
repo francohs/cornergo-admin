@@ -62,6 +62,14 @@ const routes = [
           requiresAuth: true
         }
       },
+      {
+        path: '/inventory/general',
+        name: 'generalInventory',
+        component: () => import('pages/inventory/_general.vue'),
+        meta: {
+          requiresAuth: true
+        }
+      },
       ...pages
     ]
   },

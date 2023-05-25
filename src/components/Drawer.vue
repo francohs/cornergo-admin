@@ -4,7 +4,13 @@ const auth = useAuth()
 </script>
 
 <template>
-  <q-drawer v-bind="$attrs" bordered content-class="bg-grey-1" :width="220">
+  <q-drawer
+    v-bind="$attrs"
+    bordered
+    content-class="bg-grey-1"
+    :width="220"
+    :breakpoint="0"
+  >
     <q-list bordered padding class="text-grey-9">
       <ItemLink page="receiveddtes" icon="file_copy" label="DTEs Recibidos" />
       <ItemLink page="emitteddtes" icon="receipt_long" label="DTEs Emitidos" />
@@ -19,6 +25,11 @@ const auth = useAuth()
         v-if="auth.user.isAdmin"
       />
       <ItemLink page="inventory" icon="fact_check" label="Inventario" />
+      <ItemLink
+        page="generalInventory"
+        icon="phone_android"
+        label="Inventario M"
+      />
       <ItemLink page="labels" icon="sell" label="Etiquetas" />
       <ItemLink
         page="productsupdates"

@@ -35,13 +35,8 @@ const formatter = {
   },
 
   decimal: value => {
-    if (!value) return '0'
-    // if (Number.isInteger(value)) {
-    //   return value
-    // } else {
-    //   console.log({ value })
-    //   return value.toFixed(2)
-    // }
+    if (!value) return 0
+
     value = parseFloat(value)
     return Number.isInteger(value) ? parseInt(value) : value.toFixed(2)
   },

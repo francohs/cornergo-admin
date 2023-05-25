@@ -59,15 +59,6 @@ function saveActives() {
               formatter.currency(client.balance)
             }}</q-item-label>
           </q-item-section>
-
-          <!-- <q-item-section style="width: 200px" side>
-            <div class="fit row">
-              <div class="col-4 text-right">Saldo:</div>
-              <div class="col-8 text-right">
-                {{ formatter.currency(client.balance) }}
-              </div>
-            </div>
-          </q-item-section> -->
         </q-item>
       </q-list>
 

@@ -149,7 +149,7 @@ defineExpose({ focus })
     bottom-slots
     :label="label"
     :modelValue="formattedValue"
-    @update:model-value="emit('update:modelValue', $event)"
+    @update:modelValue="emit('update:modelValue', $event)"
     :rules="rules"
     lazy-rules
     :input-class="limitClass"

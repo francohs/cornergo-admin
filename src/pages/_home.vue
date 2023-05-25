@@ -1,7 +1,5 @@
 <template>
   <q-page class="flex flex-center row">
-    <q-card class="col-6">
-      <h2 class="text-center">CornerGO Admin</h2>
-    </q-card>
+    <q-img src="src/assets/logo.png" style="height: 280px; max-width: 280px" />
   </q-page>
 </template>

@@ -57,7 +57,7 @@ module.exports = configure(function (ctx) {
       // analyze: true,
       env: {
         BASE_URL: ctx.dev
-          ? 'http://localhost:3015'
+          ? 'http://192.168.2.189:3015'
           : 'https://cornergo-api.herokuapp.com'
       },
       // rawDefine: {}

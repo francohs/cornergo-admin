@@ -1,16 +1,40 @@
+<script setup>
+import { LocalStorage } from 'quasar'
+import { useUsers } from 'stores/users'
+import { computed, onMounted, provide, ref } from 'vue'
+
+const users = useUsers()
+provide(users.$id, users)
+
+const actives = ref(LocalStorage.getItem('usersActives'))
+
+onMounted(async () => await users.getDocs())
+
+const filteredUsers = computed(() =>
+  actives.value ? users.docs.filter(u => u.active) : users.docs
+)
+
+function saveActives() {
+  LocalStorage.set('usersActives', actives.value)
+}
+</script>
+
 <template>
   <PageResponsive :loading="users.loading" :maxWidth="650">
     <div class="q-pa-lg q-px-xs-md q-px-md-xl">
       <div class="row items-center justify-between q-mb-md">
-        <div class="text-h5">Usuarios</div>
+        <div class="row">
+          <div class="text-h5">Usuarios</div>
+          <ToggleActives v-model="actives" @update:modelValue="saveActives" />
+        </div>
 
         <ButtonLinkCreate :storeId="users.$id" />
       </div>
 
-      <q-list v-if="users.docs.length > 0" bordered separator>
+      <q-list v-if="filteredUsers.length > 0" bordered separator>
         <q-item
           clickable
-          v-for="user of users.docs"
+          v-for="user of filteredUsers"
           :key="user._id"
           class="q-py-md"
           :to="{ name: 'users/:id', params: { id: user._id } }"
@@ -18,7 +42,7 @@
           <q-item-section avatar>
             <q-avatar
               rounded
-              color="primary"
+              :color="user.active ? 'primary' : 'grey'"
               text-color="white"
               icon="person"
             />
@@ -44,22 +68,3 @@
     </div>
   </PageResponsive>
 </template>
-
-<script>
-import { useUsers } from 'stores/users'
-import { onMounted, provide } from 'vue'
-
-export default {
-  name: 'UsersDocs',
-  setup() {
-    const users = useUsers()
-    provide(users.$id, users)
-
-    onMounted(async () => await users.getDocs())
-
-    return {
-      users
-    }
-  }
-}
-</script>
