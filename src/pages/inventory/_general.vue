@@ -77,12 +77,13 @@ const checked = computed(() => {
         <div class="row items-center">
           <div class="row items-center text-h5 text-weight-medium">
             <q-icon class="q-mr-sm" name="phone_android"></q-icon>
-            <div>Inventario Movil</div>
+            <div v-if="inventory.countDocs">
+              Revisados {{ checked }} / {{ inventory.countDocs }}
+            </div>
+            <div v-else>Inventario Movil</div>
           </div>
         </div>
-        <div v-if="inventory.countDocs" class="text-grey-8">
-          Revisados {{ checked }} / {{ inventory.countDocs }}
-        </div>
+
         <q-toggle
           v-model="general"
           color="green"
@@ -91,6 +92,7 @@ const checked = computed(() => {
           @update:modelValue="queryDocs"
         />
       </div>
+
       <SelectProvider
         label="Proveedor"
         icon="local_shipping"

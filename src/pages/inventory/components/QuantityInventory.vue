@@ -1,6 +1,5 @@
 <script setup>
 import { nextTick, ref } from 'vue'
-import formatter from 'tools/formatter'
 
 const props = defineProps(['modelValue'])
 
@@ -13,12 +12,12 @@ async function focus() {
 }
 function add() {
   if (quantity.value < 999) {
-    quantity.value = formatter.decimal(quantity.value) + 1
+    quantity.value = Math.round(quantity.value) + 1
   }
 }
 function substract() {
   if (quantity.value > 0) {
-    quantity.value = formatter.decimal(quantity.value) - 1
+    quantity.value = Math.round(quantity.value) - 1
   }
 }
 function numberValidation(event) {

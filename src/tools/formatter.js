@@ -38,7 +38,9 @@ const formatter = {
     if (!value) return 0
 
     value = parseFloat(value)
-    return Number.isInteger(value) ? parseInt(value) : value.toFixed(2)
+    return Number.isInteger(value)
+      ? parseInt(value)
+      : parseFloat(value.toFixed(2))
   },
 
   unformat: value => {
