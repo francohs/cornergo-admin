@@ -105,7 +105,6 @@ function clear() {
         v-model="inventory.provider"
         @update:modelValue="queryDocs"
         class="full-width q-mb-md"
-        autofocus
         clearable
         @clear="queryDocs"
         v-if="search.length < 3"
