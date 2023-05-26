@@ -3,7 +3,6 @@ import { LocalStorage } from 'quasar'
 export const baseState = () => ({
   docs: [],
   doc: {},
-  count: 0,
   options: [],
   loading: false,
   saving: false,

@@ -45,17 +45,35 @@ export const useInventory = defineStore({
               active: true
             }
           },
-          select: ['code', 'name', 'stock', 'lastStockUpdate'],
+          select: ['code', 'name', 'stock', 'lastStockUpdate', 'providers'],
           sort: { name: 1 }
         })
         this.docs = data.docs
-        this.count = data.count
       } catch (error) {
         throw error
       } finally {
         this.loading = false
       }
     },
+
+    async getFilteredProducts(search) {
+      try {
+        this.loading = true
+        const { data } = await api.post('products/query', {
+          query: {
+            contains: { fields: ['code', 'name'], value: search }
+          },
+          select: ['code', 'name', 'stock', 'lastStockUpdate', 'providers'],
+          sort: { name: 1 }
+        })
+        this.docs = data.docs
+      } catch (error) {
+        throw error
+      } finally {
+        this.loading = false
+      }
+    },
+
     async update(id, product) {
       const index = this.docs.findIndex(doc => doc._id === id)
       if (index > -1) {

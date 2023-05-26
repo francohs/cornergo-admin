@@ -6,7 +6,7 @@ import moment from 'moment'
 const products = inject('products')
 const inventory = inject('inventory')
 
-const props = defineProps(['product'])
+const props = defineProps(['product', 'search'])
 
 const QuantityRef = ref(null)
 const loading = ref(false)
@@ -47,7 +47,15 @@ async function confirm() {
           @click="confirm"
           :loading="loading"
         />
-        <div>{{ product.code }}</div>
+        <div>
+          <div>{{ product.code }}</div>
+          <div
+            v-if="search.length >= 3 && product.providers.length"
+            class="text-caption"
+          >
+            {{ product.providers[0] }}
+          </div>
+        </div>
       </div>
       <div style="width: 140px">
         <QuantityInventory v-model="product.stock" ref="QuantityRef" />

@@ -12,49 +12,22 @@ provide(products.$id, products)
 const inventory = useInventory()
 provide(inventory.$id, inventory)
 
-const general = ref(LocalStorage.getItem('generalInventory'))
 const search = ref('')
 const page = ref(1)
 const pages = ref(1)
 const rowPerPage = 10
 
-const queryDocs = async () => {
-  if (inventory.provider) {
-    if (general.value) await inventory.getGeneralInventrory(inventory.provider)
-    else await inventory.getDocs(inventory.provider)
-    pages.value = Math.ceil(inventory.countDocs / rowPerPage)
-  } else {
-    inventory.clearDocs()
-    pages.value = 1
-  }
-  page.value = 1
-  LocalStorage.set('generalInventory', general.value)
-}
+const general = ref(LocalStorage.getItem('generalInventory'))
+// clear()
 
 const filteredItems = computed(() => {
-  let filteredItems = inventory.docs
-
-  if (search.value) {
-    filteredItems = inventory.docs.filter(product => {
-      for (let field of ['code', 'name']) {
-        let rowValue = product[field]
-        if (
-          rowValue &&
-          rowValue.toUpperCase().includes(search.value.toUpperCase())
-        ) {
-          return true
-        }
-      }
-      return false
-    })
-  } else {
-    filteredItems = inventory.docs.slice(
+  if (search.value.length < 3) {
+    return inventory.docs.slice(
       rowPerPage * (page.value - 1),
       rowPerPage * page.value
     )
   }
-
-  return filteredItems
+  return inventory.docs
 })
 
 const checked = computed(() => {
@@ -66,6 +39,33 @@ const checked = computed(() => {
     return diff < -7 || curr.stock < 0 ? acc : acc + 1
   }, 0)
 })
+
+async function queryDocs() {
+  if (inventory.provider) {
+    if (general.value) await inventory.getGeneralInventrory(inventory.provider)
+    else await inventory.getDocs(inventory.provider)
+    pages.value = Math.ceil(inventory.countDocs / rowPerPage)
+  } else {
+    clear()
+  }
+  page.value = 1
+  LocalStorage.set('generalInventory', general.value)
+}
+
+async function getFilteredProducts() {
+  if (search.value.length >= 3) {
+    await inventory.getFilteredProducts(search.value)
+  } else {
+    clear()
+  }
+}
+
+function clear() {
+  inventory.provider = null
+  inventory.clearDocs()
+  pages.value = 1
+  page.value = 1
+}
 </script>
 
 <template>
@@ -93,6 +93,12 @@ const checked = computed(() => {
         />
       </div>
 
+      <SearchInventory
+        v-model="search"
+        @update:modelValue="getFilteredProducts"
+        class="q-mb-md"
+      />
+
       <SelectProvider
         label="Proveedor"
         icon="local_shipping"
@@ -102,12 +108,7 @@ const checked = computed(() => {
         autofocus
         clearable
         @clear="queryDocs"
-      />
-
-      <SearchInventory
-        v-model="search"
-        class="q-mb-md"
-        v-if="inventory.docs.length"
+        v-if="search.length < 3"
       />
 
       <div v-if="!search" class="row justify-center q-mb-md">
@@ -130,6 +131,7 @@ const checked = computed(() => {
         v-for="product of filteredItems"
         :product="product"
         :key="product._id"
+        :search="search"
       />
     </div>
   </q-page>

@@ -9,6 +9,7 @@ const props = defineProps(['modelValue'])
     :modelValue="modelValue"
     color="primary"
     placeholder="Buscar por nombre o código"
+    debounce="300"
   >
     <template v-slot:append>
       <q-icon name="search" />

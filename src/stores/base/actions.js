@@ -3,14 +3,14 @@ import notify from 'tools/notify'
 
 // request = {
 //   query: {
-//     equal: { field: value },
+//     equal: { field1: value, field2: value },
 //     date: { field: value },
-//     contains: { field: value }
+//     contains: { fields: ['field1', 'field2'], value: value }
 //   },
-//   select: [],
+//   select: ['field1', 'field2'],
 //   sort: { field: -1 },
 //   pagination: { page, rowsPerPage },
-//   populate: []
+//   populate: ['field1', 'field2']
 // }
 
 export const baseActions = () => {
