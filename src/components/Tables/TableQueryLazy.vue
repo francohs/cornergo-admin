@@ -86,7 +86,9 @@ const queryDocs = async (page = table.pagination.page) => {
         fields: table.containsFields,
         value: input
       },
-      equal: { ...table.equalFilter, active: table.actives },
+      equal: props.activeToggle
+        ? { ...table.equalFilter, active: table.actives }
+        : { ...table.equalFilter },
       date: table.dateFilter
     },
     select: [...table.visibles, ...table.forceSelect],
