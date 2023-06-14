@@ -39,7 +39,7 @@ const columns = [
   { label: 'MARGEN MAX', name: 'marginMax' },
   { label: 'VENTAS', name: 'totalSales' },
   { label: 'CREACIÓN', name: 'createdAt' },
-  { label: 'ÚLTIMA COMPRA', name: 'lastReceive.updatedAt' },
+  { label: 'ÚLTIMA COMPRA', name: 'lastReceived.updatedAt' },
   { label: 'ÚLTIMA VENTA', name: 'lastSale' },
   { label: 'EXENTO', name: 'exempt', size: 50 },
   { label: 'ACTIVO', name: 'active', size: 50 }
@@ -116,7 +116,7 @@ const columns = [
         <Cell field="marginMax" :cell="props" format="currency" />
         <Cell field="totalSales" :cell="props" format="decimal" />
         <Cell field="createdAt" :cell="props" format="localDate" />
-        <Cell field="lastReceive.updatedAt" :cell="props" format="localDate" />
+        <Cell field="lastReceived.updatedAt" :cell="props" format="localDate" />
         <Cell field="lastSale" :cell="props" format="localDate" />
         <CellToggle
           field="exempt"
