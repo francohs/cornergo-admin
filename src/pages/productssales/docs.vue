@@ -26,13 +26,13 @@ const columns = [
   { label: 'NOMBRE', name: 'name', align: 'left' },
   { label: 'CATEGORÍA', name: 'category' },
   { label: 'STOCK', name: 'stock' },
-  { label: 'MÍNIMO', name: 'minimum' },
   { label: 'COSTO', name: 'cost' },
   { label: '% MARGEN', name: 'marginRate' },
   { label: 'PRECIO', name: 'price' },
   { label: 'PRECIO BAT', name: 'batPrice' },
   { label: 'PROVEEDOR', name: 'providers' },
   { label: 'VITRINA', name: 'showcase' },
+  { label: 'MÁXIMO', name: 'maximum' },
   { label: 'ROTACIÓN', name: 'weekSale' },
   { label: 'ROT PROM', name: 'weekSaleAvg' },
   { label: 'MARGEN', name: 'marginAvg' },
@@ -83,7 +83,7 @@ const columns = [
           :cell="props"
           format="decimal"
         />
-        <CellInput field="minimum" :storeId="products.$id" :cell="props" />
+
         <CellInput
           field="cost"
           format="currency"
@@ -110,6 +110,7 @@ const columns = [
         </q-td> -->
         <CellProviders :cell="props" />
         <CellInput field="showcase" :storeId="products.$id" :cell="props" />
+        <CellInput field="maximum" :storeId="products.$id" :cell="props" />
         <Cell field="weekSale" :cell="props" />
         <Cell field="weekSaleAvg" :cell="props" />
         <Cell field="marginAvg" :cell="props" format="currency" />

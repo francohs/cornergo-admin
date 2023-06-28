@@ -34,7 +34,7 @@ const auth = useAuth()
       <ItemLink
         page="productsupdates"
         icon="edit_note"
-        label="Cambios"
+        label="Modificaciones"
         v-if="auth.user.isAdmin"
       />
       <ItemLink page="providers" icon="support_agent" label="Proveedores" />
