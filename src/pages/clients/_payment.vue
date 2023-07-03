@@ -17,7 +17,7 @@ const btnCreatePayment = ref(null)
 
 const payment = reactive({
   client: clientId,
-  payType: 'Efectivo',
+  payType: 'Transferencia',
   amount: ''
 })
 
