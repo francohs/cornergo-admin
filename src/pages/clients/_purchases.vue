@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { provide } from 'vue'
 import { useRoute } from 'vue-router'
 import { useEmittedDtes } from 'stores/emitteddtes'
 import formatter from 'tools/formatter'
@@ -7,51 +7,30 @@ import formatter from 'tools/formatter'
 const route = useRoute()
 
 const emittedDtes = useEmittedDtes()
-const page = ref(1)
-const rowsPerPage = 5
-const pages = ref(1)
-
-onMounted(async () => {
-  await getDocs()
-  pages.value = Math.ceil(emittedDtes.count / rowsPerPage)
-})
-
-const getDocs = async () => {
-  await emittedDtes.getQueryDocs({
-    query: {
-      equal: { client: route.params.id }
-    },
-    sort: { createdAt: -1 },
-    pagination: {
-      page: page.value,
-      rowsPerPage
-    }
-  })
-}
-
-const changePage = async () => {
-  await getDocs()
-}
+provide(emittedDtes.$id, emittedDtes)
 </script>
 
 <template>
   <PageResponsive :maxWidth="650">
     <div class="q-pa-lg">
-      <q-linear-progress
-        indeterminate
-        class="absolute-top"
-        v-if="emittedDtes.loading"
-      />
-
       <div class="row items-center q-mb-lg">
         <ButtonBack />
 
         <div class="text-h5">Historial de Compras</div>
       </div>
 
-      <q-list v-if="emittedDtes.docs.length > 0" bordered separator>
+      <ListLazy
+        :storeId="emittedDtes.$id"
+        :query="{
+          equal: { client: route.params.id }
+        }"
+        :sort="{ createdAt: -1 }"
+        :rowsPerPage="10"
+        noItems="Aún no tienes compras"
+        v-slot="{ docs }"
+      >
         <q-item
-          v-for="emittedDte of emittedDtes.docs"
+          v-for="emittedDte of docs"
           :key="emittedDte._id"
           class="q-py-md"
           clickable
@@ -83,23 +62,7 @@ const changePage = async () => {
             }}</q-item-label>
           </q-item-section>
         </q-item>
-      </q-list>
-
-      <div class="q-pa-lg flex flex-center" v-if="pages > 1">
-        <q-pagination
-          v-model="page"
-          :max="pages"
-          @update:modelValue="changePage"
-        />
-      </div>
-
-      <div
-        v-if="emittedDtes.docs.length == 0"
-        class="q-mt-xl text-center text-grey-7"
-        v-show="!emittedDtes.loading"
-      >
-        Aún no tienes compras
-      </div>
+      </ListLazy>
     </div>
   </PageResponsive>
 </template>

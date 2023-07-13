@@ -1,3 +1,11 @@
+<script setup>
+import formatter from 'tools/formatter'
+
+const props = defineProps({
+  item: Object
+})
+</script>
+
 <template>
   <q-item class="q-px-none">
     <div class="full-width row items-center">
@@ -28,10 +36,4 @@
   </q-item>
 </template>
 
-<script setup>
-import formatter from 'tools/formatter'
 
-const props = defineProps({
-  item: Object
-})
-</script>

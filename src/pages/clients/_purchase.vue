@@ -36,11 +36,10 @@ onMounted(async () => {
       <div class="row col q-mb-lg">
         <q-card class="fit row q-px-md">
           <q-list bordered separator class="fit q-pa-sm">
-            <ItemPos
+            <ItemDte
               v-for="item of emittedDte.items"
               :item="item"
               :key="item._id"
-              readonly
             />
           </q-list>
         </q-card>

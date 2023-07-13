@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { provide } from 'vue'
 import { useRoute } from 'vue-router'
 import { useClients } from 'stores/clients'
 import { usePayments } from 'stores/payments'
@@ -9,29 +9,7 @@ const route = useRoute()
 
 const clients = useClients()
 const payments = usePayments()
-const page = ref(1)
-const pageNext = ref(1)
-const rowsPerPage = 5
-const pages = ref(1)
-
-onMounted(async () => {
-  await getDocs()
-  pages.value = Math.ceil(payments.count / rowsPerPage)
-})
-
-const getDocs = async () => {
-  await payments.getQueryDocs({
-    query: {
-      equal: { client: route.params.id }
-    },
-    sort: { createdAt: -1 },
-    pagination: {
-      page: page.value,
-      rowsPerPage
-    }
-  })
-  pageNext.value = page.value
-}
+provide(payments.$id, payments)
 
 const payIcons = {
   Efectivo: 'payments',
@@ -57,15 +35,17 @@ const payIcons = {
         <div class="text-h5">Historial de Abonos: {{ clients.doc.name }}</div>
       </div>
 
-      <q-list v-if="payments.docs.length > 0" bordered separator>
-        <q-item
-          v-for="payment of payments.docs.slice(
-            (pageNext - 1) * rowsPerPage,
-            pageNext * rowsPerPage
-          )"
-          :key="payment._id"
-          class="q-py-md"
-        >
+      <ListLazy
+        :storeId="payments.$id"
+        :query="{
+          equal: { client: route.params.id }
+        }"
+        :sort="{ createdAt: -1 }"
+        :rowsPerPage="10"
+        noItems="Aún no tienes abonos"
+        v-slot="{ docs }"
+      >
+        <q-item v-for="payment of docs" :key="payment._id" class="q-py-md">
           <q-item-section avatar>
             <q-avatar
               rounded
@@ -89,24 +69,7 @@ const payIcons = {
             }}</q-item-label>
           </q-item-section>
         </q-item>
-      </q-list>
-
-      <div class="q-pa-lg flex flex-center" v-if="pages > 1">
-        <q-pagination
-          v-model="page"
-          :max="pages"
-          :max-pages="5"
-          @update:modelValue="getDocs"
-        />
-      </div>
-
-      <div
-        v-if="payments.docs.length == 0"
-        class="q-mt-xl text-center text-grey-7"
-        v-show="!payments.loading"
-      >
-        Aún no tienes abonos
-      </div>
+      </ListLazy>
     </div>
   </PageResponsive>
 </template>

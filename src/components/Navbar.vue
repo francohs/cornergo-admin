@@ -1,3 +1,13 @@
+<script setup>
+import { useAuth } from 'stores/auth'
+import { useQuasar } from 'quasar'
+
+const auth = useAuth()
+const quasar = useQuasar()
+
+const isMovile = quasar.screen.width < 480
+</script>
+
 <template>
   <q-header class="bg-blue-grey-10">
     <q-toolbar class="justify-between q-pl-none q-pr-lg">
@@ -45,13 +55,3 @@
     </q-toolbar>
   </q-header>
 </template>
-
-<script setup>
-import { useAuth } from 'stores/auth'
-import { useQuasar } from 'quasar'
-
-const auth = useAuth()
-const quasar = useQuasar()
-
-const isMovile = quasar.screen.width < 480
-</script>

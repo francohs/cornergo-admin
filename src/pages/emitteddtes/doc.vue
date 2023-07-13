@@ -2,7 +2,6 @@
 import { onMounted, provide, reactive } from 'vue'
 import { useRoute } from 'vue-router'
 import { useEmittedDtes } from 'stores/emitteddtes'
-import ItemDte from './components/ItemDte.vue'
 import formatter from 'tools/formatter'
 
 const route = useRoute()
