@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import { LocalStorage } from 'quasar'
-import { api, addBererToken } from 'src/boot/axios'
+import { axios, api, addBererToken } from 'src/boot/axios'
+import { useCompanies } from 'stores/companies'
+import notify from 'tools/notify'
 
 export const useAuth = defineStore({
   id: 'auth',
@@ -36,6 +38,19 @@ export const useAuth = defineStore({
         LocalStorage.set('user', this.user)
         LocalStorage.set('token', this.token)
         addBererToken(this.token)
+
+        const companies = useCompanies()
+        await companies.getDoc('5fae93a5378e42182886b016')
+        const publicIP = await axios.get('https://api.db-ip.com/v2/free/self')
+        if (
+          !data.user.isAdmin &&
+          !companies.doc.whitelist.find(i => i.ip == publicIP.data.ipAddress)
+        ) {
+          this.logout()
+          notify.negative(
+            'Debe iniciar sesión desde uno de los equipos de la empresa'
+          )
+        }
       } catch (error) {
         throw error
       } finally {

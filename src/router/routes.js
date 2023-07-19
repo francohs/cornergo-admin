@@ -6,7 +6,8 @@ const routesRequiresAdmin = [
   'users',
   'productssales',
   'productsupdates',
-  'sales'
+  'sales',
+  'company'
 ]
 
 const pages = loadRoutes().map(route => {

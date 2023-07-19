@@ -6,7 +6,7 @@ import { computed, onMounted, provide, ref } from 'vue'
 const users = useUsers()
 provide(users.$id, users)
 
-const actives = ref(LocalStorage.getItem('usersActives'))
+const actives = ref(LocalStorage.getItem('usersActives') || false)
 
 onMounted(async () => await users.getDocs())
 

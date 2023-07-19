@@ -18,7 +18,7 @@ const ServerErrors = {
   IncorrectPassword: 'Contraseña incorrecta'
 }
 
-const TokenErrors = ['Unauthorized', 'AuthTokenIncorrect', 'AuthTokenMissing']
+const AuthErrors = ['Unauthorized', 'AuthTokenIncorrect', 'AuthTokenMissing']
 
 export default boot(({ router, store }) => {
   api.interceptors.response.use(
@@ -36,7 +36,7 @@ export default boot(({ router, store }) => {
           if (Object.keys(ServerErrors).includes(error)) {
             notify.negative(ServerErrors[error])
 
-            if (TokenErrors.includes(error)) {
+            if (AuthErrors.includes(error)) {
               const auth = useAuth(store)
               auth.logout()
               router.push({ name: 'login' })
