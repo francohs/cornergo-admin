@@ -7,7 +7,7 @@ import formatter from 'tools/formatter'
 const clients = useClients()
 provide(clients.$id, clients)
 
-const actives = ref(LocalStorage.getItem('clientsActives'))
+const actives = ref(LocalStorage.getItem('clientsActives') || false)
 
 onMounted(async () => await clients.getDocs())
 
@@ -26,7 +26,13 @@ function saveActives() {
       <div class="row items-center justify-between q-mb-md">
         <div class="row">
           <div class="text-h5">Clientes</div>
-          <ToggleActives v-model="actives" @update:modelValue="saveActives" />
+          <q-toggle
+            v-model="actives"
+            @update:modelValue="saveActives"
+            color="green"
+            label="Solo Activos"
+            class="q-ml-md"
+          />
         </div>
 
         <ButtonLinkCreate :storeId="clients.$id" />

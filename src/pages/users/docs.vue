@@ -6,7 +6,7 @@ import { computed, onMounted, provide, ref } from 'vue'
 const users = useUsers()
 provide(users.$id, users)
 
-const actives = ref(LocalStorage.getItem('usersActives') || false)
+const actives = ref(LocalStorage.getItem('usersActives'))
 
 onMounted(async () => await users.getDocs())
 
@@ -25,7 +25,13 @@ function saveActives() {
       <div class="row items-center justify-between q-mb-md">
         <div class="row">
           <div class="text-h5">Usuarios</div>
-          <ToggleActives v-model="actives" @update:modelValue="saveActives" />
+          <q-toggle
+            v-model="actives"
+            @update:modelValue="saveActives"
+            color="green"
+            label="Solo Activos"
+            class="q-ml-md"
+          />
         </div>
 
         <ButtonLinkCreate :storeId="users.$id" />
