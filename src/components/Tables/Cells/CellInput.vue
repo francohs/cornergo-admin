@@ -49,7 +49,9 @@ const formatedValue = computed(() => {
   if (props.format) {
     return formatter[props.format](props.cell.row[props.field])
   }
-  return props.cell.row[props.field].toString()
+  return props.cell.row[props.field]
+    ? props.cell.row[props.field].toString()
+    : ''
 })
 
 const textOverflow = value => {
