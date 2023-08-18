@@ -19,6 +19,8 @@ const checkColor = computed(() => {
 })
 
 async function confirm() {
+  if (QuantityRef.value.quantity == '') return
+
   loading.value = true
   await products.update(
     props.product._id,
