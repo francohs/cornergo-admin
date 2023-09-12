@@ -51,6 +51,18 @@ const auth = useAuth()
         v-if="auth.user.isAdmin"
       />
       <ItemLink
+        page="papperpays"
+        icon="account_balance"
+        label="Cheques"
+        v-if="auth.user.isAdmin"
+      />
+      <ItemLink
+        page="transfers"
+        icon="money"
+        label="Transferencias"
+        v-if="auth.user.isAdmin"
+      />
+      <ItemLink
         page="cashmoves"
         icon="payments"
         label="Arqueos"

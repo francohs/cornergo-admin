@@ -1,0 +1,89 @@
+<script setup>
+import formatter from 'tools/formatter'
+import { usePapperPays } from 'stores/papperpays'
+import { onMounted, provide, ref } from 'vue'
+
+const date = ref(formatter.date(new Date()))
+
+const papperPays = usePapperPays()
+provide(papperPays.$id, papperPays)
+
+onMounted(() => onDate())
+
+const columns = [
+  { label: 'RAZÓN SOCIAL', name: 'providerName' },
+  { label: 'FACTURAS', name: 'dtesNumbers' },
+  { label: 'NÚMERO CHEQUE', name: 'number' },
+  { label: 'MONTO TOTAL', name: 'amount' },
+  { label: 'VERIFICADO', name: 'verified' }
+]
+
+async function onDate() {
+  await papperPays.getDocs(date.value)
+}
+</script>
+
+<template>
+  <LayoutPage>
+    <div class="row items-start">
+      <q-card
+        style="width: 338px"
+        class="row column q-px-lg q-pt-sm q-pb-lg q-mr-sm"
+      >
+        <div>
+          <div
+            class="row items-center justify-between text-grey-8 q-mt-md q-mb-lg full-width"
+          >
+            <div class="row items-center">
+              <q-icon name="money" size="sm" class="q-mr-sm" />
+              <div class="text-h6 q-mr-md">Cheques</div>
+            </div>
+
+            <q-btn
+              dense
+              flat
+              rounded
+              icon="refresh"
+              color="primary"
+              @click="onDate"
+            />
+          </div>
+
+          <q-separator />
+        </div>
+
+        <Calendar v-model="date" @update:modelValue="onDate" />
+
+        <q-separator class="q-mb-md" />
+      </q-card>
+      <Table
+        :rows="papperPays.docs"
+        :columns="columns"
+        loadingText="Obteniendo datos..."
+        noDataText="Aún no hay cheques para este día"
+        :hide-bottom="!!papperPays.countDocs"
+        :rows-per-page-options="[0]"
+        :loading="papperPays.loading"
+        :key="papperPays.loading"
+        class="col"
+      >
+        <template v-slot="{ props }">
+          <Cell field="providerName" :cell="props" />
+          <Cell field="dtesNumbers" :cell="props" />
+          <CellInput field="number" :storeId="papperPays.$id" :cell="props" />
+          <CellInput
+            field="amount"
+            :storeId="papperPays.$id"
+            :cell="props"
+            format="currency"
+          />
+          <CellVerified
+            field="verified"
+            :storeId="papperPays.$id"
+            :cell="props"
+          />
+        </template>
+      </Table>
+    </div>
+  </LayoutPage>
+</template>

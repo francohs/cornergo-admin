@@ -25,6 +25,7 @@ const columnsProps = props.columns.map(col => {
     no-results-label="No se encuentran resultados"
     color="primary"
     :loading="loading"
+    :key="loading"
     :wrap-cells="false"
   >
     <template v-for="(_, slot) of $slots" v-slot:[slot]="scope">

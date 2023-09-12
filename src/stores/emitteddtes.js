@@ -10,7 +10,7 @@ export const useEmittedDtes = defineStore({
     ...baseState(),
     emittedDtesTable: tableState('emittedDtesTable', {
       visibles: ['_id', 'dteTypeName', 'number', 'emissionDate', 'totalAmount'],
-      forceSelect: ['_id', 'number', 'emissionDate', 'xmlUrl', 'bsaleId'],
+      forceSelect: ['_id', 'number', 'emissionDate'],
       containsFields: ['number'],
       equalFilter: {
         client: null

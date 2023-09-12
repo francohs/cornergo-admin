@@ -139,10 +139,10 @@ function printLabels() {
         loadingText="Obteniendo datos..."
         noDataText="Puedes filtrar por día o por proveedor"
         :hide-bottom="!!priceLabels.length"
-        class="col"
         :rows-per-page-options="[0]"
         :loading="loading"
         :key="loading"
+        class="col"
       >
         <template v-slot="{ props }">
           <Cell field="code" :cell="props" />
