@@ -50,12 +50,7 @@ const auth = useAuth()
         label="Empresa"
         v-if="auth.user.isAdmin"
       />
-      <ItemLink
-        page="papperpays"
-        icon="account_balance"
-        label="Cheques"
-        v-if="auth.user.isAdmin"
-      />
+      <ItemLink page="papperpays" icon="account_balance" label="Cheques" />
       <ItemLink
         page="transfers"
         icon="money"
