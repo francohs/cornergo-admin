@@ -35,7 +35,7 @@ async function onDate() {
             class="row items-center justify-between text-grey-8 q-mt-md q-mb-lg full-width"
           >
             <div class="row items-center">
-              <q-icon name="money" size="sm" class="q-mr-sm" />
+              <q-icon name="account_balance" size="sm" class="q-mr-sm" />
               <div class="text-h6 q-mr-md">Cheques</div>
             </div>
 
@@ -69,7 +69,16 @@ async function onDate() {
       >
         <template v-slot="{ props }">
           <Cell field="providerName" :cell="props" />
-          <Cell field="dtesNumbers" :cell="props" />
+          <q-td key="dtesNumbers" :props="props">
+            {{
+              props.row.dtesNumbers.length > 2
+                ? props.row.dtesNumbers.slice(0, 2).join(', ') + ', ...'
+                : props.row.dtesNumbers.join(', ')
+            }}
+            <q-tooltip v-if="props.row.dtesNumbers.length > 2">{{
+              props.row.dtesNumbers.join(', ')
+            }}</q-tooltip>
+          </q-td>
           <CellInput field="number" :storeId="papperPays.$id" :cell="props" />
           <CellInput
             field="amount"
