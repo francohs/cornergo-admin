@@ -1,4 +1,8 @@
 <script setup>
+const props = defineProps({
+  width: [String, Number]
+})
+
 const options = [
   { label: 'ENERO', value: '01' },
   { label: 'FEBRERO', value: '02' },
@@ -22,6 +26,6 @@ const options = [
     map-options
     emit-value
     outlined
-    style="width: 200px"
+    :style="`width: ${width ? width : 200}px;`"
   />
 </template>

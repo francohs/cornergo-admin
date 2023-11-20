@@ -1,4 +1,8 @@
 <script setup>
+const props = defineProps({
+  width: [String, Number]
+})
+
 const options = [
   '2018',
   '2019',
@@ -15,5 +19,10 @@ const options = [
 </script>
 
 <template>
-  <q-select v-bind="$attrs" :options="options" outlined style="width: 200px" />
+  <q-select
+    v-bind="$attrs"
+    :options="options"
+    outlined
+    :style="`width: ${width ? width : 200}px;`"
+  />
 </template>

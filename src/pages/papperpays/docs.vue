@@ -4,6 +4,8 @@ import { usePapperPays } from 'stores/papperpays'
 import { onMounted, provide, ref } from 'vue'
 
 const date = ref(formatter.date(new Date()))
+const month = ref('07')
+const year = ref('2023')
 
 const papperPays = usePapperPays()
 provide(papperPays.$id, papperPays)
@@ -55,6 +57,28 @@ async function onDate() {
         <Calendar v-model="date" @update:modelValue="onDate" />
 
         <q-separator class="q-mb-md" />
+
+        <div class="text-subtitle q-mb-sm text-grey-8">Vista Mensual</div>
+
+        <div class="row">
+          <SelectMonth
+            v-model="month"
+            @update:model-value="onDate"
+            dense
+            width="150"
+          />
+          <SelectYear
+            v-model="year"
+            @update:model-value="onDate"
+            dense
+            width="130"
+            class="q-ml-sm"
+          />
+        </div>
+        <q-separator class="q-my-md" />
+
+        <q-btn color="primary">Ingresar Cartola</q-btn>
+        <q-btn class="q-mt-md">Ingresar Cheque</q-btn>
       </q-card>
       <Table
         :rows="papperPays.docs"

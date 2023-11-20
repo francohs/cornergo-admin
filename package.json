@@ -13,20 +13,21 @@
     "deploy": "vercel"
   },
   "dependencies": {
-    "@quasar/extras": "^1.16.6",
-    "axios": "^1.5.0",
+    "@quasar/extras": "^1.16.8",
+    "axios": "^1.6.2",
     "chart.js": "^4.4.0",
     "jspdf": "^2.5.1",
     "moment": "^2.29.4",
-    "pinia": "^2.1.6",
-    "quasar": "^2.12.6",
+    "pinia": "^2.1.7",
+    "quasar": "^2.14.0",
     "socket.io-client": "^4.7.2",
-    "vue": "^3.3.4",
-    "vue-router": "^4.2.4"
+    "vue": "^3.3.8",
+    "vue-router": "^4.2.5"
   },
   "devDependencies": {
-    "@quasar/app-vite": "^1.5.1",
-    "autoprefixer": "^10.4.15"
+    "@quasar/app-vite": "^1.7.0",
+    "autoprefixer": "^10.4.16",
+    "unplugin-vue-components": "^0.25.2"
   },
   "engines": {
     "node": "^18 || ^20",
