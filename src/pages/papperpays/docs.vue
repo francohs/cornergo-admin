@@ -2,10 +2,11 @@
 import formatter from 'tools/formatter'
 import { usePapperPays } from 'stores/papperpays'
 import { onMounted, provide, ref } from 'vue'
+import moment from 'moment'
 
 const date = ref(formatter.date(new Date()))
-const month = ref('07')
-const year = ref('2023')
+const month = ref(moment().format('MM'))
+const year = ref(moment().format('YYYY'))
 
 const papperPays = usePapperPays()
 provide(papperPays.$id, papperPays)
@@ -22,6 +23,10 @@ const columns = [
 
 async function onDate() {
   await papperPays.getDocs(date.value)
+}
+
+async function onMonthView() {
+  await papperPays.getDocsByMonth(month.value, year.value)
 }
 </script>
 
@@ -58,27 +63,29 @@ async function onDate() {
 
         <q-separator class="q-mb-md" />
 
-        <div class="text-subtitle q-mb-sm text-grey-8">Vista Mensual</div>
+        <!-- <div class="text-subtitle q-mb-sm text-grey-8">Vista Mensual</div> -->
 
+        <q-btn class="q-mb-sm" @click="onMonthView">Vista Mensual</q-btn>
         <div class="row">
           <SelectMonth
             v-model="month"
-            @update:model-value="onDate"
+            @update:model-value="onMonthView"
             dense
             width="150"
           />
           <SelectYear
             v-model="year"
-            @update:model-value="onDate"
+            @update:model-value="onMonthView"
             dense
             width="130"
             class="q-ml-sm"
           />
         </div>
+
         <q-separator class="q-my-md" />
 
         <q-btn color="primary">Ingresar Cartola</q-btn>
-        <q-btn class="q-mt-md">Ingresar Cheque</q-btn>
+        <!-- <q-btn class="q-mt-md">Ingresar Cheque</q-btn> -->
       </q-card>
       <Table
         :rows="papperPays.docs"

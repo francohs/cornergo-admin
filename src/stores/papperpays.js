@@ -25,6 +25,17 @@ export const usePapperPays = defineStore({
       } finally {
         this.loading = false
       }
+    },
+    async getDocsByMonth(month, year) {
+      try {
+        this.loading = true
+        const { data } = await api.get(`${this.$id}/month/${year}/${month}`)
+        this.docs = data.docs
+      } catch (error) {
+        throw error
+      } finally {
+        this.loading = false
+      }
     }
   }
 })
