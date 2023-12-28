@@ -1,117 +1,117 @@
 <script setup>
-import { io } from 'boot/socket'
-import { onMounted, provide, ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useReceivedDtes } from 'stores/receiveddtes'
-import { useProviders } from 'stores/providers'
-import formatter from 'tools/formatter'
-import ButtonPayCalc from './components/ButtonPayCalc.vue'
-import CellLinkDte from './components/CellLinkDte.vue'
+import { io } from "boot/socket";
+import { onMounted, provide, ref } from "vue";
+import { useRouter } from "vue-router";
+import { useReceivedDtes } from "stores/receiveddtes";
+import { useProviders } from "stores/providers";
+import formatter from "tools/formatter";
+import ButtonPayCalc from "./components/ButtonPayCalc.vue";
+import CellLinkDte from "./components/CellLinkDte.vue";
 
-const router = useRouter()
+const router = useRouter();
 
-const receivedDtes = useReceivedDtes()
-provide(receivedDtes.$id, receivedDtes)
-const providers = useProviders()
-provide(providers.$id, providers)
+const receivedDtes = useReceivedDtes();
+provide(receivedDtes.$id, receivedDtes);
+const providers = useProviders();
+provide(providers.$id, providers);
 
-const tableRef = ref({})
+const tableRef = ref({});
 
-const table = receivedDtes.receivedDtesTable
+const table = receivedDtes.receivedDtesTable;
 
 const initDate = () => {
-  table.dateFilter.value = formatter.date(new Date())
-  table.visibles = table.visibles.filter(field => field != 'emissionDate')
-}
+  table.dateFilter.value = formatter.date(new Date());
+  table.visibles = table.visibles.filter((field) => field != "emissionDate");
+};
 
 const clearDate = () => {
-  table.dateFilter.value = null
-  table.visibles.push('emissionDate')
-}
+  table.dateFilter.value = null;
+  table.visibles.push("emissionDate");
+};
 
 onMounted(async () => {
   if (!receivedDtes.docs.length) {
-    initDate()
-    await tableRef.value.queryInit()
+    initDate();
+    await tableRef.value.queryInit();
   }
 
-  io.on('receiveDte', receivedDte => {
+  io.on("receiveDte", (receivedDte) => {
     const index = receivedDtes.docs.findIndex(
-      rDte => rDte._id == receivedDte._id
-    )
-    receivedDtes.docs[index].receptionDate = receivedDte.receptionDate
-  })
+      (rDte) => rDte._id == receivedDte._id
+    );
+    receivedDtes.docs[index].receptionDate = receivedDte.receptionDate;
+  });
 
-  io.on('newDte', newDte => {
-    const index = receivedDtes.docs.findIndex(rDte => rDte._id == newDte._id)
+  io.on("newDte", (newDte) => {
+    const index = receivedDtes.docs.findIndex((rDte) => rDte._id == newDte._id);
     if (index > -1) {
       // console.log('newDte', newDte)
-      receivedDtes.docs[index] = newDte
+      receivedDtes.docs[index] = newDte;
     } else {
       // console.log('newXml', newDte)
       // receivedDtes.docs = [...receivedDtes.docs, newDte]
-      receivedDtes.docs.push(newDte)
+      receivedDtes.docs.push(newDte);
     }
-  })
-})
+  });
+});
 
 const onDate = async () => {
-  table.visibles = table.visibles.filter(field => field != 'emissionDate')
-  table.equalFilter.providerAlias = null
-  table.input = ''
-  await tableRef.value.queryInit()
-}
+  table.visibles = table.visibles.filter((field) => field != "emissionDate");
+  table.equalFilter.providerAlias = null;
+  table.input = "";
+  await tableRef.value.queryInit();
+};
 
 const onInput = async () => {
   if (table.input) {
-    table.equalFilter.providerAlias = null
-    clearDate()
+    table.equalFilter.providerAlias = null;
+    clearDate();
   } else {
-    initDate()
+    initDate();
   }
-  await tableRef.value.queryInit()
-}
+  await tableRef.value.queryInit();
+};
 
 const onFilter = async () => {
   if (table.equalFilter.providerAlias) {
-    table.input = ''
-    clearDate()
+    table.input = "";
+    clearDate();
   } else {
-    initDate()
+    initDate();
   }
-  await tableRef.value.queryInit()
-}
+  await tableRef.value.queryInit();
+};
 
 const createProvider = (rut, name) => {
   providers.doc = {
     rut,
-    name
-  }
-  router.push({ name: 'providers/create' })
-}
+    name,
+  };
+  router.push({ name: "providers/create" });
+};
 
 const columns = [
-  { label: 'DETALLE', name: '_id', size: 100 },
-  { label: 'EMISIÓN', name: 'emissionDate', size: 250 },
-  { label: 'TIPO', name: 'dteTypeName', size: 250 },
-  { label: 'FOLIO', name: 'number' },
-  { label: 'RUT', name: 'providerRut' },
+  { label: "DETALLE", name: "_id", size: 100 },
+  { label: "EMISIÓN", name: "emissionDate", size: 250 },
+  { label: "TIPO", name: "dteTypeName", size: 250 },
+  { label: "FOLIO", name: "number" },
+  { label: "RUT", name: "providerRut" },
   {
-    label: 'RAZÓN SOCIAL',
-    name: 'providerName',
-    align: 'left',
-    size: 300
+    label: "RAZÓN SOCIAL",
+    name: "providerName",
+    align: "left",
+    size: 300,
   },
-  { label: 'ALIAS', name: 'providerAlias', size: 300 },
-  { label: 'EXCENTO', name: 'exemptAmount' },
-  { label: 'IVA', name: 'ivaAmount' },
-  { label: 'TOTAL', name: 'totalAmount', align: 'right' },
-  { label: 'FORMA PAGO', name: 'paymentMethod' },
-  { label: 'EXPIRACIÓN', name: 'expirationDate' },
-  { label: 'PDF', name: 'pdfUrl' },
-  { label: 'XML', name: 'xmlUrl' },
-  { label: 'RECIBIDO', name: 'receptionDate' }
-]
+  { label: "ALIAS", name: "providerAlias", size: 300 },
+  { label: "EXCENTO", name: "exemptAmount" },
+  { label: "IVA", name: "ivaAmount" },
+  { label: "TOTAL", name: "totalAmount", align: "right" },
+  { label: "FORMA PAGO", name: "paymentMethod" },
+  { label: "EXPIRACIÓN", name: "expirationDate" },
+  { label: "PDF", name: "pdfUrl" },
+  { label: "XML", name: "xmlUrl" },
+  { label: "RECIBIDO", name: "receptionDate" },
+];
 </script>
 
 <template>
@@ -225,12 +225,7 @@ const columns = [
           </Cell>
           <Cell field="exemptAmount" format="currency" :cell="props" />
           <Cell field="ivaAmount" format="currency" :cell="props" />
-          <Cell
-            v-if="props.row.totalAmount"
-            field="totalAmount"
-            format="currency"
-            :cell="props"
-          />
+          <Cell field="totalAmount" format="currency" :cell="props" />
           <Cell field="paymentMethod" format="currency" :cell="props" />
           <Cell field="expirationDate" format="localDate" :cell="props" />
           <CellLink
@@ -249,7 +244,7 @@ const columns = [
             {{
               props.row.receptionDate
                 ? formatter.datetime(props.row.receptionDate)
-                : ''
+                : ""
             }}
             <q-icon
               v-if="props.row.receptionDate"

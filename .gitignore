@@ -29,3 +29,5 @@ yarn-error.log*
 *.sln
 
 .vercel
+yarn.lock
+pnpm-lock.yaml
